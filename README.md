@@ -1,15 +1,19 @@
 # CaritasMty_HealthApp
-Aplicacion para programa de salud
+Aplicacion para programa de salud </br>
 
-Para la API usamos un entorno virtual que evita problemas de dependencias
-$ python3.12 -m venv my-env-3.12 #crea el env
-$ source my-env-3.12/bin/activate #entra al env
+### Documentacion API
 
-$ deactivate #usar para salir del env
+##### Virtual Env
 
-version de python deberia de ser 3.12
+Para la API usamos un entorno virtual que evita problemas de dependencias </br>
+$ python3.12 -m venv my-env-3.12 #crea el env </br>
+$ source my-env-3.12/bin/activate #entra al env </br>
 
-Para installar paquetes
+$ deactivate #usar para salir del env </br>
 
-$ pip install -r requirements.txt
+version de python deberia de ser 3.12 </br>
+
+##### Para installar paquetes </br>
+
+$ pip install -r requirements.txt </br>
 
