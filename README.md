@@ -17,3 +17,7 @@ version de python deberia de ser 3.12 </br>
 
 $ pip install -r requirements.txt </br>
 
+
+Desarollado por: </br>
+
+@CarlosMtz1281 </br>
