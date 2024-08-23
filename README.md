@@ -20,3 +20,4 @@ $ pip install -r requirements.txt </br>
 
 ## Desarollado por: </br>
 @CarlosMtz1281 </br>
+@ferp03 </br>
