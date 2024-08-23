@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19815E3F2C77F6030094E7B1 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E3E2C77F6030094E7B1 /* DashboardView.swift */; };
+		19815E412C77F61B0094E7B1 /* HealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E402C77F61B0094E7B1 /* HealthView.swift */; };
+		19815E432C77F62B0094E7B1 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E422C77F62B0094E7B1 /* QRView.swift */; };
+		19815E452C77F63E0094E7B1 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E442C77F63E0094E7B1 /* ShopView.swift */; };
+		19815E472C77F64B0094E7B1 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E462C77F64B0094E7B1 /* AccountView.swift */; };
+		19815E492C77FC640094E7B1 /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E482C77FC640094E7B1 /* Consts.swift */; };
 		B5D5170D2C75720B0093C91E /* Mi_SaludApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */; };
 		B5D5170F2C75720B0093C91E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5170E2C75720B0093C91E /* ContentView.swift */; };
 		B5D517112C75720B0093C91E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D517102C75720B0093C91E /* Assets.xcassets */; };
@@ -14,6 +20,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		19815E3E2C77F6030094E7B1 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		19815E402C77F61B0094E7B1 /* HealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthView.swift; sourceTree = "<group>"; };
+		19815E422C77F62B0094E7B1 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
+		19815E442C77F63E0094E7B1 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		19815E462C77F64B0094E7B1 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		19815E482C77FC640094E7B1 /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		B5D517092C75720B0093C91E /* Mi Salud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mi Salud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mi_SaludApp.swift; sourceTree = "<group>"; };
 		B5D5170E2C75720B0093C91E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -52,7 +64,13 @@
 			isa = PBXGroup;
 			children = (
 				B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */,
+				19815E482C77FC640094E7B1 /* Consts.swift */,
 				B5D5170E2C75720B0093C91E /* ContentView.swift */,
+				19815E3E2C77F6030094E7B1 /* DashboardView.swift */,
+				19815E402C77F61B0094E7B1 /* HealthView.swift */,
+				19815E422C77F62B0094E7B1 /* QRView.swift */,
+				19815E442C77F63E0094E7B1 /* ShopView.swift */,
+				19815E462C77F64B0094E7B1 /* AccountView.swift */,
 				B5D517102C75720B0093C91E /* Assets.xcassets */,
 				B5D517122C75720B0093C91E /* Preview Content */,
 			);
@@ -137,7 +155,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19815E452C77F63E0094E7B1 /* ShopView.swift in Sources */,
+				19815E492C77FC640094E7B1 /* Consts.swift in Sources */,
+				19815E412C77F61B0094E7B1 /* HealthView.swift in Sources */,
 				B5D5170F2C75720B0093C91E /* ContentView.swift in Sources */,
+				19815E3F2C77F6030094E7B1 /* DashboardView.swift in Sources */,
+				19815E472C77F64B0094E7B1 /* AccountView.swift in Sources */,
+				19815E432C77F62B0094E7B1 /* QRView.swift in Sources */,
 				B5D5170D2C75720B0093C91E /* Mi_SaludApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
