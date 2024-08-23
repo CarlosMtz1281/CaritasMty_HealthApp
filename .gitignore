@@ -28,3 +28,6 @@
 DerivedData/
 .idea/
 build/
+
+# Ignorar archivos dentro de xcuserdata específicos
+*.xcuserdatad/**/UserInterfaceState.xcuserstate
