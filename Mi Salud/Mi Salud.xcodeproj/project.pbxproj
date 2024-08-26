@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05F735082C7D03AB0001BCF9 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F735072C7D03AB0001BCF9 /* SplashView.swift */; };
+		05F7350A2C7D04130001BCF9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F735092C7D04130001BCF9 /* LoginView.swift */; };
 		19815E3F2C77F6030094E7B1 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E3E2C77F6030094E7B1 /* DashboardView.swift */; };
 		19815E412C77F61B0094E7B1 /* HealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E402C77F61B0094E7B1 /* HealthView.swift */; };
 		19815E432C77F62B0094E7B1 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E422C77F62B0094E7B1 /* QRView.swift */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05F735072C7D03AB0001BCF9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		05F735092C7D04130001BCF9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		19815E3E2C77F6030094E7B1 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		19815E402C77F61B0094E7B1 /* HealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthView.swift; sourceTree = "<group>"; };
 		19815E422C77F62B0094E7B1 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
@@ -64,6 +68,8 @@
 			isa = PBXGroup;
 			children = (
 				B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */,
+				05F735072C7D03AB0001BCF9 /* SplashView.swift */,
+				05F735092C7D04130001BCF9 /* LoginView.swift */,
 				19815E482C77FC640094E7B1 /* Consts.swift */,
 				B5D5170E2C75720B0093C91E /* ContentView.swift */,
 				19815E3E2C77F6030094E7B1 /* DashboardView.swift */,
@@ -163,6 +169,8 @@
 				19815E472C77F64B0094E7B1 /* AccountView.swift in Sources */,
 				19815E432C77F62B0094E7B1 /* QRView.swift in Sources */,
 				B5D5170D2C75720B0093C91E /* Mi_SaludApp.swift in Sources */,
+				05F7350A2C7D04130001BCF9 /* LoginView.swift in Sources */,
+				05F735082C7D03AB0001BCF9 /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
