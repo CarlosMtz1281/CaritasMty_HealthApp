@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  sqlserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER: ${USERNAME}
+        PASSWORD: ${PASSWORD}
+    container_name: sqlserver_container
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: ${ACCEPT_EULA}
+      MSSQL_PID: ${MSSQL_PID}
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./data:/var/opt/mssql/data

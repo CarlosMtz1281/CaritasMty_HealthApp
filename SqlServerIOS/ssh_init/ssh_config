@@ -1,0 +1,8 @@
+Host *
+IdentityFile ~/.ssh/id_rsa
+SendEnv LANG LC_*
+HashKnownHosts yes
+GSSAPIAuthentication yes
+KexAlgorithms +diffie-hellman-group1-sha1
+Ciphers +aes128-cbc
+HostKeyAlgorithms=+ssh-dss

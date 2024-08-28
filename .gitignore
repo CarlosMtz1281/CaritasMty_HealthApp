@@ -4,6 +4,8 @@
 # Ignorar cualquier carpeta de entorno virtual (env)
 **/env/
 **/my-env-3.12/
+.env
+credentials
 
 .DS_Store
 
