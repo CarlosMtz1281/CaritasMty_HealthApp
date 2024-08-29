@@ -115,7 +115,7 @@ struct DashboardView: View {
                 // Ultimo examen clinico
                 
                 VStack(alignment: .leading) {
-                    Text("Ultimo examen de salud")
+                    Text("Último examen de salud")
                         .font(.title2)
                         .padding(.leading)
                     
@@ -133,7 +133,7 @@ struct DashboardView: View {
                             Text("19/02/2024")
                                 .font(.subheadline)
                                 .foregroundColor(.white)
-                            Text("San Jose del Uro")
+                            Text("San José del Uro")
                                 .font(.title3)
                                 .foregroundColor(.white)
                         }
@@ -147,7 +147,7 @@ struct DashboardView: View {
                             
                 //Eventos section
                 VStack(alignment: .leading){
-                    Text("Proximos Eventos")
+                    Text("Próximos Eventos")
                         .font(.title)
                         .padding(.bottom,20)
                         .padding()
@@ -189,7 +189,6 @@ struct DashboardView: View {
                 Spacer()
 
                 
-                Text("Dashboard View")
             }
             
         }

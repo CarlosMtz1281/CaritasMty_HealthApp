@@ -26,7 +26,7 @@ struct LoginView: View {
                 HStack{Spacer()}
                 
                 // iniciar sesion
-                Text("Iniciar Sesion")
+                Text("Iniciar Sesión")
                     .padding(.top, 20)
                     .padding(.bottom, 30)
                     .font(.largeTitle)
