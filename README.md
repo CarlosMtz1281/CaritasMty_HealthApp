@@ -22,3 +22,4 @@ $ pip install -r requirements.txt </br>
 @CarlosMtz1281 </br>
 @ferp03 </br>
 @nicoTC-04 </br>
+@ivangtamezc </br>
