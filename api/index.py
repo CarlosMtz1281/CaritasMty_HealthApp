@@ -4,7 +4,6 @@ from eventos import eventos_bp
 from mediciones import mediciones_bp
 from tienda import tienda_bp
 import mssql_functions as MSSql
-import sys
 from database import cnx
 
 app = Flask(__name__)
