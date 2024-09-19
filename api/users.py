@@ -1,19 +1,59 @@
 from flask import Blueprint, jsonify, request
 from database import cnx
+from session_manager import create_session, validate_key, delete_session
 
 users_bp = Blueprint('users', __name__)
 
+
+
 @users_bp.route('/login', methods=['POST'])
 def login():
-    return "User login"
+    data = request.json
+    correo = data.get('correo')
+    password = data.get('password')
 
-@users_bp.route('/genKey', methods=['POST'])
-def gen_key():
-    return "Generate Key"
+    if not correo or not password:
+        return jsonify({"error": "User ID is required"}), 400
+
+    query = """
+    SELECT
+        U.ID_USUARIO AS user_id
+    FROM
+        USUARIOS U
+    WHERE
+        U.CORREO = ?
+        AND U.PASS = ?
+    """
+    
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, (correo, password))
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        cursor.close()
+
+        if not results:
+            return jsonify({"error": "Invalid credentials"}), 400
+
+        user_id = results[0]['user_id']
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    user_id = results[0]['user_id']
+    
+    session_key = create_session(user_id)
+    
+    return jsonify({"key": session_key}), 200
 
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
-    return "Sign Out"
+    session_key = request.headers.get('key')
+    if session_key and validate_key(session_key):
+        delete_session(session_key)
+        return jsonify({"message": "Signed out successfully"}), 200
+    return jsonify({"error": "Invalid session key"}), 400
 
 @users_bp.route('/signUp', methods=['POST'])
 def sign_up():
@@ -21,6 +61,11 @@ def sign_up():
 
 @users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
 def current_points(user_id):
+    session_key = request.headers.get('key')
+    
+    if not session_key or validate_key(session_key) != user_id:
+        return jsonify({"error": "Invalid session key"}), 400
+    
     query = """
     SELECT
         PU.PUNTOS_ACTUALES AS puntos

@@ -15,6 +15,13 @@ local_params = {
     'DB_PASSWORD': '5abr1t0n3s_GOAT'
 }
 
+nico_local_params = {
+    'DB_HOST': 'localhost\\SQLEXPRESS',
+    'DB_NAME': 'master',
+    'DB_USER': 'sa',
+    'DB_PASSWORD': '5abr1t0n3s_GOAT'
+}
+
 def connect_to_db(params):
     """Conecta a la base de datos utilizando pyodbc y devuelve la conexión."""
     conn_str = (
@@ -30,4 +37,4 @@ def connect_to_db(params):
         print(f"Cannot connect to MSSQL server: {e}")
         sys.exit()
 
-cnx = connect_to_db(local_params)
+cnx = connect_to_db(nico_local_params)
