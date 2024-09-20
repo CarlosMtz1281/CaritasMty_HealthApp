@@ -42,31 +42,29 @@ struct DashboardView: View {
                     .padding()
                     .padding(.top, 70)
                     // Points section
-                    HStack(){
-                        VStack(alignment: .leading){
-                            Text("1,500 puntos")
-                                .font(.title2)
+                    NavigationLink(destination: PointsHistoryView()) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("1,500 puntos")
+                                    .font(.title2)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
                         }
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(20)
+                        .padding(.horizontal, 30)
+                        .padding(.bottom, 30)
+                        .shadow(radius: 2)
                     }
-                    .padding()
-                    .background(Color.white) // Add white background
-                    .cornerRadius(20) // Apply rounded corners
-
-                    .padding(.horizontal,30)
-                    .padding(.bottom, 30)
-                    .shadow(radius: 2)
-                    
-                    
                 }
-                .padding(.bottom,20)
-
+                .padding(.bottom, 20)
                 .frame(maxWidth: .infinity)
                 .frame(height: UIScreen.main.bounds.height * 0.26)
                 .background(Color(Constants.Colors.primary))
                 .clipShape(RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 20))
+                
                 
 
                 

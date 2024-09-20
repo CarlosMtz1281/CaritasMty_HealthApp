@@ -15,6 +15,7 @@
 		19815E452C77F63E0094E7B1 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E442C77F63E0094E7B1 /* ShopView.swift */; };
 		19815E472C77F64B0094E7B1 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E462C77F64B0094E7B1 /* AccountView.swift */; };
 		19815E492C77FC640094E7B1 /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E482C77FC640094E7B1 /* Consts.swift */; };
+		85D19BD92C9B98FD00B9498E /* PointsHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */; };
 		B5D5170D2C75720B0093C91E /* Mi_SaludApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */; };
 		B5D5170F2C75720B0093C91E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5170E2C75720B0093C91E /* ContentView.swift */; };
 		B5D517112C75720B0093C91E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D517102C75720B0093C91E /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		19815E442C77F63E0094E7B1 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
 		19815E462C77F64B0094E7B1 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		19815E482C77FC640094E7B1 /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
+		85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsHistoryView.swift; sourceTree = "<group>"; };
 		B5D517092C75720B0093C91E /* Mi Salud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mi Salud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mi_SaludApp.swift; sourceTree = "<group>"; };
 		B5D5170E2C75720B0093C91E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				19815E422C77F62B0094E7B1 /* QRView.swift */,
 				19815E442C77F63E0094E7B1 /* ShopView.swift */,
 				19815E462C77F64B0094E7B1 /* AccountView.swift */,
+				85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */,
 				B5D517102C75720B0093C91E /* Assets.xcassets */,
 				B5D517122C75720B0093C91E /* Preview Content */,
 			);
@@ -167,6 +170,7 @@
 				B5D5170F2C75720B0093C91E /* ContentView.swift in Sources */,
 				19815E3F2C77F6030094E7B1 /* DashboardView.swift in Sources */,
 				19815E472C77F64B0094E7B1 /* AccountView.swift in Sources */,
+				85D19BD92C9B98FD00B9498E /* PointsHistoryView.swift in Sources */,
 				19815E432C77F62B0094E7B1 /* QRView.swift in Sources */,
 				B5D5170D2C75720B0093C91E /* Mi_SaludApp.swift in Sources */,
 				05F7350A2C7D04130001BCF9 /* LoginView.swift in Sources */,
