@@ -14,8 +14,21 @@ app.register_blueprint(mediciones_bp, url_prefix='/mediciones')
 app.register_blueprint(tienda_bp, url_prefix='/tienda')
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def get_tables():
+    try:
+        cursor = cnx.cursor()
+        # Query to get all table names in the current database
+        cursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'")
+        rows = cursor.fetchall()
+
+        # Extract table names from the result
+        tables = [row[0] for row in rows]
+
+        # Return the list of table names as JSON
+        return jsonify({"tables": tables})
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
 
 @app.route("/bdtest")
 def runquery():
