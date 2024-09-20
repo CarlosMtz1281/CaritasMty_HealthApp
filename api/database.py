@@ -8,6 +8,13 @@ vm_params = {
     'DB_PASSWORD': 'Shakira123.'
 }
 
+localToVM_params = {
+    'DB_HOST': '10.14.255.64',
+    'DB_NAME': 'master',
+    'DB_USER': 'SA',
+    'DB_PASSWORD': 'Shakira123.'
+}
+
 local_params = {
     'DB_HOST': 'localhost',
     'DB_NAME': 'master',
@@ -37,4 +44,5 @@ def connect_to_db(params):
         print(f"Cannot connect to MSSQL server: {e}")
         sys.exit()
 
-cnx = connect_to_db(nico_local_params)
+cnx = connect_to_db(localToVM_params)
+
