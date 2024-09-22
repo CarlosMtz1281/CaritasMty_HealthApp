@@ -13,6 +13,7 @@ struct LoginView: View {
     @State private var username = ""
     @State private var password = ""
     @State private var showingAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         VStack {
@@ -75,7 +76,7 @@ struct LoginView: View {
                     if username == "A" && password == "1234" {
                         isLoggedIn = true
                     } else {
-                        showingAlert = true
+                        loginUser(correo: username, password: password)
                     }
                 }
                 .frame(width: 250, height: 50)
@@ -85,7 +86,7 @@ struct LoginView: View {
                 .background(.PANTONE_320_C)
                 .cornerRadius(5)
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Login Failed"), message: Text("Invalid username or password"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
                 .padding(.top, 35)
                 .shadow(radius: 5)
@@ -125,6 +126,59 @@ struct LoginView: View {
         }
         .background(.PANTONE_302_C)
         .edgesIgnoringSafeArea(.bottom)
+    }
+    // funcion de login
+    func loginUser(correo: String, password: String) {
+        guard let url = URL(string: "http://localhost:8000/users/login") else { return }
+        
+        let body: [String: Any] = ["correo": correo, "password": password]
+        
+        let jsonData = try? JSONSerialization.data(withJSONObject: body)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                DispatchQueue.main.async {
+                    self.alertMessage = "Network error: \(error?.localizedDescription ?? "Unknown error")"
+                    self.showingAlert = true
+                }
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                do {
+                    if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        if let userId = jsonResponse["user_id"] as? Int, let sessionKey = jsonResponse["key"] as? String {
+                            UserDefaults.standard.set(userId, forKey: "user_id")
+                            UserDefaults.standard.set(sessionKey, forKey: "session_key")
+                            
+                            DispatchQueue.main.async {
+                                self.isLoggedIn = true
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.alertMessage = "Invalid response from server."
+                                self.showingAlert = true
+                            }
+                        }
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.alertMessage = "Failed to decode response."
+                        self.showingAlert = true
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.alertMessage = "Invalid credentials."
+                    self.showingAlert = true
+                }
+            }
+        }.resume()
     }
 }
 
