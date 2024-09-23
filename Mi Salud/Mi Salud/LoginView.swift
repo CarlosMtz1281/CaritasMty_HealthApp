@@ -129,10 +129,9 @@ struct LoginView: View {
     }
     // funcion de login
     func loginUser(correo: String, password: String) {
-        guard let url = URL(string: "http://localhost:8000/users/login") else { return }
+        guard let url = URL(string: "http://192.168.1.65:8000/users/login") else { return }
         
         let body: [String: Any] = ["correo": correo, "password": password]
-        
         let jsonData = try? JSONSerialization.data(withJSONObject: body)
         
         var request = URLRequest(url: url)
@@ -149,32 +148,38 @@ struct LoginView: View {
                 return
             }
             
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                do {
-                    if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        if let userId = jsonResponse["user_id"] as? Int, let sessionKey = jsonResponse["key"] as? String {
-                            UserDefaults.standard.set(userId, forKey: "user_id")
-                            UserDefaults.standard.set(sessionKey, forKey: "session_key")
-                            
-                            DispatchQueue.main.async {
-                                self.isLoggedIn = true
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.alertMessage = "Invalid response from server."
-                                self.showingAlert = true
-                            }
+            // Print the raw response to debug the structure
+            if let httpResponse = response as? HTTPURLResponse {
+                print("HTTP Status Code: \(httpResponse.statusCode)")
+            }
+            print("Raw Response: \(String(describing: String(data: data, encoding: .utf8)))")
+            
+            do {
+                // Decode the JSON response
+                if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    // Handle user_id as Int or String (flexible parsing)
+                    if let userId = jsonResponse["user_id"] as? Int ?? Int(jsonResponse["user_id"] as? String ?? ""),
+                       let sessionKey = jsonResponse["key"] as? String {
+                        
+                        // Store values in UserDefaults
+                        UserDefaults.standard.set(userId, forKey: "user_id")
+                        UserDefaults.standard.set(sessionKey, forKey: "session_key")
+                        
+                        // Update the login state
+                        DispatchQueue.main.async {
+                            self.isLoggedIn = true
+                        }
+                        
+                    } else {
+                        DispatchQueue.main.async {
+                            self.alertMessage = "Invalid response from server."
+                            self.showingAlert = true
                         }
                     }
-                } catch {
-                    DispatchQueue.main.async {
-                        self.alertMessage = "Failed to decode response."
-                        self.showingAlert = true
-                    }
                 }
-            } else {
+            } catch {
                 DispatchQueue.main.async {
-                    self.alertMessage = "Invalid credentials."
+                    self.alertMessage = "Failed to decode response."
                     self.showingAlert = true
                 }
             }
