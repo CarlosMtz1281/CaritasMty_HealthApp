@@ -24,7 +24,7 @@ def login():
         U.CORREO = ?
         AND U.PASS = ?
     """
-    
+
     try:
         cursor = cnx.cursor()
         cursor.execute(query, (correo, password))
@@ -37,14 +37,14 @@ def login():
             return jsonify({"error": "Invalid credentials"}), 400
 
         user_id = results[0]['user_id']
-        
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
     user_id = results[0]['user_id']
-    
+
     session_key = create_session(user_id)
-    
+
     return jsonify({"key": session_key}), 200
 
 @users_bp.route('/signOut', methods=['POST'])
@@ -62,10 +62,10 @@ def sign_up():
 @users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
 def current_points(user_id):
     session_key = request.headers.get('key')
-    
+
     if not session_key or validate_key(session_key) != user_id:
         return jsonify({"error": "Invalid session key"}), 400
-    
+
     query = """
     SELECT
         PU.PUNTOS_ACTUALES AS puntos
@@ -79,11 +79,15 @@ def current_points(user_id):
         cursor.execute(query, (user_id,))
 
         columns = [column[0] for column in cursor.description]
-        
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+        result = cursor.fetchone()
         cursor.close()
 
-        return jsonify(results)
+        if result:
+            puntos = int(result[columns.index('puntos')])
+            return jsonify({"puntos": puntos}), 200
+        else:
+            return jsonify({"error": "No points found for the user"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -106,10 +110,10 @@ def history_points(user_id):
     FROM
         HISTORIAL_PUNTOS HP
         INNER JOIN USUARIOS U ON HP.USUARIO = U.ID_USUARIO
-        LEFT JOIN BENEFICIOS B ON HP.BENEFICIO = B.ID_BENEFICIO 
-        LEFT JOIN EVENTOS E ON HP.EVENTO = E.ID_EVENTO 
+        LEFT JOIN BENEFICIOS B ON HP.BENEFICIO = B.ID_BENEFICIO
+        LEFT JOIN EVENTOS E ON HP.EVENTO = E.ID_EVENTO
         LEFT JOIN RETOS R ON HP.RETO = R.ID_RETO
-    WHERE 
+    WHERE
         U.ID_USUARIO = ?
     """
     try:
@@ -117,7 +121,7 @@ def history_points(user_id):
         cursor.execute(query, (user_id,))
 
         columns = [column[0] for column in cursor.description]
-        
+
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         cursor.close()
 
@@ -155,7 +159,7 @@ def update_history_points():
         return jsonify({"message": "Points updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 @users_bp.route('/updatecurrentpoints', methods=['PATCH'])
 def update_current_points():
     try:
@@ -187,7 +191,7 @@ def update_current_points():
         cnx.commit()
 
         cursor.close()
-        
+
         return jsonify({"message": "Points updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
