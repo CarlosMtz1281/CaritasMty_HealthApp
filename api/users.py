@@ -51,15 +51,25 @@ def login():
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
     session_key = request.headers.get('key')
-    user_id = request.headers.get('user_id')
+    user_id = request.headers.get('User-Id')
+    
+    print("Session key: ", session_key)
+    print("User ID from request: ", user_id)
+    
+    session_user_id = validate_key(session_key)
+    
+    print("User ID from session: ", session_user_id)
 
     if not session_key or not user_id:
+        print("No session key or user ID")
         return jsonify({"error": "User ID and session key are required"}), 400
     
-    if validate_key(session_key) and validate_user(user_id, session_key):
+    if str(session_user_id) == str(user_id):
+        print("Deleting session ", session_key)
         delete_session(session_key)
         return jsonify({"message": "Signed out successfully"}), 200
     else:
+        print("Invalid session key or user ID")
         return jsonify({"error": "Invalid session key or user ID"}), 400
 
 

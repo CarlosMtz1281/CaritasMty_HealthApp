@@ -106,42 +106,54 @@ struct AccountView: View {
     }
     
     func signOut() {
-        guard let url = URL(string: "http://localhost:8000/users/signOut") else { return }
+        guard let url = URL(string: "http://192.168.1.65:8000/users/signOut") else { return }
         
-        // obtener
+        // Retrieve sessionKey and userId from UserDefaults
         guard let sessionKey = UserDefaults.standard.string(forKey: "session_key"),
               let userId = UserDefaults.standard.string(forKey: "user_id") else {
             print("Error: No session key or user ID found.")
             return
         }
         
-        // request
+        // Debugging: Print the user_id and sessionKey
+        print("Signing out with user_id: \(userId) and session_key: \(sessionKey)")
+        
+        // Create the request
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        // Add sessionKey and userId to headers as strings (with consistent header names)
         request.setValue(sessionKey, forHTTPHeaderField: "key")
-        request.setValue(userId, forHTTPHeaderField: "user_id")
-        
+        request.setValue(userId, forHTTPHeaderField: "User-Id")  // Notice the change here
+
+        // Send the request
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 print("Error:", error?.localizedDescription ?? "Unknown error")
                 return
             }
             
+            if let httpResponse = response as? HTTPURLResponse {
+                // Debugging: Print the response status
+                print("HTTP Status Code: \(httpResponse.statusCode)")
+            }
+            
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 print("Signed out successfully")
                 
-                // limpiar defaults
+                // Clear UserDefaults
                 UserDefaults.standard.removeObject(forKey: "user_id")
                 UserDefaults.standard.removeObject(forKey: "session_key")
                 
-                // cerrar app
+                // Close app
                 DispatchQueue.main.async {
                     exit(0)
                 }
                 
             } else {
+                // Debugging: Print the raw response if sign-out fails
+                print("Failed to sign out. Raw Response: \(String(data: data, encoding: .utf8) ?? "No response data")")
                 print("Error signing out: \(String(describing: error?.localizedDescription))")
             }
         }.resume()
