@@ -2,16 +2,9 @@ import pyodbc
 import pymssql
 import sys
 
-vm_params = {
-    'DB_HOST': '100.80.80.7',
-    'DB_NAME': 'alumno02',
-    'DB_USER': 'SA',
-    'DB_PASSWORD': 'Shakira123.'
-}
-
 localToVM_params = {
     'DB_HOST': '10.14.255.64',
-    'DB_NAME': 'master',
+    'DB_NAME': 'dummy', # usar tabla dummy
     'DB_USER': 'SA',
     'DB_PASSWORD': 'Shakira123.'
 }
@@ -37,11 +30,11 @@ nico_local_params = {
     'DB_PASSWORD': '5abr1t0n3s_GOAT'
 }
 
-def connect_fer():
+def connect_fer(params):
     conn = pymssql.connect(
-        server='localhost',
-        user='sa',
-        password='5abr1t0n3s_GOAT',
+        server=params['DB_HOST'],
+        user=params['DB_USER'],
+        password=params['DB_PASSWORD'],
         database='dummy'
     )
     return conn
@@ -61,7 +54,7 @@ def connect_to_db(params):
         print(f"Cannot connect to MSSQL server: {e}")
         sys.exit()
 
-cnx = connect_to_db(local_params)
+#cnx = connect_to_db(local_params)
 
-#cnx =  connect_fer()
+cnx =  connect_fer(localToVM_params)
 
