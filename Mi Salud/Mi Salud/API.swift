@@ -9,7 +9,7 @@ import Foundation
 
 // Fetch session key and user ID from UserDefaults
 let sessionKey: String = {
-    return UserDefaults.standard.string(forKey: "session_key") ?? "697cb08a-6db6-42d7-b433-a3903caad03c" // Use hardcoded session key if not found
+    return UserDefaults.standard.string(forKey: "session_key") ?? "1035ba7c-569a-4b51-a95a-7a77870e4f4c" // Use hardcoded session key if not found
 }()
 
 let userID: Int = {
