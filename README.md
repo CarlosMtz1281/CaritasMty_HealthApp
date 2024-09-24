@@ -23,3 +23,4 @@ $ pip install -r requirements.txt </br>
 @ferp03 </br>
 @nicoTC-04 </br>
 @ivangtamezc </br>
+@GermanS04 </br>
