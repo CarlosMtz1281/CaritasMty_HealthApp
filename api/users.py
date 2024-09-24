@@ -13,7 +13,7 @@ def login():
     password = data.get('password')
 
     if not correo or not password:
-        return jsonify({"error": "User ID is required"}), 400
+        return jsonify({"error": "Correo and password are required"}), 400
 
     query = """
     SELECT
@@ -24,7 +24,7 @@ def login():
         U.CORREO = ?
         AND U.PASS = ?
     """
-    
+
     try:
         cursor = cnx.cursor()
         cursor.execute(query, (correo, password))
@@ -37,23 +37,41 @@ def login():
             return jsonify({"error": "Invalid credentials"}), 400
 
         user_id = results[0]['user_id']
-        
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-    user_id = results[0]['user_id']
-    
+
+    # Create a session key for the user
     session_key = create_session(user_id)
-    
-    return jsonify({"key": session_key}), 200
+
+    # Return both the user_id and the session_key
+    return jsonify({"user_id": user_id, "key": session_key}), 200
+
 
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
     session_key = request.headers.get('key')
-    if session_key and validate_key(session_key):
+    user_id = request.headers.get('User-Id')
+
+    print("Session key: ", session_key)
+    print("User ID from request: ", user_id)
+
+    session_user_id = validate_key(session_key)
+
+    print("User ID from session: ", session_user_id)
+
+    if not session_key or not user_id:
+        print("No session key or user ID")
+        return jsonify({"error": "User ID and session key are required"}), 400
+
+    if str(session_user_id) == str(user_id):
+        print("Deleting session ", session_key)
         delete_session(session_key)
         return jsonify({"message": "Signed out successfully"}), 200
-    return jsonify({"error": "Invalid session key"}), 400
+    else:
+        print("Invalid session key or user ID")
+        return jsonify({"error": "Invalid session key or user ID"}), 400
+
 
 @users_bp.route('/signUp', methods=['POST'])
 def sign_up():
@@ -62,10 +80,10 @@ def sign_up():
 @users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
 def current_points(user_id):
     session_key = request.headers.get('key')
-    
+
     if not session_key or validate_key(session_key) != user_id:
         return jsonify({"error": "Invalid session key"}), 400
-    
+
     query = """
     SELECT
         PU.PUNTOS_ACTUALES AS puntos
@@ -79,11 +97,15 @@ def current_points(user_id):
         cursor.execute(query, (user_id,))
 
         columns = [column[0] for column in cursor.description]
-        
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+        result = cursor.fetchone()
         cursor.close()
 
-        return jsonify(results)
+        if result:
+            puntos = int(result[columns.index('puntos')])
+            return jsonify({"puntos": puntos}), 200
+        else:
+            return jsonify({"error": "No points found for the user"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -106,10 +128,10 @@ def history_points(user_id):
     FROM
         HISTORIAL_PUNTOS HP
         INNER JOIN USUARIOS U ON HP.USUARIO = U.ID_USUARIO
-        LEFT JOIN BENEFICIOS B ON HP.BENEFICIO = B.ID_BENEFICIO 
-        LEFT JOIN EVENTOS E ON HP.EVENTO = E.ID_EVENTO 
+        LEFT JOIN BENEFICIOS B ON HP.BENEFICIO = B.ID_BENEFICIO
+        LEFT JOIN EVENTOS E ON HP.EVENTO = E.ID_EVENTO
         LEFT JOIN RETOS R ON HP.RETO = R.ID_RETO
-    WHERE 
+    WHERE
         U.ID_USUARIO = ?
     """
     try:
@@ -117,7 +139,7 @@ def history_points(user_id):
         cursor.execute(query, (user_id,))
 
         columns = [column[0] for column in cursor.description]
-        
+
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         cursor.close()
 
@@ -155,7 +177,7 @@ def update_history_points():
         return jsonify({"message": "Points updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 @users_bp.route('/updatecurrentpoints', methods=['PATCH'])
 def update_current_points():
     try:
@@ -187,7 +209,7 @@ def update_current_points():
         cnx.commit()
 
         cursor.close()
-        
+
         return jsonify({"message": "Points updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

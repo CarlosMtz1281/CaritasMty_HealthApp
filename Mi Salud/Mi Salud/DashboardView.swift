@@ -16,37 +16,42 @@ struct RoundedCornersShape: Shape {
     }
 }
 
+//API CALLS
+
+// Fetch current points using the hardcoded session key
+
+
 struct DashboardView: View {
+    @State private var points: Int = 0 // para puntos
+    @State private var catalogItems: [CatalogItem] = [] // para catalogo
+
     var body: some View {
-        
         VStack(spacing: 0) {
-            ScrollView(.vertical, showsIndicators: false){
-                //Header
+            ScrollView(.vertical, showsIndicators: false) {
+                // Header
                 VStack {
-                    // salute
-                    HStack() {
-                       Circle()
-                           .frame(width: 50, height: 50)
-                           .foregroundColor(Color(Constants.Colors.accent))
+                    // Salute
+                    HStack {
+                        Circle()
+                            .frame(width: 50, height: 50)
+                            .foregroundColor(Color(Constants.Colors.accent))
                         VStack(alignment: .leading) {
                             Text("Hola, Carlos!")
                                 .font(.title2)
                                 .foregroundColor(.white)
-                            
-                            
                         }
                         Spacer()
-                        
-                        
-                   }
+                    }
                     .padding()
                     .padding(.top, 70)
+
                     // Points section
                     NavigationLink(destination: PointsHistoryView()) {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("1,500 puntos")
+                                Text("\(points) puntos")
                                     .font(.title2)
+                                    .foregroundStyle(.black)
                             }
                             Spacer()
                             Image(systemName: "chevron.right")
@@ -64,33 +69,28 @@ struct DashboardView: View {
                 .frame(height: UIScreen.main.bounds.height * 0.26)
                 .background(Color(Constants.Colors.primary))
                 .clipShape(RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 20))
-                
-                
 
-                
-                
-          
-                //tienda section
-                VStack(alignment: .leading){
+                // Tienda section
+                VStack(alignment: .leading) {
                     Text("Tienda")
                         .font(.title)
-                        .padding(.bottom,20)
+                        .padding(.bottom, 20)
                         .padding()
-                    
+
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
-                            ForEach(0..<8) { _ in
+                            ForEach(catalogItems, id: \.id) { item in // Assuming CatalogItem has a unique 'id'
                                 VStack {
-                                    Image("family_trip")
+                                    Image("family_trip") // Assuming the image is static
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 150, height: 100)
                                         .clipped()
-                                    
+
                                     VStack(alignment: .leading) {
-                                        Text("Vacaciones Cortas")
+                                        Text(item.nombre) // Display the item's name
                                             .font(.headline)
-                                        Text("3,500,000 pts")
+                                        Text("\(item.puntos) pts") // Assuming `puntos` is a property in CatalogItem
                                             .font(.subheadline)
                                             .foregroundColor(.gray)
                                     }
@@ -104,19 +104,18 @@ struct DashboardView: View {
                             }
                         }
                         .padding(.horizontal, 16)
-                        .padding(.vertical,16)
+                        .padding(.vertical, 16)
                     }
                     .frame(height: 150) // Set a fixed height for the ScrollView to avoid it expanding vertically too much
                 }
-                .padding(.bottom,50)
-                
-                // Ultimo examen clinico
-                
+                .padding(.bottom, 50)
+
+                // Último examen clinico
                 VStack(alignment: .leading) {
                     Text("Último examen de salud")
                         .font(.title2)
                         .padding(.leading)
-                    
+
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Presion Arterial")
@@ -142,24 +141,24 @@ struct DashboardView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
                 }
-                            
-                //Eventos section
-                VStack(alignment: .leading){
+
+                // Eventos section
+                VStack(alignment: .leading) {
                     Text("Próximos Eventos")
                         .font(.title)
-                        .padding(.bottom,20)
+                        .padding(.bottom, 20)
                         .padding()
-                    
+
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(0..<8) { _ in
                                 VStack {
-                                    Image("family_trip")
+                                    Image("family_trip") // Using the same image
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 150, height: 100)
                                         .clipped()
-                                    
+
                                     VStack(alignment: .leading) {
                                         Text("Platica Nutrición")
                                             .font(.headline)
@@ -177,23 +176,30 @@ struct DashboardView: View {
                             }
                         }
                         .padding(.horizontal, 16)
-                        .padding(.vertical,16)
+                        .padding(.vertical, 16)
                     }
                     .frame(height: 150) // Set a fixed height for the ScrollView to avoid it expanding vertically too much
                 }
-                .padding(.bottom,50)
-                Spacer()
-                Spacer()
-                Spacer()
+                .padding(.bottom, 50)
 
-                
+                Spacer()
+                Spacer()
+                Spacer()
             }
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white) // Optional: to set a default background color
         .edgesIgnoringSafeArea(.top) // Ensures the view extends to the top edge
-        
+        .onAppear {
+            fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
+                self.points = fetchedPoints
+
+                // Now that we have fetched points, we can fetch the catalog
+                fetchCatalog(sessionKey: sessionKey) { items in
+                    self.catalogItems = items
+                }
+            }
+        }
     }
 }
 

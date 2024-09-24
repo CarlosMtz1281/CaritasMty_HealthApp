@@ -16,6 +16,13 @@ local_params = {
     'DB_PASSWORD': '5abr1t0n3s_GOAT'
 }
 
+Ivan_local_params = {
+    'DB_HOST': 'localhost',
+    'DB_NAME': 'master',
+    'DB_USER': 'IVAN',
+    'DB_PASSWORD': '5abr1t0n3s_GOAT'
+}
+
 nico_local_params = {
     'DB_HOST': 'localhost\\SQLEXPRESS',
     'DB_NAME': 'master',
