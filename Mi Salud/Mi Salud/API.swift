@@ -7,15 +7,21 @@
 
 import Foundation
 
-// Shared session key
-let sessionKey = "697cb08a-6db6-42d7-b433-a3903caad03c" // Hardcoded session key
+// Fetch session key and user ID from UserDefaults
+let sessionKey: String = {
+    return UserDefaults.standard.string(forKey: "session_key") ?? "697cb08a-6db6-42d7-b433-a3903caad03c" // Use hardcoded session key if not found
+}()
+
+let userID: Int = {
+    return UserDefaults.standard.integer(forKey: "user_id") > 0 ? UserDefaults.standard.integer(forKey: "user_id") : 1 // Use stored user ID or default to 1
+}()
 
 // Struct to decode the current points response
 struct PointsResponse: Decodable {
     let puntos: Int
 }
 
-// Fetch current points using the hardcoded session key
+// Fetch current points using the retrieved session key
 func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (Int) -> Void) {
     guard let url = URL(string: "http://localhost:8000/users/currentpoints/\(userID)") else { return }
     
@@ -53,7 +59,6 @@ func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (
 // TIENDA
 
 // Struct to represent a single catalog item
-// Struct to represent a single catalog item
 struct CatalogItem: Codable, Identifiable {
     let id: String
     let nombre: String
@@ -67,6 +72,7 @@ struct CatalogItem: Codable, Identifiable {
         case puntos = "PUNTOS"
     }
 }
+
 func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> Void) {
     let urlString = "http://localhost:8000/tienda/catalogo"
     guard let url = URL(string: urlString) else { return }

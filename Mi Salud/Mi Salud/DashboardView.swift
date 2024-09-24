@@ -23,7 +23,6 @@ struct RoundedCornersShape: Shape {
 
 struct DashboardView: View {
     @State private var points: Int = 0 // para puntos
-    var userID: Int = 1 // Hardcoded for now, replace with actual user ID
     @State private var catalogItems: [CatalogItem] = [] // para catalogo
 
     var body: some View {

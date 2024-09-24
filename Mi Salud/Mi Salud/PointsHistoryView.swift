@@ -75,7 +75,6 @@ struct PointsHistoryView: View {
     @State private var points: Int = 0
     @State private var history: [Transaction] = []
     
-    var userID: Int = 1 // Hardcoded for now, replace with actual user ID
     
     var body: some View {
         VStack {
