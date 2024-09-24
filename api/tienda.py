@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 from database import cnx
 import logging
+from session_manager import  validate_key
+
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -9,6 +11,11 @@ tienda_bp = Blueprint('tienda', __name__)
 
 @tienda_bp.route('/catalogo', methods=['GET'])
 def catalogo():
+    key = request.headers.get('key')
+
+    if not key or not validate_key(key):
+        return jsonify({"error": "Invalid session key"}), 400
+
     query = """
     SELECT * from BENEFICIOS
     """
@@ -33,11 +40,10 @@ def catalogo():
         # Log the results for debugging
         logging.debug(f"Query results: {results}")
 
-        return jsonify({"beneficios": results}), 200
+        return jsonify(results), 200
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
-
 
 @tienda_bp.route('/comprarBono', methods=['POST'])
 def comprar_bono():

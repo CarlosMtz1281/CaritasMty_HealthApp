@@ -23,47 +23,9 @@ struct Transaction: Identifiable, Decodable {
     }
 }
 
-// Struct to decode the current points response
-struct PointsResponse: Decodable {
-    let puntos: Int
-}
-
-let sessionKey = "cb20c8b6-bb03-4789-8e8c-99d6c9b6839d" // Hardcoded session key
 
 // Fetch current points using the hardcoded session key
-func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (Int) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/currentpoints/\(userID)") else { return }
-    
-    var request = URLRequest(url: url)
-    request.addValue(sessionKey, forHTTPHeaderField: "key") // Add the session key as a header
-    
-    URLSession.shared.dataTask(with: request) { data, response, error in
-        if let error = error {
-            print("Error fetching points: \(error)")
-            return
-        }
-        
-        guard let data = data else {
-            print("No data returned")
-            return
-        }
-        
-        do {
-            // Print the raw data to debug
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("Raw JSON response: \(jsonString)")
-            }
-            
-            // Decode the dictionary response
-            let pointsResponse = try JSONDecoder().decode(PointsResponse.self, from: data)
-            DispatchQueue.main.async {
-                completion(pointsResponse.puntos)
-            }
-        } catch {
-            print("Error decoding points: \(error)")
-        }
-    }.resume()
-}
+
 
 // Fetch and decode transaction history using the hardcoded session key
 func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping ([Transaction]) -> Void) {
