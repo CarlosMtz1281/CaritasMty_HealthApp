@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct Transaction: Identifiable, Decodable {
-    
     var id = UUID()  // Using UUID for unique row identification
     var fecha: String
     var origen_nombre: String
     var puntos: String
     var tipo: Bool
     
+    // Match the API response keys to your struct properties
     enum CodingKeys: String, CodingKey {
         case fecha
         case origen_nombre
@@ -22,49 +22,51 @@ struct Transaction: Identifiable, Decodable {
         case tipo
     }
 }
-func fetchCurrentPoints(userID: Int, completion: @escaping (Int) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/currentpoints/\(userID)") else { return }
-    
-    URLSession.shared.dataTask(with: url) { data, response, error in
-        if let data = data {
-            do {
-                // Decode an array of dictionaries, then extract the "puntos" value from the first one
-                if let pointsArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: String]],
-                   let firstEntry = pointsArray.first,
-                   let puntosString = firstEntry["puntos"],
-                   let puntos = Int(puntosString) {
-                    DispatchQueue.main.async {
-                        completion(puntos)
-                    }
-                } else {
-                    print("Unexpected points format")
-                }
-            } catch {
-                print("Error decoding points: \(error)")
-            }
-        } else if let error = error {
-            print("Error fetching points: \(error)")
-        }
-    }.resume()
-}
 
-// Fetch and decode transaction history
-func fetchPointsHistory(userID: Int, completion: @escaping ([Transaction]) -> Void) {
+
+// Fetch current points using the hardcoded session key
+
+
+// Fetch and decode transaction history using the hardcoded session key
+func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping ([Transaction]) -> Void) {
     guard let url = URL(string: "http://localhost:8000/users/historypoints/\(userID)") else { return }
     
-    URLSession.shared.dataTask(with: url) { data, response, error in
-        if let data = data {
-            do {
-                // Decode the array of dictionaries into the Transaction struct
-                let history = try JSONDecoder().decode([Transaction].self, from: data)
-                DispatchQueue.main.async {
-                    completion(history)
-                }
-            } catch {
-                print("Error decoding history: \(error)")
-            }
-        } else if let error = error {
+    var request = URLRequest(url: url)
+    request.addValue(sessionKey, forHTTPHeaderField: "key") // Add the session key as a header
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
             print("Error fetching history: \(error)")
+            return
+        }
+        
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+        
+        // Debug: Print the raw response
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
+        
+        do {
+            // Try to decode the data as an array of transactions
+            let history = try JSONDecoder().decode([Transaction].self, from: data)
+            DispatchQueue.main.async {
+                completion(history)
+            }
+        } catch DecodingError.typeMismatch {
+            // If the response is not an array, try to decode as a dictionary (assumed to be an error message)
+            do {
+                let errorResponse = try JSONDecoder().decode([String: String].self, from: data)
+                print("Received dictionary (possible error message): \(errorResponse)")
+                // You can handle the error response here, e.g., showing an alert to the user
+            } catch {
+                print("Failed to decode as error dictionary: \(error)")
+            }
+        } catch {
+            print("Unexpected error decoding history: \(error)")
         }
     }.resume()
 }
@@ -114,20 +116,19 @@ struct PointsHistoryView: View {
             }
             .listStyle(InsetGroupedListStyle())
             
-            
             Spacer()
         }
-        
         .navigationBarTitle("")
         .navigationBarHidden(true)
         .onAppear {
-            // Fetch points and history when the view appears
-            fetchCurrentPoints(userID: userID) { fetchedPoints in
+            // Fetch points first, then fetch history
+            fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
                 self.points = fetchedPoints
-            }
-            
-            fetchPointsHistory(userID: userID) { fetchedHistory in
-                self.history = fetchedHistory
+                
+                // Once points are fetched, fetch the history
+                fetchPointsHistory(userID: userID, sessionKey: sessionKey) { fetchedHistory in
+                    self.history = fetchedHistory
+                }
             }
         }
     }
