@@ -27,7 +27,7 @@ nico_local_params = {
     'DB_HOST': 'localhost\\SQLEXPRESS',
     'DB_NAME': 'master',
     'DB_USER': 'sa',
-    'DB_PASSWORD': '5abr1t0n3s_GOAT'
+    'DB_PASSWORD': ''
 }
 
 def connect_fer():
