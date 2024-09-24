@@ -1,4 +1,5 @@
 import pyodbc
+import pymssql
 import sys
 
 vm_params = {
@@ -29,6 +30,15 @@ nico_local_params = {
     'DB_PASSWORD': '5abr1t0n3s_GOAT'
 }
 
+def connect_fer():
+    conn = pymssql.connect(
+        server='localhost',
+        user='sa',
+        password='5abr1t0n3s_GOAT',
+        database='dummy'
+    )
+    return conn
+
 def connect_to_db(params):
     """Conecta a la base de datos utilizando pyodbc y devuelve la conexión."""
     conn_str = (
@@ -45,4 +55,6 @@ def connect_to_db(params):
         sys.exit()
 
 cnx = connect_to_db(local_params)
+
+#cnx =  connect_fer()
 

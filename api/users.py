@@ -13,7 +13,7 @@ def login():
     password = data.get('password')
 
     if not correo or not password:
-        return jsonify({"error": "User ID is required"}), 400
+        return jsonify({"error": "Correo and password are required"}), 400
 
     query = """
     SELECT
@@ -41,19 +41,37 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    user_id = results[0]['user_id']
-
+    # Create a session key for the user
     session_key = create_session(user_id)
 
-    return jsonify({"key": session_key}), 200
+    # Return both the user_id and the session_key
+    return jsonify({"user_id": user_id, "key": session_key}), 200
+
 
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
     session_key = request.headers.get('key')
-    if session_key and validate_key(session_key):
+    user_id = request.headers.get('User-Id')
+
+    print("Session key: ", session_key)
+    print("User ID from request: ", user_id)
+
+    session_user_id = validate_key(session_key)
+
+    print("User ID from session: ", session_user_id)
+
+    if not session_key or not user_id:
+        print("No session key or user ID")
+        return jsonify({"error": "User ID and session key are required"}), 400
+
+    if str(session_user_id) == str(user_id):
+        print("Deleting session ", session_key)
         delete_session(session_key)
         return jsonify({"message": "Signed out successfully"}), 200
-    return jsonify({"error": "Invalid session key"}), 400
+    else:
+        print("Invalid session key or user ID")
+        return jsonify({"error": "Invalid session key or user ID"}), 400
+
 
 @users_bp.route('/signUp', methods=['POST'])
 def sign_up():
