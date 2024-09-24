@@ -129,7 +129,7 @@ struct LoginView: View {
     }
     // funcion de login
     func loginUser(correo: String, password: String) {
-        guard let url = URL(string: "http://192.168.1.65:8000/users/login") else { return }
+        guard let url = URL(string: "http://localhost:8000/users/login") else { return }
         
         let body: [String: Any] = ["correo": correo, "password": password]
         let jsonData = try? JSONSerialization.data(withJSONObject: body)
