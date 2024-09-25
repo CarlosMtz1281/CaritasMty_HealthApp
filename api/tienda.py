@@ -15,6 +15,8 @@ def catalogo():
     Obtiene el catálogo de beneficios disponibles para canjear.
     Documentado por Carlos.
     ---
+    tags:
+      - Sprint 2
     parameters:
       - name: key
         in: header
@@ -103,6 +105,8 @@ def comprar_bono():
     Maneja la compra de un beneficio por parte de un usuario.
     Documentado por Fer.
     ---
+    tags:
+      - Sprint 2
     parameters:
       - name: key
         in: header

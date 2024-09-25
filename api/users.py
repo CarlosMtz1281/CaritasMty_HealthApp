@@ -11,6 +11,8 @@ def login():
     Maneja el inicio de sesión de un usuario.
     Documentado por Nico.
     ---
+    tags:
+      - Sprint 2
     parameters:
       - in: body
         name: body
@@ -70,8 +72,8 @@ def login():
     FROM
         USUARIOS U
     WHERE
-        U.CORREO = ?
-        AND U.PASS = ?
+        U.CORREO = %s
+        AND U.PASS = %s
     """
 
     try:
@@ -102,6 +104,8 @@ def sign_out():
     Maneja el cierre de sesión de un usuario.
     Documentado por Iván.
     ---
+    tags:
+      - Sprint 2
     parameters:
       - name: key
         in: header
@@ -174,7 +178,7 @@ def profile_picture_get(user_id):
     LEFT JOIN
         FOTOS_PERFIL FP ON U.ID_FOTO = FP.ID_FOTO
     WHERE
-        U.ID_USUARIO = ?
+        U.ID_USUARIO = %s
     """
     try:
         cursor = cnx.cursor()
@@ -205,8 +209,8 @@ def profile_picture_change():
         cursor = cnx.cursor()
         query = """
             UPDATE USUARIOS 
-            SET ID_FOTO = (SELECT ID_FOTO FROM FOTOS_PERFIL WHERE ARCHIVO = ?) 
-            WHERE ID_USUARIO = ?
+            SET ID_FOTO = (SELECT ID_FOTO FROM FOTOS_PERFIL WHERE ARCHIVO = %s) 
+            WHERE ID_USUARIO = %s
             """
         cursor.execute(query, (path, user_id))
 
@@ -273,7 +277,7 @@ def history_points(user_id):
         LEFT JOIN EVENTOS E ON HP.EVENTO = E.ID_EVENTO
         LEFT JOIN RETOS R ON HP.RETO = R.ID_RETO
     WHERE
-        U.ID_USUARIO = ?
+        U.ID_USUARIO = %s
     """
     try:
         cursor = cnx.cursor()
@@ -307,7 +311,7 @@ def update_history_points():
 
         queryHistorial = """
         INSERT INTO HISTORIAL_PUNTOS (USUARIO, PUNTOS_MODIFICADOS, TIPO_MODIFICACION, FECHA, BENEFICIO, EVENTO, RETO)
-        VALUES (?, ?, ?, GETDATE(), ?, ?, ?)
+        VALUES (%s, %s, %s, GETDATE(), %s, %s, %s)
         """
         cursor.execute(queryHistorial, (user_id, puntos, tipo, beneficio_id, evento_id, reto_id))
 
@@ -336,14 +340,14 @@ def update_current_points():
         if(tipo):
             query = """
             UPDATE PUNTOS_USUARIO
-            SET PUNTOS_ACTUALES = PUNTOS_ACTUALES + ?
-            WHERE USUARIO = ?
+            SET PUNTOS_ACTUALES = PUNTOS_ACTUALES + %s
+            WHERE USUARIO = %s
             """
         else:
             query = """
             UPDATE PUNTOS_USUARIO
-            SET PUNTOS_ACTUALES = PUNTOS_ACTUALES - ?
-            WHERE USUARIO = ?
+            SET PUNTOS_ACTUALES = PUNTOS_ACTUALES - %s
+            WHERE USUARIO = %s
             """
         cursor.execute(query, (puntos, user_id))
 
