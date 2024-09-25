@@ -8,12 +8,62 @@ users_bp = Blueprint('users', __name__)
 
 @users_bp.route('/login', methods=['POST'])
 def login():
+    """
+    Maneja el inicio de sesión de un usuario.
+    Documentado por Nico.
+    ---
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            correo:
+              type: string
+              description: El correo electrónico del usuario.
+              example: "juan.perez@example.com"
+            password:
+              type: string
+              description: La contraseña del usuario.
+              example: "password123"
+    responses:
+      200:
+        description: Inicio de sesión exitoso.
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que ha iniciado sesión.
+              example: 123
+            key:
+              type: string
+              description: Clave de sesión generada para el usuario.
+              example: "abcd1234sessionkey"
+      400:
+        description: Error en la solicitud por falta de datos o credenciales inválidas.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "El correo y la contraseña son obligatorios. O Credenciales inválidas"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Mensaje detallando el error"
+    """
     data = request.json
     correo = data.get('correo')
     password = data.get('password')
 
     if not correo or not password:
-        return jsonify({"error": "Correo and password are required"}), 400
+        return jsonify({"error": "El correo y la contraseña son requeridos"}), 400
 
     query = """
     SELECT
@@ -34,17 +84,15 @@ def login():
         cursor.close()
 
         if not results:
-            return jsonify({"error": "Invalid credentials"}), 400
+            return jsonify({"error": "Credenciales inválidas"}), 400
 
         user_id = results[0]['user_id']
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    # Create a session key for the user
     session_key = create_session(user_id)
 
-    # Return both the user_id and the session_key
     return jsonify({"user_id": user_id, "key": session_key}), 200
 
 
@@ -62,15 +110,15 @@ def sign_out():
 
     if not session_key or not user_id:
         print("No session key or user ID")
-        return jsonify({"error": "User ID and session key are required"}), 400
+        return jsonify({"error": "El ID de usuario y la clave de sesión son obligatorios"}), 400
 
     if str(session_user_id) == str(user_id):
         print("Deleting session ", session_key)
         delete_session(session_key)
-        return jsonify({"message": "Signed out successfully"}), 200
+        return jsonify({"message": "Sesión cerrada exitosamente"}), 200
     else:
         print("Invalid session key or user ID")
-        return jsonify({"error": "Invalid session key or user ID"}), 400
+        return jsonify({"error": "Clave de sesión o ID de usuario inválidos"}), 400
 
 
 @users_bp.route('/signUp', methods=['POST'])
@@ -79,56 +127,6 @@ def sign_up():
 
 @users_bp.route('/currentpoints/<int:user_id>', methods=['GET']) # documentar
 def current_points(user_id):
-    """
-    Consulta los puntos actuales de un usuario.
-    Documentado por Fer.
-    ---
-    parameters:
-      - name: user_id
-        in: path
-        type: integer
-        required: true
-        description: El ID del usuario.
-      - name: key
-        in: header
-        type: string
-        required: true
-        description: Clave de sesión para autenticar la solicitud.
-    responses:
-      200:
-        description: Devuelve los puntos actuales del usuario.
-        schema:
-          type: object
-          properties:
-            puntos:
-              type: integer
-              example: 120
-      400:
-        description: Clave de sesión inválida o faltante.
-        schema:
-          type: object
-          properties:
-            error:
-              type: string
-              example: "Llave de sesión inválida"
-      404:
-        description: No se encontraron puntos para el usuario.
-        schema:
-          type: object
-          properties:
-            error:
-              type: string
-              example: "No se encontraron puntos para el usuario"
-      500:
-        description: Error interno del servidor.
-        schema:
-          type: object
-          properties:
-            error:
-              type: string
-              example: "Mensaje de error"
-    """
-
     session_key = request.headers.get('key')
 
     if not session_key or validate_key(session_key) != user_id:
