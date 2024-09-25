@@ -21,8 +21,8 @@ def login():
     FROM
         USUARIOS U
     WHERE
-        U.CORREO = ?
-        AND U.PASS = ?
+        U.CORREO = %s
+        AND U.PASS = %s
     """
 
     try:
@@ -77,12 +77,62 @@ def sign_out():
 def sign_up():
     return "Sign Up"
 
-@users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
+@users_bp.route('/currentpoints/<int:user_id>', methods=['GET']) # documentar
 def current_points(user_id):
+    """
+    Consulta los puntos actuales de un usuario.
+    Documentado por Fer.
+    ---
+    parameters:
+      - name: user_id
+        in: path
+        type: integer
+        required: true
+        description: El ID del usuario.
+      - name: key
+        in: header
+        type: string
+        required: true
+        description: Clave de sesión para autenticar la solicitud.
+    responses:
+      200:
+        description: Devuelve los puntos actuales del usuario.
+        schema:
+          type: object
+          properties:
+            puntos:
+              type: integer
+              example: 120
+      400:
+        description: Clave de sesión inválida o faltante.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida"
+      404:
+        description: No se encontraron puntos para el usuario.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "No se encontraron puntos para el usuario"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Mensaje de error"
+    """
+
     session_key = request.headers.get('key')
 
     if not session_key or validate_key(session_key) != user_id:
-        return jsonify({"error": "Invalid session key"}), 400
+        return jsonify({"error": "Llave de sesión inválida."}), 400
 
     query = """
     SELECT
@@ -90,7 +140,7 @@ def current_points(user_id):
     FROM
         PUNTOS_USUARIO PU
     WHERE
-        PU.USUARIO = ?
+        PU.USUARIO = %s
     """
     try:
         cursor = cnx.cursor()
@@ -105,7 +155,7 @@ def current_points(user_id):
             puntos = int(result[columns.index('puntos')])
             return jsonify({"puntos": puntos}), 200
         else:
-            return jsonify({"error": "No points found for the user"}), 404
+            return jsonify({"error": "No se encontraron puntos para el usuario."}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

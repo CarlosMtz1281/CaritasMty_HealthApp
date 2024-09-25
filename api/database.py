@@ -55,6 +55,5 @@ def connect_to_db(params):
         sys.exit()
 
 #cnx = connect_to_db(local_params)
-
-cnx =  connect_fer(localToVM_params)
+cnx =  connect_fer(local_params)
 
