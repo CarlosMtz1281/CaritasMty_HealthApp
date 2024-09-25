@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, request
 from database import cnx
-
 import logging
 from session_manager import  validate_key
 
@@ -10,12 +9,12 @@ logging.basicConfig(level=logging.DEBUG)
 
 tienda_bp = Blueprint('tienda', __name__)
 
-@tienda_bp.route('/catalogo', methods=['GET'])
+@tienda_bp.route('/catalogo', methods=['GET']) # docs
 def catalogo():
     key = request.headers.get('key')
 
     if not key or not validate_key(key):
-        return jsonify({"error": "Invalid session key"}), 400
+        return jsonify({"error": "Llave de sesión inválida."}), 400
 
     query = """
     SELECT * from BENEFICIOS
@@ -24,7 +23,7 @@ def catalogo():
         # Ensure the connection is established
         if cnx is None:
             logging.error("Database connection is not established.")
-            return jsonify({"error": "Database connection is not established."}), 500
+            return jsonify({"error": "No se estableció la conexión con la Base de Datos."}), 500
 
         cursor = cnx.cursor()
         cursor.execute(query)
@@ -32,7 +31,7 @@ def catalogo():
         # Check if the cursor has any results
         if cursor.description is None:
             logging.error("Query did not return any results.")
-            return jsonify({"error": "Query did not return any results."}), 500
+            return jsonify({"error": "No se obtuvieron resultados de la Query."}), 500
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
@@ -47,11 +46,79 @@ def catalogo():
         return jsonify({"error": str(e)}), 500
 
 @tienda_bp.route('/comprarBono', methods=['POST'])
-def comprar_bono(): #pendiente checar que pedo con la validacion con el hash de nico, yo no creo que se necesite 
+def comprar_bono():
+    """
+    Maneja la compra de un beneficio por parte de un usuario.
+    Documentado por Fer.
+    ---
+    parameters:
+      - name: key
+        in: header
+        type: string
+        required: true
+        description: Clave de sesión para autenticar la solicitud.
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que está realizando la compra.
+              example: 123
+            puntos:
+              type: integer
+              description: Puntos actuales del usuario.
+              example: 500
+            beneficio_id:
+              type: integer
+              description: ID del beneficio que el usuario desea comprar.
+              example: 45
+    responses:
+      200:
+        description: El beneficio se ha comprado exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Beneficio comprado exitosamente"
+      400:
+        description: Clave de sesión inválida.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida"
+      409:
+        description: Conflicto en la compra (beneficio ya adquirido o puntos insuficientes).
+        schema:
+          type: object
+          properties:
+            conflict:
+              type: string
+              example: "'Beneficio ya comprado anteriormente. Seleccione un beneficio distinto'. O 'Puntos insuficientes'"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Mensaje de error"
+    """
+    session_key = request.headers.get('key')
+
+    
     data = request.json
     user_id = data.get('user_id')
     puntos = data.get('puntos')
-    beneficio_id = data.get('beneficio_id') #id_beneficio
+    beneficio_id = data.get('beneficio_id')
+
+    if not session_key or validate_key(session_key) != user_id:
+        return jsonify({"error": "Llave de sesión inválida."}), 400
 
     query_checarBeneficio = """
     SELECT CASE WHEN EXISTS (

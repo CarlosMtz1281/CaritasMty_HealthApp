@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flasgger import Swagger
 from users import users_bp
 from eventos import eventos_bp
 from mediciones import mediciones_bp
@@ -13,6 +14,16 @@ app.register_blueprint(users_bp, url_prefix='/users')
 app.register_blueprint(eventos_bp, url_prefix='/eventos')
 app.register_blueprint(mediciones_bp, url_prefix='/mediciones')
 app.register_blueprint(tienda_bp, url_prefix='/tienda')
+
+# Documentación en Swagger
+swagger = Swagger(app, template={
+    "info":{
+        "title": "Documentación Equipo 4",
+        "description": "Documentación de endpoints LeSabritones",
+        "version": "1.0.0"
+    }
+ })
+
 
 @app.route("/")
 def get_tables():

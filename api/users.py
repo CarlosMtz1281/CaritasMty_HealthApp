@@ -13,7 +13,7 @@ def login():
     password = data.get('password')
 
     if not correo or not password:
-        return jsonify({"error": "Correo and password are required"}), 400
+        return jsonify({"error": "El correo y la contraseña son requeridos"}), 400
 
     query = """
     SELECT
@@ -21,8 +21,8 @@ def login():
     FROM
         USUARIOS U
     WHERE
-        U.CORREO = ?
-        AND U.PASS = ?
+        U.CORREO = %s
+        AND U.PASS = %s
     """
 
     try:
@@ -34,17 +34,15 @@ def login():
         cursor.close()
 
         if not results:
-            return jsonify({"error": "Invalid credentials"}), 400
+            return jsonify({"error": "Credenciales inválidas"}), 400
 
         user_id = results[0]['user_id']
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    # Create a session key for the user
     session_key = create_session(user_id)
 
-    # Return both the user_id and the session_key
     return jsonify({"user_id": user_id, "key": session_key}), 200
 
 
@@ -62,15 +60,15 @@ def sign_out():
 
     if not session_key or not user_id:
         print("No session key or user ID")
-        return jsonify({"error": "User ID and session key are required"}), 400
+        return jsonify({"error": "El ID de usuario y la clave de sesión son obligatorios"}), 400
 
     if str(session_user_id) == str(user_id):
         print("Deleting session ", session_key)
         delete_session(session_key)
-        return jsonify({"message": "Signed out successfully"}), 200
+        return jsonify({"message": "Sesión cerrada exitosamente"}), 200
     else:
         print("Invalid session key or user ID")
-        return jsonify({"error": "Invalid session key or user ID"}), 400
+        return jsonify({"error": "Clave de sesión o ID de usuario inválidos"}), 400
 
 
 @users_bp.route('/signUp', methods=['POST'])
@@ -141,7 +139,7 @@ def current_points(user_id):
     session_key = request.headers.get('key')
 
     if not session_key or validate_key(session_key) != user_id:
-        return jsonify({"error": "Invalid session key"}), 400
+        return jsonify({"error": "Llave de sesión inválida."}), 400
 
     query = """
     SELECT
@@ -149,7 +147,7 @@ def current_points(user_id):
     FROM
         PUNTOS_USUARIO PU
     WHERE
-        PU.USUARIO = ?
+        PU.USUARIO = %s
     """
     try:
         cursor = cnx.cursor()
@@ -164,7 +162,7 @@ def current_points(user_id):
             puntos = int(result[columns.index('puntos')])
             return jsonify({"puntos": puntos}), 200
         else:
-            return jsonify({"error": "No points found for the user"}), 404
+            return jsonify({"error": "No se encontraron puntos para el usuario."}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
