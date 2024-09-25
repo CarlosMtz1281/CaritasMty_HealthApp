@@ -218,7 +218,7 @@ def profile_picture_change():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@users_bp.route('/currentpoints/<int:user_id>', methods=['GET']) # documentar
+@users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
 def current_points(user_id):
     """
     Consulta los puntos actuales de un usuario.
