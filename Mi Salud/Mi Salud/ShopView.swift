@@ -24,7 +24,7 @@ struct ShopCard: View {
 
             VStack(alignment: .leading) {
                 Text(name)
-                    .font(.title2)
+                    .font(.system(size: 21))
                     .bold()
                     .lineLimit(2)
                     .layoutPriority(1)
@@ -71,123 +71,136 @@ struct ShopView: View {
     @State private var isButtonVisible = true
     @State private var lastScrollOffset: CGFloat = 0
     private let scrollThreshold: CGFloat = 50
+    @State private var points: Int = 0
+    @State private var catalogItems: [CatalogItem] = []
     
     init() {
-      UIScrollView.appearance().bounces = false
-   }
+        UIScrollView.appearance().bounces = false
+    }
     
     var body: some View {
-        VStack(spacing: 0) {
-            VStack {
-                HStack {
-                    VStack(alignment: .leading){
-                        Text("Tienda")
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .bold()
-                    }
-                    .padding(.leading, 30)
-                    .frame(width: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    Spacer()
-               }
-                .padding()
-                .padding(.top, 70)
-                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                
-                HStack(){
-                    VStack(alignment: .leading){
-                        Text("1,500 puntos")
-                            .font(.title2)
-                            .bold()
-                    }
-                    .padding(.leading, 30)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .padding(.trailing, 15)
-                }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(20)
-
-                .padding(.horizontal,30)
-                .padding(.bottom, 30)
-                .shadow(radius: 2)
-            }
-            .padding(.bottom,20)
-            .frame(maxWidth: .infinity)
-            .frame(height: UIScreen.main.bounds.height * 0.26)
-            .background(Color(Constants.Colors.primary))
-            .clipShape(RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 20))
-            
-            if isButtonVisible {
-                HStack(){
-                    Spacer()
-                    Button(action: {
-                        
-                    }) {
-                        HStack {
-                            Image(systemName: "line.horizontal.3.decrease.circle")
-                                .font(.system(size: 20))
+        NavigationStack{
+            VStack(spacing: 0) {
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading){
+                            Text("Tienda")
+                                .font(.title)
                                 .foregroundColor(.white)
-                            Text("Filtros")
-                                .font(.system(size: 20))
-                                .foregroundColor(.white)
+                                .bold()
                         }
-                        .padding(.vertical, 12)
-                        .padding(.horizontal, 25)
-                        .background(Color(Constants.Colors.primary))
-                        .cornerRadius(100)
+                        .padding(.leading, 30)
+                        .frame(width: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                        Spacer()
                     }
-                    .padding(.horizontal)
-                    .padding(.vertical, 10)
-                }
-                .frame(width: .infinity)
-                .padding(.horizontal, 20)
-                .background(Color.clear)
-            }
-            
-            ScrollViewReader {proxy in
-                ScrollView(.vertical, showsIndicators: false){
-                    GeometryReader { geometry in
-                        Color.clear
-                            .preference(key: ScrollOffsetKey.self, value: geometry.frame(in: .global).minY)
-                            .onPreferenceChange(ScrollOffsetKey.self) { value in
-                                let scrollDifference = value - lastScrollOffset
-                                if abs(scrollDifference) > scrollThreshold {
-                                    if value < lastScrollOffset {
-                                        withAnimation {
-                                            isButtonVisible = false
-                                        }
-                                    } else if value > lastScrollOffset {
-                                        withAnimation {
-                                            isButtonVisible = true
-                                        }
-                                    }
-                                    lastScrollOffset = value
-                                }
-                            }
-                    }
-                    .frame(height: 0)
+                    .padding()
+                    .padding(.top, 70)
+                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                     
-                    VStack(spacing: 20) {
-                        ShopCard(image: "family_trip", name: "Viaje con tu familia", description: "Un viaje promocional con tu familia", points: 10000000)
-                        ShopCard(image: "family_trip", name: "Unos audifonos Sony", description: "Un viaje promocional con tu familia", points: 20000)
-                        ShopCard(image: "family_trip", name: "Unos audifonos Sony", description: "Un viaje promocional con tu familia", points: 20000)
-                        ShopCard(image: "family_trip", name: "Unos audifonos Sony", description: "Un viaje promocional con tu familia", points: 20000)
-                        ShopCard(image: "family_trip", name: "Unos audifonos Sony", description: "Un viaje promocional con tu familia", points: 20000)
-                        
+                    NavigationLink(destination: PointsHistoryView()) {
+                        HStack(){
+                            VStack(alignment: .leading){
+                                Text("\(points) puntos")
+                                    .font(.title2)
+                                    .bold()
+                                    .foregroundStyle(Color.black)
+                            }
+                            .padding(.leading, 30)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .padding(.trailing, 15)
+                                .foregroundStyle(Color.black)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(20)
+                        .padding(.horizontal,30)
+                        .padding(.bottom, 30)
+                        .shadow(radius: 2)
                     }
-                    .padding(.horizontal)
+                }
+                .padding(.bottom,20)
+                .frame(maxWidth: .infinity)
+                .frame(height: UIScreen.main.bounds.height * 0.26)
+                .background(Color(Constants.Colors.primary))
+                .clipShape(RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 20))
+                
+                if isButtonVisible {
+                    HStack(){
+                        Spacer()
+                        Button(action: {
+                            
+                        }) {
+                            HStack {
+                                Image(systemName: "line.horizontal.3.decrease.circle")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.white)
+                                Text("Filtros")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.white)
+                            }
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 25)
+                            .background(Color(Constants.Colors.primary))
+                            .cornerRadius(100)
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical, 10)
+                    }
+                    .frame(width: .infinity)
+                    .padding(.horizontal, 20)
+                    .background(Color.clear)
+                }
+                
+                ScrollViewReader {proxy in
+                    ScrollView(.vertical, showsIndicators: false){
+                        GeometryReader { geometry in
+                            Color.clear
+                                .preference(key: ScrollOffsetKey.self, value: geometry.frame(in: .global).minY)
+                                .onPreferenceChange(ScrollOffsetKey.self) { value in
+                                    let scrollDifference = value - lastScrollOffset
+                                    if abs(scrollDifference) > scrollThreshold {
+                                        if value < lastScrollOffset {
+                                            withAnimation {
+                                                isButtonVisible = false
+                                            }
+                                        } else if value > lastScrollOffset {
+                                            withAnimation {
+                                                isButtonVisible = true
+                                            }
+                                        }
+                                        lastScrollOffset = value
+                                    }
+                                }
+                        }
+                        .frame(height: 0)
+                        
+                        VStack(spacing: 20) {
+                            ForEach(catalogItems) { item in
+                                ShopCard(image: "family_trip", name: item.nombre, description: item.descripcion, points: Int(item.puntos) ?? 0)
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+                Spacer()
+                Spacer()
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.white)
+            .edgesIgnoringSafeArea(.top)
+            .padding(.bottom, 10)
+            .onAppear{
+                fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
+                    self.points = fetchedPoints
+                    
+                    fetchCatalog(sessionKey: sessionKey) { items in
+                        self.catalogItems = items
+                    }
                 }
             }
-            Spacer()
-            Spacer()
-            Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
-        .edgesIgnoringSafeArea(.top)
-        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

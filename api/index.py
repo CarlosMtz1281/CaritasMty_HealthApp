@@ -52,7 +52,7 @@ def runquery():
         return f"<p>Query Result:</p><p>{result}</p>"
     except Exception as e:
         return f"<p>Error running query: {str(e)}</p>"
-    
+
 @app.route("/getSessions")
 def get_sessions():
     return jsonify(session_storage)

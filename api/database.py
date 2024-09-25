@@ -1,5 +1,5 @@
 import pyodbc
-import pymssql
+#import pymssql
 import sys
 
 localToVM_params = {

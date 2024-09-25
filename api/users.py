@@ -75,7 +75,66 @@ def sign_out():
 def sign_up():
     return "Sign Up"
 
-@users_bp.route('/currentpoints/<int:user_id>', methods=['GET']) # documentar
+@users_bp.route('/profilepicture/<int:user_id>', methods=['GET'])
+def profile_picture_get(user_id):
+    session_key = request.headers.get('key')
+
+    if not session_key or validate_key(session_key) != user_id:
+        return jsonify({"error": "Invalid session key"}), 400
+
+    query = """
+    SELECT
+        FP.ARCHIVO AS archivo
+    FROM
+        USUARIOS U
+    LEFT JOIN
+        FOTOS_PERFIL FP ON U.ID_FOTO = FP.ID_FOTO
+    WHERE
+        U.ID_USUARIO = ?
+    """
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, (user_id,))
+        
+        result = cursor.fetchone()
+        cursor.close()
+
+        if result:
+            archivo = result[0]
+            return jsonify({"archivo": archivo}), 200
+        else:
+            return jsonify({"error": "No points found for the user"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@users_bp.route('/profilepicture', methods=['PATCH'])
+def profile_picture_change():
+    try:
+        data = request.json
+
+        user_id = data.get('user_id')
+        path = data.get('path')
+
+        if path is None or user_id is None:
+            return jsonify({"error": "Invalid input data"}), 400
+
+        cursor = cnx.cursor()
+        query = """
+            UPDATE USUARIOS 
+            SET ID_FOTO = (SELECT ID_FOTO FROM FOTOS_PERFIL WHERE ARCHIVO = ?) 
+            WHERE ID_USUARIO = ?
+            """
+        cursor.execute(query, (path, user_id))
+
+        cnx.commit()
+
+        cursor.close()
+
+        return jsonify({"message": "Points updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
 def current_points(user_id):
     session_key = request.headers.get('key')
 
