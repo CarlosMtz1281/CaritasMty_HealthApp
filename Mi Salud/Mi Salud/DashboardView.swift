@@ -24,6 +24,7 @@ struct RoundedCornersShape: Shape {
 struct DashboardView: View {
     @State private var points: Int = 0 // para puntos
     @State private var catalogItems: [CatalogItem] = [] // para catalogo
+    @State private var currentImagePath: String?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,9 +33,18 @@ struct DashboardView: View {
                 VStack {
                     // Salute
                     HStack {
-                        Circle()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(Color(Constants.Colors.accent))
+                        if let currentImagePath = currentImagePath {
+                            Image(currentImagePath)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .foregroundColor(Color(Constants.Colors.accent))
+                        } else {
+                            Circle()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(Color(Constants.Colors.accent))
+                        }
                         VStack(alignment: .leading) {
                             Text("Hola, Carlos!")
                                 .font(.title2)
@@ -197,6 +207,10 @@ struct DashboardView: View {
                 // Now that we have fetched points, we can fetch the catalog
                 fetchCatalog(sessionKey: sessionKey) { items in
                     self.catalogItems = items
+                    
+                    fetchProfilePicture(userID: userID, sessionKey: sessionKey) { path in
+                        self.currentImagePath = path
+                    }
                 }
             }
         }

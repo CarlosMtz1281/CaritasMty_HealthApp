@@ -9,7 +9,7 @@ import Foundation
 
 // Fetch session key and user ID from UserDefaults
 let sessionKey: String = {
-    return UserDefaults.standard.string(forKey: "session_key") ?? "1035ba7c-569a-4b51-a95a-7a77870e4f4c" // Use hardcoded session key if not found
+    return UserDefaults.standard.string(forKey: "session_key") ?? "7c3e7347-bc6b-462f-a6a6-1358be14728f" // Use hardcoded session key if not found
 }()
 
 let userID: Int = {
@@ -19,6 +19,10 @@ let userID: Int = {
 // Struct to decode the current points response
 struct PointsResponse: Decodable {
     let puntos: Int
+}
+
+struct ProfilePictureResponse: Decodable {
+    let archivo: String
 }
 
 // Fetch current points using the retrieved session key
@@ -114,6 +118,85 @@ func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> V
             }
         } catch {
             print("Error decoding catalog items: \(error)")
+        }
+    }.resume()
+}
+
+func updateProfilePicture(userID: Int, imagePath: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
+    guard let url = URL(string: "http://localhost:8000/users/profilepicture") else { return }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "PATCH"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue(sessionKey, forHTTPHeaderField: "key")
+
+    let body: [String: Any] = [
+        "user_id": userID,
+        "path": imagePath
+    ]
+    
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+    } catch {
+        print("Failed to serialize JSON: \(error)")
+        return
+    }
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            DispatchQueue.main.async {
+                completion(.failure(error))
+            }
+            return
+        }
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            if httpResponse.statusCode == 200 {
+                DispatchQueue.main.async {
+                    completion(.success("Profile picture updated successfully"))
+                }
+            } else {
+                let errorMessage = "Error: HTTP \(httpResponse.statusCode)"
+                print(errorMessage)
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])))
+                }
+            }
+        }
+    }.resume()
+}
+
+func fetchProfilePicture(userID: Int, sessionKey: String, completion: @escaping (String) -> Void) {
+    guard let url = URL(string: "http://localhost:8000/users/profilepicture/\(userID)") else {
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.addValue(sessionKey, forHTTPHeaderField: "key")
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching profile picture: \(error)")
+            return
+        }
+        
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+        
+        do {
+            if let jsonString = String(data: data, encoding: .utf8) {
+                //print("Raw JSON response: \(jsonString)")
+            }
+
+            let profilePictureResponse = try JSONDecoder().decode(ProfilePictureResponse.self, from: data)
+            DispatchQueue.main.async {
+                completion(profilePictureResponse.archivo)
+            }
+        } catch {
+            print("Error decoding profile picture response: \(error)")
         }
     }.resume()
 }
