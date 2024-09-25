@@ -74,15 +74,27 @@ func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping (
 struct PointsHistoryView: View {
     @State private var points: Int = 0
     @State private var history: [Transaction] = []
-    
+    @Environment(\.presentationMode) var presentationMode // To control the dismiss action
+
     
     var body: some View {
         VStack {
             // Header
             HStack {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Dismiss the current view
+                }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.white)
+                        .font(.system(size: 20))
+                }
+                .padding(.trailing, 8)
+                
                 Text("Historial de puntos")
                     .font(.title2)
                     .bold()
+                    .foregroundColor(.white)
+                
                 Spacer()
             }
             .padding()
