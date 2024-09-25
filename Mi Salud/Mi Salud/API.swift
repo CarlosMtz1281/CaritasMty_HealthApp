@@ -117,3 +117,47 @@ func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> V
         }
     }.resume()
 }
+
+func updateProfilePicture(userID: Int, imagePath: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
+    guard let url = URL(string: "http://localhost:8000/users/profilepicture") else { return }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "PATCH"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue(sessionKey, forHTTPHeaderField: "key")
+
+    let body: [String: Any] = [
+        "user_id": userID,
+        "path": imagePath
+    ]
+    
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+    } catch {
+        print("Failed to serialize JSON: \(error)")
+        return
+    }
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            DispatchQueue.main.async {
+                completion(.failure(error))
+            }
+            return
+        }
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            if httpResponse.statusCode == 200 {
+                DispatchQueue.main.async {
+                    completion(.success("Profile picture updated successfully"))
+                }
+            } else {
+                let errorMessage = "Error: HTTP \(httpResponse.statusCode)"
+                print(errorMessage)
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])))
+                }
+            }
+        }
+    }.resume()
+}

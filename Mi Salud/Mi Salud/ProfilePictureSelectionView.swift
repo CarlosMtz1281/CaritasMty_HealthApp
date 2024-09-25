@@ -74,7 +74,19 @@ struct ProfilePictureSelectionView: View {
 
             // Change Photo Button
             Button(action: {
-                // Action to change the profile picture
+                guard let selectedImage = selectedImage else {
+                    print("No image selected")
+                    return
+                }
+                
+                updateProfilePicture(userID: userID, imagePath: selectedImage, sessionKey: sessionKey) { result in
+                    switch result {
+                    case .success(let message):
+                        print(message)
+                    case .failure(let error):
+                        print("Failed to update profile picture: \(error.localizedDescription)")
+                    }
+                }
             }) {
                 Text("Cambiar Foto")
                     .foregroundColor(.white)
