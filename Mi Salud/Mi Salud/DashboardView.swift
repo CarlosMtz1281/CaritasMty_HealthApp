@@ -24,14 +24,40 @@ struct RoundedCornersShape: Shape {
 struct DashboardView: View {
     @State private var points: Int = 0 // para puntos
     @State private var catalogItems: [CatalogItem] = [] // para catalogo
+    @State private var currentImagePath: String?
 
     var body: some View {
         NavigationView{
-            VStack(spacing: 0) {
-                ScrollView(.vertical, showsIndicators: false) {
-                    // Header
-                    VStack {
-                        // Salute
+        VStack(spacing: 0) {
+            ScrollView(.vertical, showsIndicators: false) {
+                // Header
+                VStack {
+                    // Salute
+                    HStack {
+                        if let currentImagePath = currentImagePath {
+                            Image(currentImagePath)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .foregroundColor(Color(Constants.Colors.accent))
+                        } else {
+                            Circle()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(Color(Constants.Colors.accent))
+                        }
+                        VStack(alignment: .leading) {
+                            Text("Hola, Carlos!")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                        }
+                        Spacer()
+                    }
+                    .padding()
+                    .padding(.top, 70)
+
+                    // Points section
+                    NavigationLink(destination: PointsHistoryView()) {
                         HStack {
                             Circle()
                                 .frame(width: 50, height: 50)
@@ -195,15 +221,20 @@ struct DashboardView: View {
                 fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
                     self.points = fetchedPoints
 
-                    // Now that we have fetched points, we can fetch the catalog
-                    fetchCatalog(sessionKey: sessionKey) { items in
-                        self.catalogItems = items
+                // Now that we have fetched points, we can fetch the catalog
+                fetchCatalog(sessionKey: sessionKey) { items in
+                    self.catalogItems = items
+                    
+                    fetchProfilePicture(userID: userID, sessionKey: sessionKey) { path in
+                        self.currentImagePath = path
                     }
                 }
             }
         }
+        }
         
     }
+}
 }
 
 #Preview {
