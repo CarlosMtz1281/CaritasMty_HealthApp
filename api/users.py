@@ -97,6 +97,41 @@ def login():
 
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
+
+    """
+    Maneja el cierre de sesión de un usuario.
+    Documentado por Iván.
+    ---
+    parameters:
+      - name: key
+        in: header
+        type: string
+        required: true
+        description: Clave de sesión para autenticar la solicitud.
+      - name: User-Id
+        in: header
+        type: string
+        required: true
+        description: ID del usuario que está cerrando sesión.
+    responses:
+      200:
+        description: Cierre de sesión exitoso.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Sesión cerrada exitosamente"
+      400:
+        description: Error en la solicitud, faltan o son inválidos el ID de usuario o la clave de sesión.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "El ID de usuario y la clave de sesión son obligatorios. O Clave de sesión o ID de usuario inválidos"
+    """
+
     session_key = request.headers.get('key')
     user_id = request.headers.get('User-Id')
 
