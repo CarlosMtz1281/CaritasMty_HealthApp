@@ -18,8 +18,8 @@ app.register_blueprint(tienda_bp, url_prefix='/tienda')
 # Documentación en Swagger
 swagger = Swagger(app, template={
     "info":{
-        "title": "Documentación Fer",
-        "description": "Documentación de endpoints de Historia de Usuario 06, Acceder a Dashboard",
+        "title": "Documentación Equipo 4",
+        "description": "Documentación de endpoints LeSabritones",
         "version": "1.0.0"
     }
  })
