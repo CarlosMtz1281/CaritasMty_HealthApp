@@ -33,35 +33,20 @@ struct DashboardView: View {
                 // Header
                 VStack {
                     // Salute
-                    HStack {
-                        if let currentImagePath = currentImagePath {
-                            Image(currentImagePath)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                                .foregroundColor(Color(Constants.Colors.accent))
-                        } else {
-                            Circle()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(Color(Constants.Colors.accent))
-                        }
-                        VStack(alignment: .leading) {
-                            Text("Hola, Carlos!")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                    }
-                    .padding()
-                    .padding(.top, 70)
-
-                    // Points section
-                    NavigationLink(destination: PointsHistoryView()) {
+                    VStack{
                         HStack {
-                            Circle()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(Color(Constants.Colors.accent))
+                            if let currentImagePath = currentImagePath {
+                                Image(currentImagePath)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .foregroundColor(Color(Constants.Colors.accent))
+                            } else {
+                                Circle()
+                                    .frame(width: 50, height: 50)
+                                    .foregroundColor(Color(Constants.Colors.accent))
+                            }
                             VStack(alignment: .leading) {
                                 Text("Hola, Carlos!")
                                     .font(.title2)
@@ -73,16 +58,20 @@ struct DashboardView: View {
                         .padding(.top, 70)
 
                         // Points section
-                        NavigationLink(destination: PointsHistoryView()) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("\(points) puntos")
-                                        .font(.title2)
-                                        .foregroundStyle(.black)
+                
+                            // Points section
+                            NavigationLink(destination: PointsHistoryView()) {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text("\(points) puntos")
+                                            .font(.title2)
+                                            .foregroundStyle(.black)
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
                                 }
-                                Spacer()
-                                Image(systemName: "chevron.right")
                             }
+                    
                             .padding()
                             .background(Color.white)
                             .cornerRadius(20)
@@ -90,7 +79,6 @@ struct DashboardView: View {
                             .padding(.bottom, 30)
                             .shadow(radius: 2)
                         }
-                    }
                     .padding(.bottom, 20)
                     .frame(maxWidth: .infinity)
                     .frame(height: UIScreen.main.bounds.height * 0.26)
