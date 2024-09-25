@@ -220,6 +220,56 @@ def profile_picture_change():
 
 @users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
 def current_points(user_id):
+    """
+    Consulta los puntos actuales de un usuario.
+    Documentado por German.
+    ---
+    parameters:
+      - name: user_id
+        in: path
+        type: integer
+        required: true
+        description: El ID del usuario.
+      - name: key
+        in: header
+        type: string
+        required: true
+        description: Clave de sesión para autenticar la solicitud.
+    responses:
+      200:
+        description: Devuelve los puntos actuales del usuario.
+        schema:
+          type: object
+          properties:
+            puntos:
+              type: integer
+              example: 120
+      400:
+        description: Clave de sesión inválida o faltante.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida"
+      404:
+        description: No se encontraron puntos para el usuario.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "No se encontraron puntos para el usuario"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Mensaje de error"
+    """
+
     session_key = request.headers.get('key')
 
     if not session_key or validate_key(session_key) != user_id:
