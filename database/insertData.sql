@@ -2,16 +2,29 @@
 INSERT INTO TIPO_USUARIO (DESCRIPCION) VALUES ('Empleado');
 INSERT INTO TIPO_USUARIO (DESCRIPCION) VALUES ('Voluntario');
 
+
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile1.jpg','Voluntario1');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile2.jpg','Voluntario2');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile3.jpg','Voluntario3');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile4.jpg','Voluntario4');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile5.jpg','Voluntario5');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile6.jpg','Voluntario6');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile7.jpg','Voluntario7');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile8.jpg','Voluntario8');
+INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile9.jpg','Voluntario9');
+
+
+
 -- 2. Insertar usuarios
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('Juan', 'Pérez', 'Gómez', 'juan.perez@example.com', 'password', 1, 'profile1.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('Ana', 'López', 'Martínez', 'ana.lopez@example.com', 'password', 2, 'profile2.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('Carlos', 'Ramírez', 'Sánchez', 'carlos.ramirez@example.com', 'password', 1, 'profile1.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('María', 'Fernández', 'Rodríguez', 'maria.fernandez@example.com', 'password', 2, 'profile3.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('Lucía', 'Navarro', 'García', 'lucia.navarro@example.com', 'password', 1, 'profile3.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('Pedro', 'González', 'Torres', 'pedro.gonzalez@example.com', 'password', 2, 'profile4.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('Sofía', 'Hernández', 'Lopez', 'sofia.hernandez@example.com', 'password', 1, 'profile1.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('Miguel', 'Cruz', 'Mendoza', 'miguel.cruz@example.com', 'password', 2, 'profile5.jpg');
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, FOTO_PERFIL) VALUES ('AAA', 'BBB', 'CCC', 'aaa.bbb@example.com', 'password', 2, 'profile2.jpg');
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Juan', 'Pérez', 'Gómez', 'juan.perez@example.com', 'password', 1, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Ana', 'López', 'Martínez', 'ana.lopez@example.com', 'password', 2, 2);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Carlos', 'Ramírez', 'Sánchez', 'carlos.ramirez@example.com', 'password', 1, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('María', 'Fernández', 'Rodríguez', 'maria.fernandez@example.com', 'password', 2, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Lucía', 'Navarro', 'García', 'lucia.navarro@example.com', 'password', 1, 4);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Pedro', 'González', 'Torres', 'pedro.gonzalez@example.com', 'password', 2, 4);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Sofía', 'Hernández', 'Lopez', 'sofia.hernandez@example.com', 'password', 1, 3);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Miguel', 'Cruz', 'Mendoza', 'miguel.cruz@example.com', 'password', 2, 2);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('AAA', 'BBB', 'CCC', 'aaa.bbb@example.com', 'password', 2, 1);
 
 -- 3. Insertar eventos
 INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE) VALUES ('Conferencia de Tecnología', 'Una conferencia sobre las últimas tendencias en tecnología.', 100, 10);
