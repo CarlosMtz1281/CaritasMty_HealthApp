@@ -11,58 +11,6 @@ tienda_bp = Blueprint('tienda', __name__)
 
 @tienda_bp.route('/catalogo', methods=['GET']) # docs
 def catalogo():
-    """
-    Obtiene el catálogo de beneficios disponibles para canjear.
-    Documentado por Fer.
-    ---
-    parameters:
-      - name: key
-        in: header
-        type: string
-        required: true
-        description: Clave de sesión para autenticar la solicitud.
-    responses:
-      200:
-        description: Lista de beneficios disponibles.
-        schema:
-          type: array
-          items:
-            type: object
-            properties:
-              ID_BENEFICIO:
-                type: integer
-                description: ID del beneficio.
-                example: 1
-              NOMBRE:
-                type: string
-                description: Nombre del beneficio.
-                example: "Día libre"
-              DESCRIPCION:
-                type: string
-                description: Descripción del beneficio.
-                example: "Un día libre extra para descansar"
-              PUNTOS:
-                type: integer
-                description: Puntos requeridos para canjear el beneficio.
-                example: 20
-      400:
-        description: Clave de sesión inválida o faltante.
-        schema:
-          type: object
-          properties:
-            error:
-              type: string
-              example: "Invalid session key"
-      500:
-        description: Error interno del servidor.
-        schema:
-          type: object
-          properties:
-            error:
-              type: string
-              example: "No se estableció la conexión con la Base de Datos or No se obtuvieron resultados de la Query"
-    """
-
     key = request.headers.get('key')
 
     if not key or not validate_key(key):
