@@ -5,9 +5,58 @@ from session_manager import create_session, validate_key, delete_session
 users_bp = Blueprint('users', __name__)
 
 
-
 @users_bp.route('/login', methods=['POST'])
 def login():
+    """
+    Maneja el inicio de sesión de un usuario.
+    Documentado por Nico.
+    ---
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            correo:
+              type: string
+              description: El correo electrónico del usuario.
+              example: "juan.perez@example.com"
+            password:
+              type: string
+              description: La contraseña del usuario.
+              example: "password123"
+    responses:
+      200:
+        description: Inicio de sesión exitoso.
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que ha iniciado sesión.
+              example: 123
+            key:
+              type: string
+              description: Clave de sesión generada para el usuario.
+              example: "abcd1234sessionkey"
+      400:
+        description: Error en la solicitud por falta de datos o credenciales inválidas.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "El correo y la contraseña son obligatorios. O Credenciales inválidas"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Mensaje detallando el error"
+    """
     data = request.json
     correo = data.get('correo')
     password = data.get('password')
@@ -21,8 +70,8 @@ def login():
     FROM
         USUARIOS U
     WHERE
-        U.CORREO = %s
-        AND U.PASS = %s
+        U.CORREO = ?
+        AND U.PASS = ?
     """
 
     try:
@@ -48,6 +97,41 @@ def login():
 
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
+
+    """
+    Maneja el cierre de sesión de un usuario.
+    Documentado por Iván.
+    ---
+    parameters:
+      - name: key
+        in: header
+        type: string
+        required: true
+        description: Clave de sesión para autenticar la solicitud.
+      - name: User-Id
+        in: header
+        type: string
+        required: true
+        description: ID del usuario que está cerrando sesión.
+    responses:
+      200:
+        description: Cierre de sesión exitoso.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Sesión cerrada exitosamente"
+      400:
+        description: Error en la solicitud, faltan o son inválidos el ID de usuario o la clave de sesión.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "El ID de usuario y la clave de sesión son obligatorios. O Clave de sesión o ID de usuario inválidos"
+    """
+
     session_key = request.headers.get('key')
     user_id = request.headers.get('User-Id')
 
