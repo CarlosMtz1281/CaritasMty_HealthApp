@@ -57,21 +57,24 @@ def comprar_bono():
         type: string
         required: true
         description: Clave de sesión para autenticar la solicitud.
-      - name: user_id
-        in: body
-        type: integer
+      - in: body
+        name: body
         required: true
-        description: ID del usuario que está realizando la compra.
-      - name: puntos
-        in: body
-        type: integer
-        required: true
-        description: Puntos actuales del usuario.
-      - name: beneficio_id
-        in: body
-        type: integer
-        required: true
-        description: ID del beneficio que el usuario desea comprar.
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que está realizando la compra.
+              example: 123
+            puntos:
+              type: integer
+              description: Puntos actuales del usuario.
+              example: 500
+            beneficio_id:
+              type: integer
+              description: ID del beneficio que el usuario desea comprar.
+              example: 45
     responses:
       200:
         description: El beneficio se ha comprado exitosamente.
@@ -108,13 +111,14 @@ def comprar_bono():
     """
     session_key = request.headers.get('key')
 
-    if not session_key or validate_key(session_key) != user_id:
-        return jsonify({"error": "Llave de sesión inválida."}), 400
     
     data = request.json
     user_id = data.get('user_id')
     puntos = data.get('puntos')
     beneficio_id = data.get('beneficio_id')
+
+    if not session_key or validate_key(session_key) != user_id:
+        return jsonify({"error": "Llave de sesión inválida."}), 400
 
     query_checarBeneficio = """
     SELECT CASE WHEN EXISTS (
