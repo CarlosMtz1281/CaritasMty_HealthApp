@@ -1,0 +1,35 @@
+# Ignorar carpetas __pycache__ en cualquier lugar del proyecto
+**/__pycache__/
+
+# Ignorar cualquier carpeta de entorno virtual (env)
+**/env/
+**/my-env-3.12/
+.env
+credentials
+
+.DS_Store
+
+# Ignorar carpetas y archivos generados por Xcode
+*.xcworkspace
+*.xcuserstate
+*.xcodeproj
+*.xcworkspace/
+*.xcuserdatad/
+*.xcuserdata/
+*.xcscheme
+*.xccheckout
+*.xcscmblueprint
+
+# Ignorar archivos de configuración de Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Ignorar archivos de entornos de desarrollo de Xcode
+DerivedData/
+.idea/
+build/
+
+# Ignorar archivos dentro de xcuserdata específicos
+*.xcuserdatad/**/UserInterfaceState.xcuserstate
