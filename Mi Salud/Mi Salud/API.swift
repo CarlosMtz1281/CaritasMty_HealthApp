@@ -9,7 +9,7 @@ import Foundation
 
 // Fetch session key and user ID from UserDefaults
 let sessionKey: String = {
-    return UserDefaults.standard.string(forKey: "session_key") ?? "10c290e8-ec05-4885-952b-adae99df07f8" // Use hardcoded session key if not found
+    return UserDefaults.standard.string(forKey: "session_key") ?? "71e43aed-e421-4329-a33d-5465e38a49bc" // Use hardcoded session key if not found
 }()
 
 let userID: Int = {
@@ -17,7 +17,8 @@ let userID: Int = {
 }()
 
 // Struct to decode the current points response
-struct PointsResponse: Decodable {
+struct PointsResponse: Codable {
+    let nombre: String
     let puntos: Int
 }
 
@@ -26,7 +27,7 @@ struct ProfilePictureResponse: Decodable {
 }
 
 // Fetch current points using the retrieved session key
-func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (Int) -> Void) {
+func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (String, Int) -> Void) {
     guard let url = URL(string: "http://localhost:8000/users/currentpoints/\(userID)") else { return }
     
     var request = URLRequest(url: url)
@@ -52,13 +53,14 @@ func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (
             // Decode the dictionary response
             let pointsResponse = try JSONDecoder().decode(PointsResponse.self, from: data)
             DispatchQueue.main.async {
-                completion(pointsResponse.puntos)
+                completion(pointsResponse.nombre, pointsResponse.puntos)
             }
         } catch {
             print("Error decoding points: \(error)")
         }
     }.resume()
 }
+
 
 // TIENDA
 

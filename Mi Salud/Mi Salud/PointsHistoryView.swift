@@ -74,7 +74,9 @@ func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping (
 struct PointsHistoryView: View {
     @State private var points: Int = 0
     @State private var history: [Transaction] = []
-    @Environment(\.presentationMode) var presentationMode // To control the dismiss action
+    @Environment(\.presentationMode) var presentationMode 
+    @State private var userName: String = "Usuario"
+
 
     
     var body: some View {
@@ -133,8 +135,11 @@ struct PointsHistoryView: View {
         .navigationBarHidden(true)
         .onAppear {
             // Fetch points first, then fetch history
-            fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
+            fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedName, fetchedPoints in
+                // Store the fetched name and points
+                self.userName = fetchedName
                 self.points = fetchedPoints
+
                 
                 // Once points are fetched, fetch the history
                 fetchPointsHistory(userID: userID, sessionKey: sessionKey) { fetchedHistory in
