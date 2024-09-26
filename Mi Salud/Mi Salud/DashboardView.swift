@@ -25,6 +25,8 @@ struct DashboardView: View {
     @State private var points: Int = 0 // para puntos
     @State private var catalogItems: [CatalogItem] = [] // para catalogo
     @State private var currentImagePath: String?
+    @State private var userName: String = "Usuario"
+
 
     var body: some View {
         NavigationView{
@@ -48,7 +50,7 @@ struct DashboardView: View {
                                     .foregroundColor(Color(Constants.Colors.accent))
                             }
                             VStack(alignment: .leading) {
-                                Text("Hola, Carlos!")
+                                Text("Hola," + userName)
                                     .font(.title2)
                                     .foregroundColor(.white)
                             }
@@ -206,19 +208,23 @@ struct DashboardView: View {
             .background(Color.white) // Optional: to set a default background color
             .edgesIgnoringSafeArea(.top) // Ensures the view extends to the top edge
             .onAppear {
-                fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
+                fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedName, fetchedPoints in
+                    // Store the fetched name and points
+                    self.userName = fetchedName
                     self.points = fetchedPoints
 
-                // Now that we have fetched points, we can fetch the catalog
-                fetchCatalog(sessionKey: sessionKey) { items in
-                    self.catalogItems = items
-                    
-                    fetchProfilePicture(userID: userID, sessionKey: sessionKey) { path in
-                        self.currentImagePath = path
+                    // Now that we have fetched points, we can fetch the catalog
+                    fetchCatalog(sessionKey: sessionKey) { items in
+                        self.catalogItems = items
+                        
+                        // Fetch the profile picture path
+                        fetchProfilePicture(userID: userID, sessionKey: sessionKey) { path in
+                            self.currentImagePath = path
+                            print(path)
+                        }
                     }
                 }
             }
-        }
         }
         
     }

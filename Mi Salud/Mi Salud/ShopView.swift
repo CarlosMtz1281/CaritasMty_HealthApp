@@ -73,6 +73,8 @@ struct ShopView: View {
     private let scrollThreshold: CGFloat = 50
     @State private var points: Int = 0
     @State private var catalogItems: [CatalogItem] = []
+    @State private var userName: String = "Usuario"
+
     
     init() {
         UIScrollView.appearance().bounces = false
@@ -192,7 +194,9 @@ struct ShopView: View {
             .edgesIgnoringSafeArea(.top)
             .padding(.bottom, 10)
             .onAppear{
-                fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
+                fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedName, fetchedPoints in
+                    // Store the fetched name and points
+                    self.userName = fetchedName
                     self.points = fetchedPoints
                     
                     fetchCatalog(sessionKey: sessionKey) { items in
