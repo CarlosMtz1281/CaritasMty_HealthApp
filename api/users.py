@@ -72,8 +72,8 @@ def login():
     FROM
         USUARIOS U
     WHERE
-        U.CORREO = %s
-        AND U.PASS = %s
+        U.CORREO = ?
+        AND U.PASS = ?
     """
 
     try:
@@ -178,12 +178,12 @@ def profile_picture_get(user_id):
     LEFT JOIN
         FOTOS_PERFIL FP ON U.ID_FOTO = FP.ID_FOTO
     WHERE
-        U.ID_USUARIO = %s
+        U.ID_USUARIO = ?
     """
     try:
         cursor = cnx.cursor()
         cursor.execute(query, (user_id,))
-        
+
         result = cursor.fetchone()
         cursor.close()
 
@@ -194,7 +194,7 @@ def profile_picture_get(user_id):
             return jsonify({"error": "No points found for the user"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 @users_bp.route('/profilepicture', methods=['PATCH'])
 def profile_picture_change():
     try:
@@ -208,8 +208,8 @@ def profile_picture_change():
 
         cursor = cnx.cursor()
         query = """
-            UPDATE USUARIOS 
-            SET ID_FOTO = (SELECT ID_FOTO FROM FOTOS_PERFIL WHERE ARCHIVO = %s) 
+            UPDATE USUARIOS
+            SET ID_FOTO = (SELECT ID_FOTO FROM FOTOS_PERFIL WHERE ARCHIVO = %s)
             WHERE ID_USUARIO = %s
             """
         cursor.execute(query, (path, user_id))
@@ -287,11 +287,11 @@ def current_points(user_id):
     FROM
         PUNTOS_USUARIO PU
     WHERE
-        PU.USUARIO = %s
+        PU.USUARIO = ?
     """
 
     query_nombre = """
-    SELECT NOMBRE FROM USUARIOS WHERE ID_USUARIO = %s
+    SELECT NOMBRE FROM USUARIOS WHERE ID_USUARIO = ?
     """
     try:
         #obtener nombre
