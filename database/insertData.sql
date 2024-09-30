@@ -27,13 +27,12 @@ INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARI
 INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('AAA', 'BBB', 'CCC', 'aaa.bbb@example.com', 'password', 2, 1);
 
 -- 3. Insertar eventos
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE) VALUES ('Conferencia de Tecnología', 'Una conferencia sobre las últimas tendencias en tecnología.', 100, 10);
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE) VALUES ('Seminario de Desarrollo Personal', 'Un seminario enfocado en el crecimiento personal y profesional.', 50, 8);
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE) VALUES ('Taller de Innovación', 'Un taller interactivo sobre innovación y creatividad.', 30, 15);
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE) VALUES ('Conferencia de Marketing', 'Tendencias actuales en marketing digital.', 75, 12);
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE) VALUES ('Taller de Trabajo en Equipo', 'Mejorar habilidades de trabajo en equipo.', 40, 10);
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE) VALUES ('Foro de Innovación Empresarial', 'Discusión sobre innovación en negocios.', 60, 18);
-
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Conferencia de Tecnología', 'Una conferencia sobre las últimas tendencias en tecnología.', 100, 10, '2024-10-10 09:00:00');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Seminario de Desarrollo Personal', 'Un seminario enfocado en el crecimiento personal y profesional.', 50, 8, '2024-10-15 14:00:00');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Taller de Innovación', 'Un taller interactivo sobre innovación y creatividad.', 30, 15, '2024-11-05 11:00:00');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Conferencia de Marketing', 'Tendencias actuales en marketing digital.', 75, 12, '2024-11-12 10:00:00');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Taller de Trabajo en Equipo', 'Mejorar habilidades de trabajo en equipo.', 40, 10, '2024-12-01 09:30:00');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Foro de Innovación Empresarial', 'Discusión sobre innovación en negocios.', 60, 18, '2024-12-15 15:00:00');
 
 -- 4. Insertar beneficios
 INSERT INTO BENEFICIOS (NOMBRE, DESCRIPCION, PUNTOS) VALUES ('Día libre', 'Un día libre extra para descansar.', 20);

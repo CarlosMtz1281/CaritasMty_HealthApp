@@ -54,6 +54,6 @@ def connect_to_db(params):
         print(f"Cannot connect to MSSQL server: {e}")
         sys.exit()
 
-cnx = connect_to_db(local_params)
+cnx = connect_to_db(nico_local_params)
 #cnx =  connect_fer(local_params)
 
