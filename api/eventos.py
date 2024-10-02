@@ -43,7 +43,7 @@ def eventos_usuario(user_id):
         SELECT E.ID_EVENTO, E.NOMBRE, E.DESCRIPCION, E.NUM_MAX_ASISTENTES, E.PUNTAJE, E.FECHA
         FROM USUARIOS_EVENTOS UE
         JOIN EVENTOS E ON UE.EVENTO = E.ID_EVENTO
-        WHERE UE.USUARIO = ? AND E.FECHA >= GETDATE();
+        WHERE UE.USUARIO = %s AND E.FECHA >= GETDATE();
     """
     
     try:
@@ -75,7 +75,7 @@ def usuarios_evento(user_id, id_evento):
         SELECT U.NOMBRE, U.A_PATERNO
         FROM USUARIOS_EVENTOS UE
         JOIN USUARIOS U ON UE.USUARIO = U.ID_USUARIO
-        WHERE UE.EVENTO = ? AND U.ID_USUARIO != ?;
+        WHERE UE.EVENTO = %s AND U.ID_USUARIO != %s;
     """
     
     try:
@@ -106,7 +106,7 @@ def registrar_participacion():
     
     query = """
         INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO)
-        VALUES (?, ?);
+        VALUES (%s, %s);
     """
     
     try:

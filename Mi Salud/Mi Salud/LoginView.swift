@@ -50,6 +50,7 @@ struct LoginView: View {
                         .foregroundColor(.black)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
+                        .autocapitalization(.none) // quitar caps
                     
                     // Contra
                     Text("Contraseña")
@@ -79,7 +80,8 @@ struct LoginView: View {
                         loginUser(correo: username, password: password)
                     }
                 }
-                .frame(width: 250, height: 50)
+                //.frame(width: 250, height: 50)
+                .frame(width: 265, height: 65)
                 .foregroundColor(.white)
                 .font(.title2)
                 .bold()
@@ -88,15 +90,18 @@ struct LoginView: View {
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
-                .padding(.top, 35)
+                //.padding(.top, 35)
+                .padding(.top, 55)
                 .shadow(radius: 5)
                 
+                /*
                 Divider()
                     .padding(.top, 15)
                     .padding(.bottom, 15)
                     .padding(.horizontal, 20)
                 
                 // boton google
+                
                 Button(action: {/*aun nada*/}) {
                     HStack {
                         Image("logogoogle")
@@ -116,7 +121,7 @@ struct LoginView: View {
                 .background(.white)
                 .cornerRadius(5)
                 .shadow(radius: 5)
-                
+                */
                 
                 Spacer()
             }
@@ -188,6 +193,7 @@ struct LoginView: View {
 }
 
 
-//#Preview {
-//   LoginView()
-//}
+#Preview {
+    @Previewable @State var isLoggedIn: Bool = false
+    LoginView(isLoggedIn: $isLoggedIn)
+}

@@ -123,7 +123,7 @@ struct PointsHistoryView: View {
             List {
                 Section(header: Text("Ultimas Transacciones")) {
                     ForEach(history) { transaction in
-                        TransactionRow(title: transaction.origen_nombre, date: transaction.fecha, points: "\(transaction.puntos) puntos")
+                        TransactionRow(title: transaction.origen_nombre, date: transaction.fecha, points: "\(transaction.tipo ? transaction.puntos : "-\(transaction.puntos)") puntos", tipo: transaction.tipo)
                     }
                 }
             }
@@ -154,6 +154,7 @@ struct TransactionRow: View {
     var title: String
     var date: String
     var points: String
+    var tipo: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -164,6 +165,7 @@ struct TransactionRow: View {
                 Spacer()
                 Text(points)
                     .bold()
+                    .foregroundColor(tipo ? .green : .red)
             }
             .font(.subheadline)
             .foregroundColor(.gray)
