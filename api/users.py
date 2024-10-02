@@ -72,8 +72,8 @@ def login():
     FROM
         USUARIOS U
     WHERE
-        U.CORREO = ?
-        AND U.PASS = ?
+        U.CORREO = %s
+        AND U.PASS = %s
     """
 
     try:
@@ -178,7 +178,7 @@ def profile_picture_get(user_id):
     LEFT JOIN
         FOTOS_PERFIL FP ON U.ID_FOTO = FP.ID_FOTO
     WHERE
-        U.ID_USUARIO = ?
+        U.ID_USUARIO = %s
     """
     try:
         cursor = cnx.cursor()
@@ -287,11 +287,11 @@ def current_points(user_id):
     FROM
         PUNTOS_USUARIO PU
     WHERE
-        PU.USUARIO = ?
+        PU.USUARIO = %s
     """
 
     query_nombre = """
-    SELECT NOMBRE FROM USUARIOS WHERE ID_USUARIO = ?
+    SELECT NOMBRE FROM USUARIOS WHERE ID_USUARIO = %s
     """
     try:
         #obtener nombre
