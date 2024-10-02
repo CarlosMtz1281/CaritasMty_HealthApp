@@ -50,6 +50,7 @@ struct LoginView: View {
                         .foregroundColor(.black)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
+                        .autocapitalization(.none) // quitar caps
                     
                     // Contra
                     Text("Contraseña")
