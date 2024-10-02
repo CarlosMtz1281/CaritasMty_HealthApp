@@ -4,7 +4,6 @@ from users import users_bp
 from eventos import eventos_bp
 from mediciones import mediciones_bp
 from tienda import tienda_bp
-import mssql_functions as MSSql
 from database import cnx
 from session_manager import validate_key, create_session, delete_session, session_storage
 
