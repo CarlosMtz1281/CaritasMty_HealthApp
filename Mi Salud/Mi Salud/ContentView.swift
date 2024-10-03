@@ -42,7 +42,7 @@ struct ContentView: View {
                         .tabItem {
                             Image(systemName: "bag")
                         }.tag(3)
-                    AccountView()
+                    AccountView(isLoggedIn: $isLoggedIn)
                         .tabItem {
                             Image(systemName: "person")
                         }.tag(4)
