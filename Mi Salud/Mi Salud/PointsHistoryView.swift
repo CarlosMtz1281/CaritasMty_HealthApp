@@ -122,7 +122,7 @@ struct PointsHistoryView: View {
             // Transactions list
             List {
                 Section(header: Text("Ultimas Transacciones")) {
-                    ForEach(history) { transaction in
+                    ForEach(history.reversed()) { transaction in
                         TransactionRow(title: transaction.origen_nombre, date: transaction.fecha, points: "\(transaction.tipo ? transaction.puntos : "-\(transaction.puntos)") puntos", tipo: transaction.tipo)
                     }
                 }
