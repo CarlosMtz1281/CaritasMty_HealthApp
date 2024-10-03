@@ -22,7 +22,7 @@ struct ContentView: View {
                 SplashView()
                     .transition(.opacity) // Optional: add transition animation
             } else if !isLoggedIn {
-                LoginView(isLoggedIn: $isLoggedIn)
+                LoginView(isLoggedIn: $isLoggedIn, selectedTab: $selectedTab)
                 //LoginView()
             } else {
                 TabView(selection: $selectedTab) {
