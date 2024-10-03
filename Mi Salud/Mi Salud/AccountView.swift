@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AccountView: View {
+    @Binding var isLoggedIn: Bool
     var body: some View {
         NavigationView{
             VStack {
@@ -107,7 +108,7 @@ struct AccountView: View {
     }
     
     func signOut() {
-        guard let url = URL(string: "http://192.168.1.65:8000/users/signOut") else { return }
+        guard let url = URL(string: "http://localhost:8000/users/signOut") else { return }
         
         // Retrieve sessionKey and userId from UserDefaults
         guard let sessionKey = UserDefaults.standard.string(forKey: "session_key"),
@@ -149,7 +150,7 @@ struct AccountView: View {
                 
                 // Close app
                 DispatchQueue.main.async {
-                    exit(0)
+                    isLoggedIn = false
                 }
                 
             } else {
@@ -162,5 +163,5 @@ struct AccountView: View {
 }
 
 #Preview {
-    AccountView()
+    AccountView(isLoggedIn: .constant(true))
 }
