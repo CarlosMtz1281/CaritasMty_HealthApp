@@ -8,105 +8,107 @@
 import SwiftUI
 
 struct AccountView: View {
+    @Binding var isLoggedIn: Bool
     var body: some View {
-        VStack {
-            HStack {
-                Text("PERFIL")
-                    .font(.title)
-                    .fontWeight(.bold)
+        NavigationView{
+            VStack {
+                HStack {
+                    Text("PERFIL")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.top, 40)
+                .padding(.bottom, 20)
+                
+                VStack(spacing: 0) {
+                    Divider()
+                    
+                    NavigationLink(destination: ProfilePictureSelectionView()) {
+                        HStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(Constants.Colors.primary), lineWidth: 2)
+                                .frame(width: 55, height: 55)
+                                .overlay(
+                                    Image(systemName: "pencil.circle")
+                                        .font(.system(size: 36))
+                                        .foregroundColor(Color(Constants.Colors.primary))
+                                )
+                                .padding(.leading)
+                            
+                            Text("Modificar Cuenta")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding()
+                            
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                    }
+                    
+                    
+                    Divider()
+                    
+                    Button(action: {
+                    }) {
+                        HStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(Constants.Colors.primary), lineWidth: 2)
+                                .frame(width: 55, height: 55)
+                                .overlay(
+                                    Image(systemName: "bolt.circle")
+                                        .font(.system(size: 36))
+                                        .foregroundColor(Color(Constants.Colors.primary))
+                                )
+                                .padding(.leading)
+                            
+                            Text("Ver mis puntos")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding()
+                            
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                    }
+                    
+                    Divider()
+                    
+                    Button(action: {
+                        signOut()
+                    }) {
+                        HStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(Constants.Colors.primary), lineWidth: 2)
+                                .frame(width: 55, height: 55)
+                                .overlay(
+                                    Image(systemName: "arrowshape.turn.up.left.circle")
+                                        .font(.system(size: 36))
+                                        .foregroundColor(Color(Constants.Colors.primary))
+                                )
+                                .padding(.leading)
+                            
+                            Text("Cerrar Sesión")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding()
+                            
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                    }
+                    
+                    Divider()
+                }
+                .padding(.horizontal)
                 Spacer()
             }
-            .padding(.horizontal)
-            .padding(.top, 40)
-            .padding(.bottom, 20)
-
-            VStack(spacing: 0) {
-                Divider()
-
-                Button(action: {
-                }) {
-                    HStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(Constants.Colors.primary), lineWidth: 2)
-                            .frame(width: 55, height: 55)
-                            .overlay(
-                                Image(systemName: "pencil.circle")
-                                    .font(.system(size: 36))
-                                    .foregroundColor(Color(Constants.Colors.primary))
-                            )
-                            .padding(.leading)
-                        
-                        Text("Modificar Cuenta")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .padding()
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical)
-                }
-
-
-                Divider()
-
-                Button(action: {
-                }) {
-                    HStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(Constants.Colors.primary), lineWidth: 2)
-                            .frame(width: 55, height: 55)
-                            .overlay(
-                                Image(systemName: "bolt.circle")
-                                    .font(.system(size: 36))
-                                    .foregroundColor(Color(Constants.Colors.primary))
-                            )
-                            .padding(.leading)
-                        
-                        Text("Ver mis puntos")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .padding()
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical)
-                }
-
-                Divider()
-                
-                Button(action: {
-                    signOut()
-                }) {
-                    HStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(Constants.Colors.primary), lineWidth: 2)
-                            .frame(width: 55, height: 55)
-                            .overlay(
-                                Image(systemName: "arrowshape.turn.up.left.circle")
-                                    .font(.system(size: 36))
-                                    .foregroundColor(Color(Constants.Colors.primary))
-                            )
-                            .padding(.leading)
-                        
-                        Text("Cerrar Sesión")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .padding()
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical)
-                }
-
-                Divider()
-            }
-            .padding(.horizontal)
-            Spacer()
         }
     }
     
     func signOut() {
-        guard let url = URL(string: "http://192.168.1.65:8000/users/signOut") else { return }
+        guard let url = URL(string: "http://localhost:8000/users/signOut") else { return }
         
         // Retrieve sessionKey and userId from UserDefaults
         guard let sessionKey = UserDefaults.standard.string(forKey: "session_key"),
@@ -148,7 +150,7 @@ struct AccountView: View {
                 
                 // Close app
                 DispatchQueue.main.async {
-                    exit(0)
+                    isLoggedIn = false
                 }
                 
             } else {
@@ -161,5 +163,5 @@ struct AccountView: View {
 }
 
 #Preview {
-    AccountView()
+    AccountView(isLoggedIn: .constant(true))
 }

@@ -74,15 +74,29 @@ func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping (
 struct PointsHistoryView: View {
     @State private var points: Int = 0
     @State private var history: [Transaction] = []
-    
+    @Environment(\.presentationMode) var presentationMode 
+    @State private var userName: String = "Usuario"
+
+
     
     var body: some View {
         VStack {
             // Header
             HStack {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss() // Dismiss the current view
+                }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.white)
+                        .font(.system(size: 20))
+                }
+                .padding(.trailing, 8)
+                
                 Text("Historial de puntos")
                     .font(.title2)
                     .bold()
+                    .foregroundColor(.white)
+                
                 Spacer()
             }
             .padding()
@@ -109,7 +123,7 @@ struct PointsHistoryView: View {
             List {
                 Section(header: Text("Ultimas Transacciones")) {
                     ForEach(history) { transaction in
-                        TransactionRow(title: transaction.origen_nombre, date: transaction.fecha, points: "\(transaction.puntos) puntos")
+                        TransactionRow(title: transaction.origen_nombre, date: transaction.fecha, points: "\(transaction.tipo ? transaction.puntos : "-\(transaction.puntos)") puntos", tipo: transaction.tipo)
                     }
                 }
             }
@@ -121,8 +135,11 @@ struct PointsHistoryView: View {
         .navigationBarHidden(true)
         .onAppear {
             // Fetch points first, then fetch history
-            fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedPoints in
+            fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedName, fetchedPoints in
+                // Store the fetched name and points
+                self.userName = fetchedName
                 self.points = fetchedPoints
+
                 
                 // Once points are fetched, fetch the history
                 fetchPointsHistory(userID: userID, sessionKey: sessionKey) { fetchedHistory in
@@ -137,6 +154,7 @@ struct TransactionRow: View {
     var title: String
     var date: String
     var points: String
+    var tipo: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -147,6 +165,7 @@ struct TransactionRow: View {
                 Spacer()
                 Text(points)
                     .bold()
+                    .foregroundColor(tipo ? .green : .red)
             }
             .font(.subheadline)
             .foregroundColor(.gray)

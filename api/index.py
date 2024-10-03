@@ -1,9 +1,9 @@
 from flask import Flask, jsonify
+from flasgger import Swagger
 from users import users_bp
 from eventos import eventos_bp
 from mediciones import mediciones_bp
 from tienda import tienda_bp
-import mssql_functions as MSSql
 from database import cnx
 from session_manager import validate_key, create_session, delete_session, session_storage
 
@@ -13,6 +13,16 @@ app.register_blueprint(users_bp, url_prefix='/users')
 app.register_blueprint(eventos_bp, url_prefix='/eventos')
 app.register_blueprint(mediciones_bp, url_prefix='/mediciones')
 app.register_blueprint(tienda_bp, url_prefix='/tienda')
+
+# Documentación en Swagger
+swagger = Swagger(app, template={
+    "info":{
+        "title": "Documentación Equipo 4",
+        "description": "Documentación de endpoints LeSabritones",
+        "version": "1.0.0"
+    }
+ })
+
 
 @app.route("/")
 def get_tables():
@@ -41,7 +51,7 @@ def runquery():
         return f"<p>Query Result:</p><p>{result}</p>"
     except Exception as e:
         return f"<p>Error running query: {str(e)}</p>"
-    
+
 @app.route("/getSessions")
 def get_sessions():
     return jsonify(session_storage)

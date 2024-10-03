@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
+    @Binding var selectedTab: Int
     //@State private var isLoggedIn: Bool = false
     @State private var username = ""
     @State private var password = ""
@@ -50,6 +51,7 @@ struct LoginView: View {
                         .foregroundColor(.black)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
+                        .autocapitalization(.none) // quitar caps
                     
                     // Contra
                     Text("Contraseña")
@@ -79,7 +81,8 @@ struct LoginView: View {
                         loginUser(correo: username, password: password)
                     }
                 }
-                .frame(width: 250, height: 50)
+                //.frame(width: 250, height: 50)
+                .frame(width: 265, height: 65)
                 .foregroundColor(.white)
                 .font(.title2)
                 .bold()
@@ -88,15 +91,18 @@ struct LoginView: View {
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
-                .padding(.top, 35)
+                //.padding(.top, 35)
+                .padding(.top, 55)
                 .shadow(radius: 5)
                 
+                /*
                 Divider()
                     .padding(.top, 15)
                     .padding(.bottom, 15)
                     .padding(.horizontal, 20)
                 
                 // boton google
+                
                 Button(action: {/*aun nada*/}) {
                     HStack {
                         Image("logogoogle")
@@ -116,7 +122,7 @@ struct LoginView: View {
                 .background(.white)
                 .cornerRadius(5)
                 .shadow(radius: 5)
-                
+                */
                 
                 Spacer()
             }
@@ -168,6 +174,7 @@ struct LoginView: View {
                         // Update the login state
                         DispatchQueue.main.async {
                             self.isLoggedIn = true
+                            self.selectedTab = 0
                         }
                         
                     } else {
@@ -187,7 +194,11 @@ struct LoginView: View {
     }
 }
 
+struct LoginView_Previews: PreviewProvider {
+    @State static var isLoggedIn: Bool = false
+    @State static var selectedTab: Int = 0
 
-//#Preview {
-//   LoginView()
-//}
+    static var previews: some View {
+        LoginView(isLoggedIn: $isLoggedIn, selectedTab: $selectedTab)
+    }
+}
