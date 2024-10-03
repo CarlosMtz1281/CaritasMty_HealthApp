@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
+    @Binding var selectedTab: Int
     //@State private var isLoggedIn: Bool = false
     @State private var username = ""
     @State private var password = ""
@@ -173,6 +174,7 @@ struct LoginView: View {
                         // Update the login state
                         DispatchQueue.main.async {
                             self.isLoggedIn = true
+                            self.selectedTab = 0
                         }
                         
                     } else {
@@ -192,8 +194,11 @@ struct LoginView: View {
     }
 }
 
+struct LoginView_Previews: PreviewProvider {
+    @State static var isLoggedIn: Bool = false
+    @State static var selectedTab: Int = 0
 
-#Preview {
-    @Previewable @State var isLoggedIn: Bool = false
-    LoginView(isLoggedIn: $isLoggedIn)
+    static var previews: some View {
+        LoginView(isLoggedIn: $isLoggedIn, selectedTab: $selectedTab)
+    }
 }
