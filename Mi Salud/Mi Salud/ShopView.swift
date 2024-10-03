@@ -12,6 +12,8 @@ struct ShopCard: View {
     var name: String
     var description: String
     var points: Int
+    var catalogItem: CatalogItem
+    var userPoints: Int
 
     var body: some View {
         HStack{
@@ -31,7 +33,7 @@ struct ShopCard: View {
                     .padding(.bottom, 3)
 
                 Text(description)
-                    .font(.system(size: 13))
+                    .font(.system(size: 13.5))
                     .foregroundColor(.gray)
                     .lineLimit(2)
                     .padding(.bottom, 10)
@@ -43,14 +45,13 @@ struct ShopCard: View {
                     
                     
 
-                Button(action: {
-                    
-                }) {
-                    Text("Redimir")
-                        .font(.system(size: 10))
+                NavigationLink(destination: MasInformacion(catalogItem: catalogItem, userPoints: userPoints)) {
+                    Text("Más Detalles")
+                        .font(.system(size: 15))
                         .foregroundColor(.white)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 16)
+                        .bold()
                 }
                 .frame(maxWidth: .infinity)
                 .background(Color(Constants.Colors.accent))
@@ -179,7 +180,7 @@ struct ShopView: View {
                         
                         VStack(spacing: 20) {
                             ForEach(catalogItems) { item in
-                                ShopCard(image: "family_trip", name: item.nombre, description: item.descripcion, points: Int(item.puntos) ?? 0)
+                                ShopCard(image: "family_trip", name: item.nombre, description: item.descripcion, points: Int(item.puntos) ?? 0, catalogItem: item, userPoints: points)
                             }
                         }
                         .padding(.horizontal)
