@@ -45,4 +45,4 @@ def connect_db(params):
     )
     return conn
 
-cnx =  connect_db(fer_local_params)
+cnx =  connect_db(local_params)
