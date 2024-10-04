@@ -41,7 +41,8 @@ struct EventListView: View {
                             Text("Mis eventos")
                                 .font(.title)
                                 .bold()
-                                .padding(20)
+                                .padding(.leading, 20)
+                                .padding(.top, 20)
                             
                             // Display user's events (Here, we show a few hardcoded events)
                             ForEach(events) { event in
@@ -56,7 +57,8 @@ struct EventListView: View {
                             Text("Próximos eventos")
                                 .font(.title)
                                 .bold()
-                                .padding(20)
+                                .padding(.leading, 20)
+                                .padding(.top, 20)
                             
                             // Display upcoming events (Using the same sample data)
                             ForEach(events) { event in

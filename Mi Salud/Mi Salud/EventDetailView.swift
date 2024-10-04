@@ -109,7 +109,7 @@ struct EventDetailView: View {
                 // Action for reserving
             }) {
                 Text("Reservar Lugar")
-                    .font(.title)
+                    .font(.title2)
                     .bold()
                     .frame(maxWidth: .infinity)
                     .padding()
