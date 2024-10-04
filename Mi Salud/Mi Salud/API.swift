@@ -265,3 +265,17 @@ func comprarBono(userID: Int, puntos: Int, beneficioId: String, sessionKey: Stri
     
     task.resume()
 }
+
+
+// events
+
+struct Event: Identifiable {
+    let id = UUID()
+    let title: String
+    let date: String
+    let location: String
+    let availableSpots: Int
+    let description: String
+    let organizer: String
+    let eventDate: String
+}

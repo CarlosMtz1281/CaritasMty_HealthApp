@@ -30,9 +30,9 @@ struct ContentView: View {
                         .tabItem {
                             Image(systemName: "house")
                         }.tag(0)
-                    HealthView()
+                    EventListView()
                         .tabItem {
-                            Image(systemName: "stethoscope")
+                            Image(systemName: "calendar.badge.plus")
                         }.tag(1)
                     QRView()
                         .tabItem {
