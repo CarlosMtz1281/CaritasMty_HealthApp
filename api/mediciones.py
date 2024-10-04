@@ -14,6 +14,11 @@ def historial_mediciones():
 
 @mediciones_bp.route('/datossalud/<int:user_id>', methods=['GET'])
 def datos_salud(user_id):
+    session_key = request.headers.get('key')
+
+    if not session_key or validate_key(session_key) != user_id:
+        return jsonify({"error": "Invalid session key"}), 400
+
     query = """
         SELECT DS.EDAD, DS.TIPO_SANGRE, DS.GENERO, DS.PESO, DS.ALTURA
         FROM DATOS_SALUD DS
@@ -43,6 +48,11 @@ def datos_salud(user_id):
     
 @mediciones_bp.route('/medicionesdatos/<int:user_id>', methods=['GET'])
 def obtener_mediciones(user_id):
+    session_key = request.headers.get('key')
+
+    if not session_key or validate_key(session_key) != user_id:
+        return jsonify({"error": "Invalid session key"}), 400
+    
     glucosa_query = """
         SELECT TOP 5 G.FECHA, G.NIVEL
         FROM GLUCOSA G
