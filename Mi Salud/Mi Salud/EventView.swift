@@ -39,9 +39,9 @@ struct EventListView: View {
                         VStack(alignment: .leading, spacing: 16) {
                             // Title for user's events
                             Text("Mis eventos")
-                                .font(.title2)
+                                .font(.title)
                                 .bold()
-                                .padding(.horizontal)
+                                .padding(20)
                             
                             // Display user's events (Here, we show a few hardcoded events)
                             ForEach(events) { event in
@@ -54,9 +54,9 @@ struct EventListView: View {
                             
                             // Title for upcoming events
                             Text("Próximos eventos")
-                                .font(.title2)
+                                .font(.title)
                                 .bold()
-                                .padding(.horizontal)
+                                .padding(20)
                             
                             // Display upcoming events (Using the same sample data)
                             ForEach(events) { event in

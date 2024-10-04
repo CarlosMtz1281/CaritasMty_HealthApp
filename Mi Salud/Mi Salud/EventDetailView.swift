@@ -10,7 +10,6 @@ import SwiftUI
 struct EventDetailView: View {
     let event: Event
     @Environment(\.presentationMode) var presentationMode
-
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -25,11 +24,10 @@ struct EventDetailView: View {
                 }
                 .padding(.trailing, 8)
                 
-                // Header section
-                Text("Proximos eventos")
-                    .font(.title)
+                // Event title (match the mockup)
+                Text("Detalles de evento")
+                    .font(.title2)
                     .bold()
-                    .padding(.horizontal)
                 
                 Spacer()
             }
@@ -37,29 +35,63 @@ struct EventDetailView: View {
             .background(Color(Constants.Colors.primary))
             .foregroundColor(.white)
             
-            // Available spots info
+            Text(event.title)
+                .font(.title)
+                .bold()
+                .padding(.top, 20)
+                .padding(.leading, 20)
+            
+            // Image and Available spots section
             HStack {
+                // Placeholder for event image
+                Image("family_trip")
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                    .cornerRadius(10)
+                
                 Spacer()
+                
+                // Available spots information
                 Text("Quedan \(event.availableSpots) cupos disponibles")
-                    .font(.subheadline)
+                    .font(.headline)
                     .bold()
                     .foregroundColor(.black)
+                
                 Spacer()
             }
-            .padding(.vertical)
+            .padding(.horizontal)
+            .padding(.vertical, 20)
             
-            // Event details
-            VStack(alignment: .leading) {
-                Text("Lugar: \(event.location)")
+            // Event details section
+            VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("Lugar:").bold()
+                        Text(event.location)
+                    }
                     .font(.body)
-                
-                Text("Fecha: \(event.eventDate)")
+                    .foregroundColor(.black)
+                    
+                    HStack {
+                        Text("Fecha:").bold()
+                        Text(event.eventDate)
+                    }
                     .font(.body)
-                
-                Text("Impartido por: \(event.organizer)")
+                    .foregroundColor(.black)
+                    
+                    HStack {
+                        Text("Impartido por:").bold()
+                        Text(event.organizer)
+                    }
                     .font(.body)
+                    .foregroundColor(.black)
+                                        
+            
+                }
                 
-                Text("• Descripcion")
+                Divider()
+                
+                Text("Descripción")
                     .font(.headline)
                     .padding(.top)
                 
@@ -69,13 +101,15 @@ struct EventDetailView: View {
             }
             .padding(.horizontal)
             
-            // Reserve button
+            // Spacer to push the button to the bottom
             Spacer()
             
+            // Reserve Button
             Button(action: {
                 // Action for reserving
             }) {
                 Text("Reservar Lugar")
+                    .font(.title)
                     .bold()
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -85,7 +119,11 @@ struct EventDetailView: View {
             }
             .padding(.horizontal)
         }
-        
+        .navigationBarHidden(true)  // Hide the navigation bar since we added our own back button
     }
 }
 
+#Preview {
+    // Test the view with sample event data
+    EventDetailView(event: Event(title: "Charla Nutricion", date: "29 Noviembre 2024", location: "Oficinas Caritas San Jose de Uro", availableSpots: 20, description: "Lorem Ipsum etsun dolorem, Sancti Sacramentum...", organizer: "Caritas Salud", eventDate: "15 de Enero 2025 8:00 AM"))
+}
