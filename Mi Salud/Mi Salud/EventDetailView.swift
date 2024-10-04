@@ -13,7 +13,7 @@ struct EventDetailView: View {
 
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading) {
             // Back button and title
             HStack {
                 Button(action: {

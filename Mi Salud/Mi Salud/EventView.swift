@@ -78,27 +78,40 @@ struct EventRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             // Event title and date
-            HStack {
-                Text(event.title)
-                    .font(.headline)
+            HStack{
+                HStack{
+                    VStack(alignment: .leading){
+                        
+                        Text(event.title)
+                            .font(.title2)
+                        
+                        Text(event.date)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                }
+                
+                
                 Spacer()
-                Text(event.date)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
+                // "Ver Más" button and navigation
+                NavigationLink(destination: EventDetailView(event: event)) {
+                    Text("Ver Más")
+                        .frame(width:100, height: 45)
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.white)
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 16)
+                        .background(Color.orange)
+                        .cornerRadius(8)
+                }
+                .padding(.top, 8)
+            }.frame(height: 60)
+                .padding(15)
             
-            // "Ver Más" button and navigation
-            NavigationLink(destination: EventDetailView(event: event)) {
-                Text("Ver Más")
-                    .font(.subheadline)
-                    .bold()
-                    .foregroundColor(.white)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 16)
-                    .background(Color.orange)
-                    .cornerRadius(8)
-            }
-            .padding(.top, 8)
+            
+            
         }
         .padding(.vertical, 10)
         .background(Color.white)
