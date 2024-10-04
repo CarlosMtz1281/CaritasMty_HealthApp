@@ -9,12 +9,13 @@ import SwiftUI
 
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
+    @Binding var selectedTab: Int
     //@State private var isLoggedIn: Bool = false
     @State private var username = ""
     @State private var password = ""
     @State private var showingAlert = false
     @State private var alertMessage = ""
-
+    
     var body: some View {
         VStack {
             Spacer()
@@ -41,7 +42,7 @@ struct LoginView: View {
                         .padding(.bottom, -5)
                         .font(.title)
                         .bold()
-                        
+                    
                     TextField("", text: $username)
                         .padding(10)
                         .background(
@@ -50,6 +51,7 @@ struct LoginView: View {
                         .foregroundColor(.black)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
+                        .autocapitalization(.none) // quitar caps
                     
                     // Contra
                     Text("Contraseña")
@@ -58,7 +60,7 @@ struct LoginView: View {
                         .padding(.top, 15)
                         .font(.title)
                         .bold()
-                        
+                    
                     SecureField("", text: $password)
                         .padding(10)
                         .background(
@@ -79,7 +81,8 @@ struct LoginView: View {
                         loginUser(correo: username, password: password)
                     }
                 }
-                .frame(width: 250, height: 50)
+                //.frame(width: 250, height: 50)
+                .frame(width: 265, height: 65)
                 .foregroundColor(.white)
                 .font(.title2)
                 .bold()
@@ -88,35 +91,38 @@ struct LoginView: View {
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
-                .padding(.top, 35)
+                //.padding(.top, 35)
+                .padding(.top, 55)
                 .shadow(radius: 5)
                 
-                Divider()
-                    .padding(.top, 15)
-                    .padding(.bottom, 15)
-                    .padding(.horizontal, 20)
-                
-                // boton google
-                Button(action: {/*aun nada*/}) {
-                    HStack {
-                        Image("logogoogle")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                        
-                        Text("Ingresar con Google")
-                            .font(.title3)
-                            .bold()
-                    }
-                }
-                .frame(width: 250, height: 45)
-                .foregroundColor(.black)
-                .font(.title3)
-                .bold()
-                .background(.white)
-                .cornerRadius(5)
-                .shadow(radius: 5)
-                
+                /*
+                 Divider()
+                 .padding(.top, 15)
+                 .padding(.bottom, 15)
+                 .padding(.horizontal, 20)
+                 
+                 // boton google
+                 
+                 Button(action: {/*aun nada*/}) {
+                 HStack {
+                 Image("logogoogle")
+                 .resizable()
+                 .scaledToFit()
+                 .frame(width: 24, height: 24)
+                 
+                 Text("Ingresar con Google")
+                 .font(.title3)
+                 .bold()
+                 }
+                 }
+                 .frame(width: 250, height: 45)
+                 .foregroundColor(.black)
+                 .font(.title3)
+                 .bold()
+                 .background(.white)
+                 .cornerRadius(5)
+                 .shadow(radius: 5)
+                 */
                 
                 Spacer()
             }
@@ -142,13 +148,13 @@ struct LoginView: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 DispatchQueue.main.async {
-                    self.alertMessage = "Network error: \(error?.localizedDescription ?? "Unknown error")"
+                    self.alertMessage = "Error de conexion: No se pudo establecer conexion con el servidor"
                     self.showingAlert = true
                 }
                 return
             }
             
-            // Print the raw response to debug the structure
+            // Print the raw response for debugging
             if let httpResponse = response as? HTTPURLResponse {
                 print("HTTP Status Code: \(httpResponse.statusCode)")
             }
@@ -157,9 +163,14 @@ struct LoginView: View {
             do {
                 // Decode the JSON response
                 if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    // Handle user_id as Int or String (flexible parsing)
-                    if let userId = jsonResponse["user_id"] as? Int ?? Int(jsonResponse["user_id"] as? String ?? ""),
-                       let sessionKey = jsonResponse["key"] as? String {
+                    // Check if there's an error message
+                    if let errorMessage = jsonResponse["error"] as? String {
+                        DispatchQueue.main.async {
+                            self.alertMessage = errorMessage  // Show the error message (e.g., "Credenciales inválidas")
+                            self.showingAlert = true
+                        }
+                    } else if let userId = jsonResponse["user_id"] as? Int ?? Int(jsonResponse["user_id"] as? String ?? ""),
+                              let sessionKey = jsonResponse["key"] as? String {
                         
                         // Store values in UserDefaults
                         UserDefaults.standard.set(userId, forKey: "user_id")
@@ -168,11 +179,11 @@ struct LoginView: View {
                         // Update the login state
                         DispatchQueue.main.async {
                             self.isLoggedIn = true
+                            self.selectedTab = 0
                         }
-                        
                     } else {
                         DispatchQueue.main.async {
-                            self.alertMessage = "Invalid response from server."
+                            self.alertMessage = "Unexpected response format."
                             self.showingAlert = true
                         }
                     }
@@ -186,8 +197,11 @@ struct LoginView: View {
         }.resume()
     }
 }
+struct LoginView_Previews: PreviewProvider {
+    @State static var isLoggedIn: Bool = false
+    @State static var selectedTab: Int = 0
 
-
-//#Preview {
-//   LoginView()
-//}
+    static var previews: some View {
+        LoginView(isLoggedIn: $isLoggedIn, selectedTab: $selectedTab)
+    }
+}

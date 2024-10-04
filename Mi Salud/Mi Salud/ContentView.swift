@@ -22,7 +22,7 @@ struct ContentView: View {
                 SplashView()
                     .transition(.opacity) // Optional: add transition animation
             } else if !isLoggedIn {
-                LoginView(isLoggedIn: $isLoggedIn)
+                LoginView(isLoggedIn: $isLoggedIn, selectedTab: $selectedTab)
                 //LoginView()
             } else {
                 TabView(selection: $selectedTab) {
@@ -30,9 +30,9 @@ struct ContentView: View {
                         .tabItem {
                             Image(systemName: "house")
                         }.tag(0)
-                    HealthView()
+                    EventListView()
                         .tabItem {
-                            Image(systemName: "stethoscope")
+                            Image(systemName: "calendar.badge.plus")
                         }.tag(1)
                     QRView()
                         .tabItem {
@@ -42,7 +42,7 @@ struct ContentView: View {
                         .tabItem {
                             Image(systemName: "bag")
                         }.tag(3)
-                    AccountView()
+                    AccountView(isLoggedIn: $isLoggedIn)
                         .tabItem {
                             Image(systemName: "person")
                         }.tag(4)
