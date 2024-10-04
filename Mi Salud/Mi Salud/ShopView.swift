@@ -75,6 +75,8 @@ struct ShopView: View {
     @State private var points: Int = 0
     @State private var catalogItems: [CatalogItem] = []
     @State private var userName: String = "Usuario"
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     
     init() {
@@ -190,20 +192,36 @@ struct ShopView: View {
                 Spacer()
                 Spacer()
             }
+            .onAppear{
+                fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedName, fetchedPoints in
+                    if fetchedPoints == 0 {
+                        self.alertMessage = "Error: No se pudieron obtener los puntos."
+                        self.showAlert = true
+                    } else {
+                        self.userName = fetchedName
+                        self.points = fetchedPoints
+                        
+                        fetchCatalog(sessionKey: sessionKey) { items in
+                            if items.isEmpty {
+                                self.alertMessage = "Error: No hay artículos disponibles en el catálogo."
+                                self.showAlert = true
+                            } else {
+                                self.catalogItems = items
+                            }
+                        }
+                    }
+                }
+            }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.white)
             .edgesIgnoringSafeArea(.top)
             .padding(.bottom, 10)
-            .onAppear{
-                fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedName, fetchedPoints in
-                    // Store the fetched name and points
-                    self.userName = fetchedName
-                    self.points = fetchedPoints
-                    
-                    fetchCatalog(sessionKey: sessionKey) { items in
-                        self.catalogItems = items
-                    }
-                }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Error de Conexión"),
+                    message: Text(alertMessage),
+                    dismissButton: .default(Text("Aceptar"))
+                )
             }
         }
     }
