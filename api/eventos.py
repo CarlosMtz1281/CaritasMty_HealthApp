@@ -43,7 +43,7 @@ def eventos_usuario(user_id):
         SELECT E.ID_EVENTO, E.NOMBRE, E.DESCRIPCION, E.NUM_MAX_ASISTENTES, E.PUNTAJE, E.FECHA
         FROM USUARIOS_EVENTOS UE
         JOIN EVENTOS E ON UE.EVENTO = E.ID_EVENTO
-        WHERE UE.USUARIO = ? AND E.FECHA >= GETDATE();
+        WHERE UE.USUARIO = %d AND E.FECHA >= GETDATE();
     """
     
     try:
@@ -75,7 +75,7 @@ def usuarios_evento(user_id, id_evento):
         SELECT U.NOMBRE, U.A_PATERNO
         FROM USUARIOS_EVENTOS UE
         JOIN USUARIOS U ON UE.USUARIO = U.ID_USUARIO
-        WHERE UE.EVENTO = ? AND U.ID_USUARIO != ?;
+        WHERE UE.EVENTO = %d AND U.ID_USUARIO != %d;
     """
     
     try:
@@ -105,8 +105,8 @@ def registrar_participacion():
     id_evento = data.get('id_evento')
     
     query = """
-        INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO)
-        VALUES (?, ?);
+        INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO)
+        VALUES (%d, %d, 0);
     """
     
     try:
@@ -120,6 +120,50 @@ def registrar_participacion():
         return jsonify({"error": str(e)}), 500
     
     
+@eventos_bp.route('/asistirEvento', methods=['POST'])
+def asistir_evento():    
+    data = request.json
+    user_id = data.get('user_id')
+    id_evento = data.get('id_evento')
+    
+    # primero validar que usuario este registrado en el evento
+    query = """
+        SELECT *
+        FROM USUARIOS_EVENTOS
+        WHERE USUARIO = %d AND EVENTO = %d;
+    """
+    
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, (user_id, id_evento))
+        result = cursor.fetchone()
+        cursor.close()
+        
+        if not result:
+            return jsonify({"error": "Usuario no registrado en el evento."}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    # si el usuario ya asistió, no hacer nada
+    if result[2]:
+        return jsonify({"message": "Usuario ya asistió al evento."}), 200
+    
+    # si el usuario no ha asistido, actualizar el registro
+    query = """
+        UPDATE USUARIOS_EVENTOS
+        SET ASISTIO = 1
+        WHERE USUARIO = %d AND EVENTO = %d;
+    """
+    
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, (user_id, id_evento))
+        cnx.commit()
+        cursor.close()
+        
+        return jsonify({"message": "Asistencia registrada."}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
     
 
 @eventos_bp.route('/crearEvento', methods=['POST'])

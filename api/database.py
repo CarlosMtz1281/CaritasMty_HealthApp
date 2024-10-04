@@ -35,7 +35,7 @@ def connect_fer(params):
         server=params['DB_HOST'],
         user=params['DB_USER'],
         password=params['DB_PASSWORD'],
-        database='dummy'
+        database='master'
     )
     return conn
 
@@ -54,6 +54,6 @@ def connect_to_db(params):
         print(f"Cannot connect to MSSQL server: {e}")
         sys.exit()
 
-cnx = connect_to_db(nico_local_params)
-#cnx =  connect_fer(local_params)
+#cnx = connect_to_db(nico_local_params)
+cnx =  connect_fer(nico_local_params)
 
