@@ -32,7 +32,9 @@ CREATE TABLE EVENTOS (
     DESCRIPCION VARCHAR(MAX),
     NUM_MAX_ASISTENTES NUMERIC(18, 0),
     PUNTAJE NUMERIC(18, 0),
-    FECHA DATETIME
+    FECHA DATETIME,
+    LUGAR VARCHAR(200),        
+    EXPOSITOR VARCHAR(150)    
 );
 
 -- 4. Beneficios disponibles para alcanzar
@@ -45,10 +47,12 @@ CREATE TABLE BENEFICIOS (
 
 -- 5. Catalogo: Retos disponibles
 CREATE TABLE RETOS (
-    ID_RETO NUMERIC(18, 0) PRIMARY KEY IDENTITY,
-    NOMBRE VARCHAR(MAX),
-    DESCRIPCION VARCHAR(MAX),
-    PUNTAJE NUMERIC(18, 0)
+    ID_RETO NUMERIC(18, 0) PRIMARY KEY IDENTITY,  -- ID autoincrementable para el reto
+    NOMBRE VARCHAR(MAX),                          -- Nombre del reto
+    DESCRIPCION VARCHAR(MAX),                     -- Descripción del reto
+    PUNTAJE NUMERIC(18, 0),                       -- Puntuación asociada al reto
+    CONTACTO VARCHAR(MAX),                        -- Información de contacto (correo o teléfono)
+    FECHA_LIMITE DATE                             -- Fecha límite para completar el reto
 );
 
 -- 6. Relacion usuarios y sus beneficios obtenidos
