@@ -280,7 +280,6 @@ struct Event: Identifiable {
     let eventDate: String
 }
 
-<<<<<<< HEAD
 struct EventItem: Codable, Identifiable {
     let id: String
     let title: String
@@ -404,7 +403,6 @@ func fetchChallenges(sessionKey: String, completion: @escaping ([ChallengeItem])
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Error fetching challenges: \(error.localizedDescription)")
-=======
 
 
 
@@ -472,7 +470,6 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Error fetching health data: \(error)")
->>>>>>> main
             return
         }
         
@@ -481,7 +478,6 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
             return
         }
         
-<<<<<<< HEAD
         // Imprimir la respuesta JSON en bruto para depuración
         if let jsonString = String(data: data, encoding: .utf8) {
             print("Raw JSON response: \(jsonString)")
@@ -534,7 +530,6 @@ func fetchMyChallenges(userId: Int, sessionKey: String, completion: @escaping ([
     }.resume()
 }
 
-=======
         do {
             // Debug: Print the raw JSON
             if let jsonString = String(data: data, encoding: .utf8) {
@@ -566,4 +561,3 @@ func fetchMyChallenges(userId: Int, sessionKey: String, completion: @escaping ([
         }
     }.resume()
 }
->>>>>>> main
