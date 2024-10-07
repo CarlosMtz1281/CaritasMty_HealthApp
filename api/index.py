@@ -58,5 +58,11 @@ def runquery():
 def get_sessions():
     return jsonify(session_storage)
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8000)
+API_CERT = '/home/user01/mnt/api_https/SSL/sabritones.tc2007b.tec.mx.cer'
+API_KEY = '/home/user01/mnt/api_https/SSL/sabritones.tc2007b.tec.mx.key'
+
+if __name__ == '__main__':
+    import ssl
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.load_cert_chain(API_CERT, API_KEY)
+    app.run(host='0.0.0.0', port=10206, ssl_context=context, debug=True)

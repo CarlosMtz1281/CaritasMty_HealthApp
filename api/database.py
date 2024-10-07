@@ -19,4 +19,6 @@ def connect_db(params):
     )
     return conn
 
+print(local_params)
+
 cnx =  connect_db(local_params)
