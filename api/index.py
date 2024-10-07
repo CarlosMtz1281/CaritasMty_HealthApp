@@ -4,6 +4,7 @@ from users import users_bp
 from eventos import eventos_bp
 from mediciones import mediciones_bp
 from tienda import tienda_bp
+from retos import retos_bp
 from database import cnx
 from session_manager import validate_key, create_session, delete_session, session_storage
 
@@ -13,6 +14,7 @@ app.register_blueprint(users_bp, url_prefix='/users')
 app.register_blueprint(eventos_bp, url_prefix='/eventos')
 app.register_blueprint(mediciones_bp, url_prefix='/mediciones')
 app.register_blueprint(tienda_bp, url_prefix='/tienda')
+app.register_blueprint(retos_bp, url_prefix='/retos')
 
 # Documentación en Swagger
 swagger = Swagger(app, template={

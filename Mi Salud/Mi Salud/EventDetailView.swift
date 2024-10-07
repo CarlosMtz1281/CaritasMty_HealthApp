@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EventDetailView: View {
-    let event: Event
+    let event: EventItem // Use EventItem instead of Event
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -44,7 +44,7 @@ struct EventDetailView: View {
             // Image and Available spots section
             HStack {
                 // Placeholder for event image
-                Image("family_trip")
+                Image("family_trip") // Replace with a dynamic image if you have one
                     .resizable()
                     .frame(width: 200, height: 200)
                     .cornerRadius(10)
@@ -67,7 +67,7 @@ struct EventDetailView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Text("Lugar:").bold()
-                        Text(event.location)
+                        Text(event.location) // Update with real location data if available in EventItem
                     }
                     .font(.body)
                     .foregroundColor(.black)
@@ -81,12 +81,10 @@ struct EventDetailView: View {
                     
                     HStack {
                         Text("Impartido por:").bold()
-                        Text(event.organizer)
+                        Text(event.organizer) // Update with real organizer data if available
                     }
                     .font(.body)
                     .foregroundColor(.black)
-                                        
-            
                 }
                 
                 Divider()
@@ -101,7 +99,6 @@ struct EventDetailView: View {
             }
             .padding(.horizontal)
             
-            // Spacer to push the button to the bottom
             Spacer()
             
             // Reserve Button
@@ -119,11 +116,8 @@ struct EventDetailView: View {
             }
             .padding(.horizontal)
         }
-        .navigationBarHidden(true)  // Hide the navigation bar since we added our own back button
+        .navigationBarHidden(true)  
     }
 }
 
-#Preview {
-    // Test the view with sample event data
-    EventDetailView(event: Event(title: "Charla Nutricion", date: "29 Noviembre 2024", location: "Oficinas Caritas San Jose de Uro", availableSpots: 20, description: "Lorem Ipsum etsun dolorem, Sancti Sacramentum...", organizer: "Caritas Salud", eventDate: "15 de Enero 2025 8:00 AM"))
-}
+
