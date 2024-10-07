@@ -9,7 +9,7 @@ import Foundation
 
 // Fetch session key and user ID from UserDefaults
 let sessionKey: String = {
-    return UserDefaults.standard.string(forKey: "session_key") ?? "6b546726-e396-41a9-8cc7-13b89c8ca0cf" // Use hardcoded session key if not found
+    return UserDefaults.standard.string(forKey: "session_key") ?? "d0e14599-d0c2-4853-8663-707303ff00e0" // Use hardcoded session key if not found
 }()
 
 let userID: Int = {
@@ -280,6 +280,7 @@ struct Event: Identifiable {
     let eventDate: String
 }
 
+<<<<<<< HEAD
 struct EventItem: Codable, Identifiable {
     let id: String
     let title: String
@@ -403,6 +404,75 @@ func fetchChallenges(sessionKey: String, completion: @escaping ([ChallengeItem])
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Error fetching challenges: \(error.localizedDescription)")
+=======
+
+
+
+
+////////////////////////////////////////////////////////////////////////////// SALUD ///////////////////////////////////////////////////////////////////////////
+struct HealthDataPoint: Identifiable {
+    var id = UUID()
+    var time: String
+    var value: Double
+}
+
+struct BloodPressureDataPoint: Identifiable {
+    var id = UUID()
+    var time: String
+    var systolic: Double
+    var diastolic: Double
+}
+
+struct MedicionesResponse: Codable {
+    let resultados: MedicionesResultados
+}
+
+struct MedicionesResultados: Codable {
+    let glucosa: [Glucose]
+    let presion_arterial: [BloodPressure]
+    let ritmo_cardiaco: [HeartRate]
+}
+
+struct Glucose: Codable {
+    var fecha: String
+    var glucosa: Int
+}
+
+struct BloodPressure: Codable {
+    var fecha: String
+    var presion_diastolica: Int
+    var presion_sistolica: Int
+}
+
+struct HeartRate: Codable {
+    var fecha: String
+    var ritmo: Int
+}
+
+func formatDate(_ dateString: String) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+    if let date = formatter.date(from: dateString) {
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MM/dd/yy"
+        return outputFormatter.string(from: date)
+    }
+    return dateString
+}
+
+func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping ([HealthDataPoint], [BloodPressureDataPoint], [HealthDataPoint]) -> Void) {
+    guard let url = URL(string: "http://localhost:8000/mediciones/medicionesdatos/\(userID)") else {
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.addValue(sessionKey, forHTTPHeaderField: "key")
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching health data: \(error)")
+>>>>>>> main
             return
         }
         
@@ -411,6 +481,7 @@ func fetchChallenges(sessionKey: String, completion: @escaping ([ChallengeItem])
             return
         }
         
+<<<<<<< HEAD
         // Imprimir la respuesta JSON en bruto para depuración
         if let jsonString = String(data: data, encoding: .utf8) {
             print("Raw JSON response: \(jsonString)")
@@ -463,3 +534,36 @@ func fetchMyChallenges(userId: Int, sessionKey: String, completion: @escaping ([
     }.resume()
 }
 
+=======
+        do {
+            // Debug: Print the raw JSON
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Raw JSON response: \(jsonString)")
+            }
+
+            // Decode the response
+            let medicionesResponse = try JSONDecoder().decode(MedicionesResponse.self, from: data)
+            
+            // Process the data and send it via the completion handler
+            DispatchQueue.main.async {
+                let glucosaData = medicionesResponse.resultados.glucosa.map {
+                    HealthDataPoint(time: formatDate($0.fecha), value: Double($0.glucosa))
+                }
+                
+                let bloodPressureData = medicionesResponse.resultados.presion_arterial.map {
+                    BloodPressureDataPoint(time: formatDate($0.fecha), systolic: Double($0.presion_sistolica), diastolic: Double($0.presion_diastolica))
+                }
+                
+                let heartRateData = medicionesResponse.resultados.ritmo_cardiaco.map {
+                    HealthDataPoint(time: formatDate($0.fecha), value: Double($0.ritmo))
+                }
+                
+                // Call the completion handler with the formatted data
+                completion(glucosaData, bloodPressureData, heartRateData)
+            }
+        } catch {
+            print("Error decoding health data response: \(error)")
+        }
+    }.resume()
+}
+>>>>>>> main
