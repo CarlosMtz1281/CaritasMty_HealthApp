@@ -21,7 +21,7 @@ struct DottedRoundedSquareView: View {
 }
 
 struct QRView: View {
-    @State private var inputText = "1234" // Valor definido por el administrador
+    @State private var inputText = "1" // Valor definido por el administrador
     @State private var qrCodeImage: UIImage?
     
     let context = CIContext()
