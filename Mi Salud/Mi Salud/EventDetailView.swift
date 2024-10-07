@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct EventDetailView: View {
-    let event: EventItem // Use EventItem instead of Event
+    let event: EventItem // EventItem model for event details
     @Environment(\.presentationMode) var presentationMode
+    @State private var message: String = "" // State for holding success/error message
+    @State private var showAlert = false // State for showing the alert
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -24,7 +26,7 @@ struct EventDetailView: View {
                 }
                 .padding(.trailing, 8)
                 
-                // Event title (match the mockup)
+                // Event title
                 Text("Detalles de evento")
                     .font(.title2)
                     .bold()
@@ -67,7 +69,7 @@ struct EventDetailView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Text("Lugar:").bold()
-                        Text(event.location) // Update with real location data if available in EventItem
+                        Text(event.location)
                     }
                     .font(.body)
                     .foregroundColor(.black)
@@ -81,7 +83,7 @@ struct EventDetailView: View {
                     
                     HStack {
                         Text("Impartido por:").bold()
-                        Text(event.organizer) // Update with real organizer data if available
+                        Text(event.organizer)
                     }
                     .font(.body)
                     .foregroundColor(.black)
@@ -103,7 +105,22 @@ struct EventDetailView: View {
             
             // Reserve Button
             Button(action: {
-                // Action for reserving
+                registrarParticipacion(userID: userID, idEvento: event.id, sessionKey: sessionKey) { result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let successMessage):
+                            message = successMessage
+                            showAlert = true
+                            // After successful registration, dismiss the view
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        case .failure(let error):
+                            message = "Error: \(error.localizedDescription)"
+                            showAlert = true
+                        }
+                    }
+                }
             }) {
                 Text("Reservar Lugar")
                     .font(.title2)
@@ -115,8 +132,11 @@ struct EventDetailView: View {
                     .cornerRadius(8)
             }
             .padding(.horizontal)
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Resultado"), message: Text(message), dismissButton: .default(Text("OK")))
+            }
         }
-        .navigationBarHidden(true)  
+        .navigationBarHidden(true)
     }
 }
 
