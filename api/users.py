@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from database import cnx
 from session_manager import create_session, validate_key, delete_session
+import hashlib
 
 users_bp = Blueprint('users', __name__)
 
@@ -77,8 +78,9 @@ def login():
     """
 
     try:
+        hash_password = hashlib.sha256(password.encode()).digest()
         cursor = cnx.cursor()
-        cursor.execute(query, (correo, password))
+        cursor.execute(query, (correo, hash_password))
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
