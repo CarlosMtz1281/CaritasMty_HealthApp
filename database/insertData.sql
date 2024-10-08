@@ -16,15 +16,15 @@ INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile9','Voluntario9'
 
 
 -- 2. Insertar usuarios
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Juan', 'Pérez', 'Gómez', 'juan.perez@example.com', 'password', 1, 1);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Ana', 'López', 'Martínez', 'ana.lopez@example.com', 'password', 2, 2);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Carlos', 'Ramírez', 'Sánchez', 'carlos.ramirez@example.com', 'password', 1, 1);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('María', 'Fernández', 'Rodríguez', 'maria.fernandez@example.com', 'password', 2, 1);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Lucía', 'Navarro', 'García', 'lucia.navarro@example.com', 'password', 1, 4);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Pedro', 'González', 'Torres', 'pedro.gonzalez@example.com', 'password', 2, 4);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Sofía', 'Hernández', 'Lopez', 'sofia.hernandez@example.com', 'password', 1, 3);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Miguel', 'Cruz', 'Mendoza', 'miguel.cruz@example.com', 'password', 2, 2);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('AAA', 'BBB', 'CCC', 'aaa.bbb@example.com', 'password', 2, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Juan', 'Pérez', 'Gómez', 'juan.perez@example.com', HASHBYTES('SHA2_256', 'password'), 1, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Ana', 'López', 'Martínez', 'ana.lopez@example.com', HASHBYTES('SHA2_256', 'password'), 2, 2);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Carlos', 'Ramírez', 'Sánchez', 'carlos.ramirez@example.com', HASHBYTES('SHA2_256', 'password'), 1, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('María', 'Fernández', 'Rodríguez', 'maria.fernandez@example.com', HASHBYTES('SHA2_256', 'password'), 2, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Lucía', 'Navarro', 'García', 'lucia.navarro@example.com', HASHBYTES('SHA2_256', 'password'), 1, 4);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Pedro', 'González', 'Torres', 'pedro.gonzalez@example.com', HASHBYTES('SHA2_256', 'password'), 2, 4);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Sofía', 'Hernández', 'Lopez', 'sofia.hernandez@example.com', HASHBYTES('SHA2_256', 'password'), 1, 3);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Miguel', 'Cruz', 'Mendoza', 'miguel.cruz@example.com', HASHBYTES('SHA2_256', 'password'), 2, 2);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('AAA', 'BBB', 'CCC', 'aaa.bbb@example.com', HASHBYTES('SHA2_256', 'password'), 2, 1);
 
 -- 3. Insertar eventos con las nuevas columnas Lugar y Expositor
 INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia de Tecnología', 'Una conferencia sobre las últimas tendencias en tecnología.', 100, 10, '2024-10-10 09:00:00', 'Auditorio Central', 'Dr. Juan Pérez');
