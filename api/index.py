@@ -7,6 +7,8 @@ from tienda import tienda_bp
 from retos import retos_bp
 from database import cnx
 from session_manager import validate_key, create_session, delete_session, session_storage
+import secure
+
 
 # Remove 'Server' from header
 from gunicorn.http import wsgi
@@ -18,6 +20,17 @@ wsgi.Response = Response
 
 
 app = Flask(__name__)
+
+@app.after_request
+def add_header(r):
+    secure_headers = secure.Secure()
+    secure_headers.framework.flask(r)
+    #r.headers['X-Frame-Options'] = 'SAMEORIGIN' # ya lo llena 'secure'
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Content-Security-Policy"] = "default-src 'none'"
+    r.headers["Shakira"] = "rocks!"
+    #r.headers["Expires"] = "0"
+    return r
 
 app.register_blueprint(users_bp, url_prefix='/users')
 app.register_blueprint(eventos_bp, url_prefix='/eventos')
