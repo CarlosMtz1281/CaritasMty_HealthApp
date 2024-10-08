@@ -86,11 +86,21 @@ struct ChallengeDetailView: View {
             
             Spacer()
             
-            // Reserve Button
             Button(action: {
-                // Action for reserving
+                registerForChallenge(userID: userID, challengeID: challenge.id, sessionKey: sessionKey) { result in
+                    switch result {
+                    case .success(let message):
+                        print("Registration successful: \(message)")
+                        // Optionally dismiss the view after success
+                        DispatchQueue.main.async {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
+                    case .failure(let error):
+                        print("Registration failed: \(error.localizedDescription)")
+                    }
+                }
             }) {
-                Text("Reservar Lugar")
+                Text("Registrate")
                     .font(.title2)
                     .bold()
                     .frame(maxWidth: .infinity)

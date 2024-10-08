@@ -268,18 +268,6 @@ func comprarBono(userID: Int, puntos: Int, beneficioId: String, sessionKey: Stri
 
 
 // events
-
-struct Event: Identifiable {
-    let id = UUID()
-    let title: String
-    let date: String
-    let location: String
-    let availableSpots: Int
-    let description: String
-    let organizer: String
-    let eventDate: String
-}
-
 struct EventItem: Codable, Identifiable {
     let id: String
     let title: String
@@ -289,7 +277,7 @@ struct EventItem: Codable, Identifiable {
     let eventDate: String
     let location: String
     let organizer: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "ID_EVENTO"
         case title = "NOMBRE"
@@ -306,24 +294,24 @@ func fetchEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void
     print("Fetching general events...")
     print(sessionKey)
     guard let url = URL(string: "http://localhost:8000/eventos/getFuturosEventos") else { return }
-    
+
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Add session key as header
-    
+
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Error fetching events: \(error.localizedDescription)")
             return
         }
-        
+
         guard let data = data else {
             print("No data returned")
             return
         }
-        
+
         // Print the raw JSON response for debugging
-     
-        
+
+
         do {
             let events = try JSONDecoder().decode([EventItem].self, from: data)
             DispatchQueue.main.async {
@@ -340,26 +328,26 @@ func fetchMyEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Vo
     print(sessionKey)
     guard let url = URL(string: "http://localhost:8000/eventos/eventosUsuario/\(userID)") else { return }
     print("Fetching personal events...")
-    
+
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Add session key as header
-    
+
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Error fetching personal events: \(error.localizedDescription)")
             return
         }
-        
+
         guard let data = data else {
             print("No data returned")
             return
         }
-        
+
         // Print the raw JSON response for debugging
         if let jsonString = String(data: data, encoding: .utf8) {
             print("Raw JSON response: \(jsonString)")
         }
-        
+
         do {
             let events = try JSONDecoder().decode([EventItem].self, from: data)
             DispatchQueue.main.async {
@@ -368,8 +356,74 @@ func fetchMyEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Vo
         } catch {
             print("Error decoding personal events: \(error.localizedDescription)")
         }
-        
+
         print("Done")
+    }.resume()
+}
+
+func registrarParticipacion(userID: Int, idEvento: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
+        
+    // Create the URL for the API endpoint
+    guard let url = URL(string: "http://localhost:8000/eventos/registrarParticipacion") else {
+        print("Invalid URL")
+        return
+    }
+    
+    // Create the request
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    
+    // Set headers
+    request.setValue(sessionKey, forHTTPHeaderField: "key")
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    // Create the body
+    
+    let body: [String: Any] = [
+        "user_id": userID,
+        "id_evento": userID
+    ]
+    
+    print(body)
+
+    
+    // Convert the body to JSON
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+    } catch {
+        print("Error serializing JSON: \(error)")
+        completion(.failure(error))
+        return
+    }
+    
+    // Make the API call
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        // Handle error
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        // Handle response
+        if let data = data, let response = response as? HTTPURLResponse {
+            if response.statusCode == 200 {
+                // Success response
+                if let responseMessage = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let message = responseMessage["message"] as? String {
+                    completion(.success(message))
+                } else {
+                    completion(.failure(NSError(domain: "", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: "Failed to parse response"])))
+                }
+            } else {
+                // Server error response
+                if let errorMessage = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let error = errorMessage["error"] as? String {
+                    completion(.failure(NSError(domain: "", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: error])))
+                } else {
+                    completion(.failure(NSError(domain: "", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: "Unknown error"])))
+                }
+            }
+        }
     }.resume()
 }
 
@@ -381,7 +435,7 @@ struct ChallengeItem: Codable, Identifiable {
     let contact: String
     let deadline: String
     let score: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "ID_RETO"
         case title = "NOMBRE"
@@ -396,13 +450,129 @@ func fetchChallenges(sessionKey: String, completion: @escaping ([ChallengeItem])
     print("Fetching challenges...")
     print(sessionKey)
     guard let url = URL(string: "http://localhost:8000/retos/getRetos") else { return }
-    
+
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Agregar clave de sesión como header
-    
+
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Error fetching challenges: \(error.localizedDescription)")
+            return
+        }
+
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+
+        // Imprimir la respuesta JSON en bruto para depuración
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
+
+        do {
+            let challenges = try JSONDecoder().decode([ChallengeItem].self, from: data)
+            DispatchQueue.main.async {
+                completion(challenges)
+            }
+        } catch {
+            print("Error decoding challenges: \(error.localizedDescription)")
+        }
+    }.resume()
+}
+
+// Nuevo método para obtener los retos del usuario
+func fetchMyChallenges(userId: Int, sessionKey: String, completion: @escaping ([ChallengeItem]) -> Void) {
+    print("Fetching my challenges for user: \(userId)...")
+    print(sessionKey)
+    guard let url = URL(string: "http://localhost:8000/retos/getMyRetos/\(userId)") else { return }
+
+    var request = URLRequest(url: url)
+    request.addValue(sessionKey, forHTTPHeaderField: "key") // Agregar clave de sesión como header
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching my challenges: \(error.localizedDescription)")
+            return
+        }
+
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+
+        // Imprimir la respuesta JSON en bruto para depuración
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
+
+        do {
+            let challenges = try JSONDecoder().decode([ChallengeItem].self, from: data)
+            DispatchQueue.main.async {
+                completion(challenges)
+            }
+        } catch {
+            print("Error decoding my challenges: \(error.localizedDescription)")
+        }
+    }.resume()
+}
+
+func registerForChallenge(userID: Int, challengeID: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
+    
+    // Attempt to cast challengeID to an Int
+    guard let challengeIDInt = Int(challengeID) else {
+        print("Invalid challenge ID format. Must be an integer.")
+        return
+    }
+    
+    // Define the URL
+    guard let url = URL(string: "http://localhost:8000/retos/registerReto") else {
+        print("Invalid URL")
+        return
+    }
+    
+    // Prepare the request
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.addValue(sessionKey, forHTTPHeaderField: "key")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    // Prepare the JSON payload
+    let payload: [String: Any] = [
+        "user_id": userID,
+        "id_reto": challengeIDInt // Use the casted Int value here
+    ]
+
+    print(payload)
+    
+    // Convert to JSON data
+    guard let httpBody = try? JSONSerialization.data(withJSONObject: payload, options: []) else {
+        print("Error serializing JSON")
+        return
+    }
+    request.httpBody = httpBody
+    
+    // Send the request
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        // Handle any errors
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        // Ensure response is successful
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            print("Invalid response from server")
+            return
+        }
+        
+        // Parse the response data
+        if let data = data, let responseString = String(data: data, encoding: .utf8) {
+            completion(.success(responseString))
+        }
+    }.resume()
+}
+
 
 
 
@@ -478,58 +648,6 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
             return
         }
         
-        // Imprimir la respuesta JSON en bruto para depuración
-        if let jsonString = String(data: data, encoding: .utf8) {
-            print("Raw JSON response: \(jsonString)")
-        }
-        
-        do {
-            let challenges = try JSONDecoder().decode([ChallengeItem].self, from: data)
-            DispatchQueue.main.async {
-                completion(challenges)
-            }
-        } catch {
-            print("Error decoding challenges: \(error.localizedDescription)")
-        }
-    }.resume()
-}
-
-// Nuevo método para obtener los retos del usuario
-func fetchMyChallenges(userId: Int, sessionKey: String, completion: @escaping ([ChallengeItem]) -> Void) {
-    print("Fetching my challenges for user: \(userId)...")
-    print(sessionKey)
-    guard let url = URL(string: "http://localhost:8000/retos/getMyRetos/\(userId)") else { return }
-    
-    var request = URLRequest(url: url)
-    request.addValue(sessionKey, forHTTPHeaderField: "key") // Agregar clave de sesión como header
-    
-    URLSession.shared.dataTask(with: request) { data, response, error in
-        if let error = error {
-            print("Error fetching my challenges: \(error.localizedDescription)")
-            return
-        }
-        
-        guard let data = data else {
-            print("No data returned")
-            return
-        }
-        
-        // Imprimir la respuesta JSON en bruto para depuración
-        if let jsonString = String(data: data, encoding: .utf8) {
-            print("Raw JSON response: \(jsonString)")
-        }
-        
-        do {
-            let challenges = try JSONDecoder().decode([ChallengeItem].self, from: data)
-            DispatchQueue.main.async {
-                completion(challenges)
-            }
-        } catch {
-            print("Error decoding my challenges: \(error.localizedDescription)")
-        }
-    }.resume()
-}
-
         do {
             // Debug: Print the raw JSON
             if let jsonString = String(data: data, encoding: .utf8) {

@@ -88,3 +88,45 @@ def get_my_retos(user_id):
         # Depurar en caso de error
         print(f"An error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
+    
+
+@retos_bp.route('/registerReto', methods=['POST'])
+def register_reto():
+    session_key = request.headers.get('key')
+    
+    # Validar la clave de sesión
+    if not session_key:
+        return jsonify({"error": "Llave de sesión faltante."}), 400
+
+    valid_user_id = validate_key(session_key)
+    
+    # Verificar que la clave de sesión sea válida
+    if valid_user_id is None:
+        return jsonify({"error": "Llave de sesión inválida."}), 400
+
+    data = request.json
+    user_id = data.get('user_id')
+    id_reto = data.get('id_reto')
+    
+    # Verificar que se envíen los datos necesarios
+    if not user_id or not id_reto:
+        return jsonify({"error": "Faltan datos necesarios (user_id o id_reto)."}), 400
+
+    # Verificar que el user_id en el cuerpo coincida con el user_id de la sesión
+    if valid_user_id != user_id:
+        return jsonify({"error": "El ID de usuario no coincide con la sesión."}), 400
+    
+    query = """
+        INSERT INTO USUARIOS_RETOS (ID, ID_RETO)
+        VALUES (%s, %s);
+    """
+    
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, (user_id, id_reto))
+        cnx.commit()
+        cursor.close()
+        
+        return jsonify({"message": "Usuario registrado al reto exitosamente."}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
