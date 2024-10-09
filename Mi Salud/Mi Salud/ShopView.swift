@@ -102,7 +102,7 @@ struct ShopView: View {
                     .padding(.top, 70)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                     
-                    NavigationLink(destination: PointsHistoryView()) {
+                    NavigationLink(destination: PointsHistoryView(points: points)) {
                         HStack(){
                             VStack(alignment: .leading){
                                 Text("\(points) puntos")

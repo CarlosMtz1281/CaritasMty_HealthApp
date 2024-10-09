@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flasgger import Swagger
 from users import users_bp
 from eventos import eventos_bp
@@ -9,9 +9,38 @@ from database import cnx
 from session_manager import validate_key, create_session, delete_session, session_storage
 import secure
 
-
 # Remove 'Server' from header
 from gunicorn.http import wsgi
+
+try:
+    import logging
+    import logging.handlers
+    # Logging (remember the 5Ws: “What”, “When”, “Who”, “Where”, “Why”)
+    LOG_PATH = '/var/log/api_http'
+    LOGFILE = LOG_PATH  + '/api_http.log'
+    logformat = '%(asctime)s.%(msecs)03d %(levelname)s: %(message)s'
+    formatter = logging.Formatter(logformat, datefmt='%d-%b-%y %H:%M:%S')
+    loggingRotativo = False
+    DEV = True
+    if loggingRotativo:
+        # Logging rotativo
+        LOG_HISTORY_DAYS = 3
+        handler = logging.handlers.TimedRotatingFileHandler(
+                LOGFILE,
+                when='midnight',
+                backupCount=LOG_HISTORY_DAYS)
+    else:
+        handler = logging.FileHandler(filename=LOGFILE)
+    handler.setFormatter(formatter)
+    my_logger = logging.getLogger("api_http")
+    my_logger.addHandler(handler)
+    if DEV:
+        my_logger.setLevel(logging.DEBUG)
+    else:
+        my_logger.setLevel(logging.INFO)
+except:
+    pass
+
 class Response(wsgi.Response):
     def default_headers(self, *args, **kwargs):
         headers = super(Response, self).default_headers(*args, **kwargs)
@@ -50,6 +79,10 @@ swagger = Swagger(app, template={
 
 @app.route("/")
 def get_tables():
+
+    my_logger.info("({}) Se hizo una petición".format(request.remote_addr))
+    my_logger.debug("({}) Se hizo una petición".format(request.remote_addr))
+
     try:
         cursor = cnx.cursor()
         # Query to get all table names in the current database
@@ -67,6 +100,10 @@ def get_tables():
 
 @app.route("/bdtest")
 def runquery():
+
+    my_logger.info("({}) Se hizo una petición".format(request.remote_addr))
+    my_logger.debug("({}) Se hizo una petición".format(request.remote_addr))
+    
     try:
         cursor = cnx.cursor()
         cursor.execute("SELECT * FROM USUARIOS")

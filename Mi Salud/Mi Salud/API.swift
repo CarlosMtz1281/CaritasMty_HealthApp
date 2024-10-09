@@ -28,7 +28,8 @@ struct ProfilePictureResponse: Decodable {
 
 // Fetch current points using the retrieved session key
 func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (String, Int) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/currentpoints/\(userID)") else { return }
+    let concUrl = Constants.path + "/users/currentpoints/\(userID)"
+    guard let url = URL(string: concUrl) else { return }
     
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Add the session key as a header
@@ -80,8 +81,9 @@ struct CatalogItem: Codable, Identifiable {
 }
 
 func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> Void) {
-    let urlString = "http://localhost:8000/tienda/catalogo"
-    guard let url = URL(string: urlString) else { return }
+    let concUrl = Constants.path + "/tienda/catalogo"
+    
+    guard let url = URL(string: concUrl) else { return }
 
     var request = URLRequest(url: url)
     request.httpMethod = "GET" // Ensure the method is set correctly
@@ -125,7 +127,10 @@ func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> V
 }
 
 func updateProfilePicture(userID: Int, imagePath: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/profilepicture") else { return }
+
+    let concUrl = Constants.path + "/users/profilepicture"
+    
+    guard let url = URL(string: concUrl) else { return }
     
     var request = URLRequest(url: url)
     request.httpMethod = "PATCH"
@@ -169,7 +174,11 @@ func updateProfilePicture(userID: Int, imagePath: String, sessionKey: String, co
 }
 
 func fetchProfilePicture(userID: Int, sessionKey: String, completion: @escaping (String) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/profilepicture/\(userID)") else {
+    
+    let concUrl = Constants.path + "/users/profilepicture/\(userID)"
+
+    
+    guard let url = URL(string: concUrl) else {
         return
     }
     
@@ -204,7 +213,11 @@ func fetchProfilePicture(userID: Int, sessionKey: String, completion: @escaping 
 }
 
 func comprarBono(userID: Int, puntos: Int, beneficioId: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void){
-    guard let url = URL(string: "http://localhost:8000/tienda/comprarBono") else {
+    
+    let concUrl = Constants.path + "/tienda/comprarBono"
+
+    
+    guard let url = URL(string: concUrl) else {
         completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
         return
     }
@@ -293,7 +306,11 @@ struct EventItem: Codable, Identifiable {
 func fetchEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void) {
     print("Fetching general events...")
     print(sessionKey)
-    guard let url = URL(string: "http://localhost:8000/eventos/getFuturosEventos") else { return }
+    
+    let concUrl = Constants.path + "/eventos/getFuturosEventos"
+
+    
+    guard let url = URL(string: concUrl) else { return }
 
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Add session key as header
@@ -326,7 +343,11 @@ func fetchEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void
 func fetchMyEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void) {
     print("Fetching personal events...")
     print(sessionKey)
-    guard let url = URL(string: "http://localhost:8000/eventos/eventosUsuario/\(userID)") else { return }
+    
+    let concUrl = Constants.path + "/eventos/eventosUsuario/\(userID)"
+
+    
+    guard let url = URL(string: concUrl) else { return }
     print("Fetching personal events...")
 
     var request = URLRequest(url: url)
@@ -363,8 +384,12 @@ func fetchMyEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Vo
 
 func registrarParticipacion(userID: Int, idEvento: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
         
+    
+    let concUrl = Constants.path + "/eventos/registrarParticipacion"
+
+    
     // Create the URL for the API endpoint
-    guard let url = URL(string: "http://localhost:8000/eventos/registrarParticipacion") else {
+    guard let url = URL(string: concUrl) else {
         print("Invalid URL")
         return
     }
@@ -381,7 +406,7 @@ func registrarParticipacion(userID: Int, idEvento: String, sessionKey: String, c
     
     let body: [String: Any] = [
         "user_id": userID,
-        "id_evento": userID
+        "id_evento": idEvento
     ]
     
     print(body)
@@ -449,7 +474,11 @@ struct ChallengeItem: Codable, Identifiable {
 func fetchChallenges(sessionKey: String, completion: @escaping ([ChallengeItem]) -> Void) {
     print("Fetching challenges...")
     print(sessionKey)
-    guard let url = URL(string: "http://localhost:8000/retos/getRetos") else { return }
+    
+    let concUrl = Constants.path + "/retos/getRetos"
+
+    
+    guard let url = URL(string: concUrl) else { return }
 
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Agregar clave de sesión como header
@@ -485,7 +514,11 @@ func fetchChallenges(sessionKey: String, completion: @escaping ([ChallengeItem])
 func fetchMyChallenges(userId: Int, sessionKey: String, completion: @escaping ([ChallengeItem]) -> Void) {
     print("Fetching my challenges for user: \(userId)...")
     print(sessionKey)
-    guard let url = URL(string: "http://localhost:8000/retos/getMyRetos/\(userId)") else { return }
+    
+    let concUrl = Constants.path + "/retos/getMyRetos/\(userId)"
+
+    
+    guard let url = URL(string: concUrl) else { return }
 
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Agregar clave de sesión como header
@@ -525,8 +558,12 @@ func registerForChallenge(userID: Int, challengeID: String, sessionKey: String, 
         return
     }
     
+    
+    let concUrl = Constants.path + "/retos/registerReto"
+
+    
     // Define the URL
-    guard let url = URL(string: "http://localhost:8000/retos/registerReto") else {
+    guard let url = URL(string: concUrl) else {
         print("Invalid URL")
         return
     }
@@ -540,7 +577,7 @@ func registerForChallenge(userID: Int, challengeID: String, sessionKey: String, 
     // Prepare the JSON payload
     let payload: [String: Any] = [
         "user_id": userID,
-        "id_reto": challengeIDInt // Use the casted Int value here
+        "id_reto": challengeIDInt 
     ]
 
     print(payload)
@@ -629,7 +666,11 @@ func formatDate(_ dateString: String) -> String {
 }
 
 func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping ([HealthDataPoint], [BloodPressureDataPoint], [HealthDataPoint]) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/mediciones/medicionesdatos/\(userID)") else {
+    
+    let concUrl = Constants.path + "/mediciones/medicionesdatos/\(userID)"
+
+    
+    guard let url = URL(string: concUrl) else {
         return
     }
     

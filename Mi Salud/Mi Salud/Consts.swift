@@ -19,8 +19,10 @@ struct Constants {
         static let accent = UIColor(named: "PANTONE_1575_C") ?? UIColor.gray
         static let fontColor = Color(.black)
         static let fontColor2 = Color(.white)
+        
     }
-    
+    static let path = "https://sabritones.tc2007b.tec.mx:10206/"
+
     // MARK: - Endpoints
     struct Endpoints {
         static let BASE_API_URL = ""

@@ -26,7 +26,9 @@ struct Transaction: Identifiable, Decodable {
 
 // Función para obtener y decodificar el historial de puntos utilizando la clave de sesión hardcodeada
 func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping ([Transaction]?, String?) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/historypoints/\(userID)") else { return }
+    let concUrl = Constants.path + "/users/historypoints/\(userID)"
+
+    guard let url = URL(string: concUrl) else { return }
     
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Añadir la clave de sesión como un encabezado
@@ -66,7 +68,7 @@ func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping (
 }
 
 struct PointsHistoryView: View {
-    @State private var points: Int = 0
+    var points: Int
     @State private var history: [Transaction] = []
     @State private var errorMessage: String? = nil
     @Environment(\.presentationMode) var presentationMode
@@ -178,5 +180,5 @@ struct TransactionRow: View {
 }
 
 #Preview {
-    PointsHistoryView()
+    PointsHistoryView(points: 0)
 }
