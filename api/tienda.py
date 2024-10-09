@@ -1,13 +1,11 @@
 from flask import Blueprint, jsonify, request
 from database import cnx
-import logging
 from session_manager import validate_key
 
 from logger import my_logger  
 
 
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)
+
 
 # Create a Blueprint for 'Tienda'
 tienda_bp = Blueprint('tienda', __name__)
@@ -19,18 +17,18 @@ def catalogo():
     Obtiene el catálogo de beneficios disponibles para canjear.
     Documentado por Carlos.
     """
-    logging.debug("Starting /catalogo request.")
+    my_logger.debug("Starting /catalogo request.")
 
     key = request.headers.get('key')
     if not key or not validate_key(key):
-        logging.warning("Invalid or missing session key.")
+        my_logger.warning("Invalid or missing session key.")
         return jsonify({"error": "Llave de sesión inválida."}), 400
 
     query = "SELECT * FROM BENEFICIOS"
     
     try:
         if cnx is None:
-            logging.error("Database connection not established.")
+            my_logger.error("Database connection not established.")
             return jsonify({"error": "No se estableció la conexión con la Base de Datos."}), 500
 
         cursor = cnx.cursor()
@@ -38,18 +36,18 @@ def catalogo():
         
         # Check if query returned any results
         if cursor.description is None:
-            logging.error("Query did not return any results.")
+            my_logger.error("Query did not return any results.")
             return jsonify({"error": "No se obtuvieron resultados de la Query."}), 500
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         cursor.close()
 
-        logging.debug("Catalog query executed successfully.")
+        my_logger.debug("Catalog query executed successfully.")
         return jsonify(results), 200
 
     except Exception as e:
-        logging.error(f"Error occurred during /catalogo: {str(e)}")
+        my_logger.error(f"Error occurred during /catalogo: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 
@@ -59,7 +57,7 @@ def comprar_bono():
     """
     Maneja la compra de un beneficio por parte de un usuario.
     """
-    logging.debug("Starting /comprarBono request.")
+    my_logger.debug("Starting /comprarBono request.")
 
     session_key = request.headers.get('key')
     data = request.json
@@ -68,7 +66,7 @@ def comprar_bono():
     beneficio_id = data.get('beneficio_id')
 
     if not session_key or validate_key(session_key) != user_id:
-        logging.warning("Invalid session key.")
+        my_logger.warning("Invalid session key.")
         return jsonify({"error": "Llave de sesión inválida."}), 400
 
     query_checarBeneficio = """
@@ -96,7 +94,7 @@ def comprar_bono():
         tiene_beneficio = row[0] == 'True'
         
         if tiene_beneficio:
-            logging.warning(f"User {user_id} already purchased benefit {beneficio_id}.")
+            my_logger.warning(f"User {user_id} already purchased benefit {beneficio_id}.")
             return jsonify({"conflict": "Beneficio ya comprado anteriormente. Seleccione un beneficio distinto"}), 409
 
         cursor.execute(query_puntajeBeneficio, (beneficio_id,))
@@ -106,42 +104,42 @@ def comprar_bono():
         if puntos >= costo_beneficio:
             puntosAct = puntos - costo_beneficio
             cursor.execute(query_restaPuntos, (puntosAct, user_id))
-            logging.debug(f"Points deducted for user {user_id}: {puntosAct} remaining.")
+            my_logger.debug(f"Points deducted for user {user_id}: {puntosAct} remaining.")
 
             # Add to benefit history
             cursor.execute(query_historialBeneficios, (user_id, beneficio_id))
-            logging.debug(f"Benefit {beneficio_id} added to history for user {user_id}.")
+            my_logger.debug(f"Benefit {beneficio_id} added to history for user {user_id}.")
 
             # Add to points history
             cursor.execute(query_historialPuntos, (user_id, costo_beneficio, beneficio_id))
-            logging.debug(f"Points history updated for user {user_id}.")
+            my_logger.debug(f"Points history updated for user {user_id}.")
 
             cnx.commit()
             return jsonify({"message": "Beneficio comprado exitosamente"}), 200
         else:
-            logging.warning(f"User {user_id} has insufficient points. Required: {costo_beneficio}, Available: {puntos}.")
+            my_logger.warning(f"User {user_id} has insufficient points. Required: {costo_beneficio}, Available: {puntos}.")
             return jsonify({"conflict": "Puntos insuficientes"}), 409
 
     except Exception as e:
-        logging.error(f"Error occurred during /comprarBono: {str(e)}")
+        my_logger.error(f"Error occurred during /comprarBono: {str(e)}")
         cnx.rollback()
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
 
 
-# Additional route stubs (to be implemented) with logging
+# Additional route stubs (to be implemented) with my_logger
 @tienda_bp.route('/bonosComprados', methods=['GET'])
 def bonos_comprados():
-    logging.debug("Starting /bonosComprados request.")
+    my_logger.debug("Starting /bonosComprados request.")
     return "Bonos Comprados"
 
 @tienda_bp.route('/crearBono', methods=['POST'])
 def crear_bono():
-    logging.debug("Starting /crearBono request.")
+    my_logger.debug("Starting /crearBono request.")
     return "Crear Bono"
 
 @tienda_bp.route('/borrarBono', methods=['DELETE'])
 def borrar_bono():
-    logging.debug("Starting /borrarBono request.")
+    my_logger.debug("Starting /borrarBono request.")
     return "Borrar Bono"
