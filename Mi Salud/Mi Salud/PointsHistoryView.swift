@@ -68,7 +68,7 @@ func fetchPointsHistory(userID: Int, sessionKey: String, completion: @escaping (
 }
 
 struct PointsHistoryView: View {
-    @State private var points: Int = 0
+    var points: Int
     @State private var history: [Transaction] = []
     @State private var errorMessage: String? = nil
     @Environment(\.presentationMode) var presentationMode
@@ -180,5 +180,5 @@ struct TransactionRow: View {
 }
 
 #Preview {
-    PointsHistoryView()
+    PointsHistoryView(points: 0)
 }

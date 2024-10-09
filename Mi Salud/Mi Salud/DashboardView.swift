@@ -63,7 +63,7 @@ struct DashboardView: View {
                         // Points section
                 
                             // Points section
-                            NavigationLink(destination: PointsHistoryView()) {
+                        NavigationLink(destination: PointsHistoryView(points: points)) {
                                 HStack {
                                     VStack(alignment: .leading) {
                                         Text("\(points) puntos")
