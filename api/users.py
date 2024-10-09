@@ -6,8 +6,6 @@ import hashlib
 from logger import my_logger  
 
 
-# Configure logging
-my_logger.basicConfig(level=my_logger.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 users_bp = Blueprint('users', __name__)
 
