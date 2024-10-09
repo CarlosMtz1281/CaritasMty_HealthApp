@@ -43,6 +43,7 @@
 		855B864C2CB4463C00BC32C4 /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsHistoryView.swift; sourceTree = "<group>"; };
 		85DF87ED2CA39E8A001F97B1 /* ProfilePictureSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureSelectionView.swift; sourceTree = "<group>"; };
+		85E561DC2CB6B7C600EAED5D /* Mi-Salud-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Mi-Salud-Info.plist"; sourceTree = SOURCE_ROOT; };
 		B5511B262CAE0389000EADB4 /* MasInformacion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasInformacion.swift; sourceTree = "<group>"; };
 		B5D517092C75720B0093C91E /* Mi Salud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mi Salud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mi_SaludApp.swift; sourceTree = "<group>"; };
@@ -81,6 +82,7 @@
 		B5D5170B2C75720B0093C91E /* Mi Salud */ = {
 			isa = PBXGroup;
 			children = (
+				85E561DC2CB6B7C600EAED5D /* Mi-Salud-Info.plist */,
 				B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */,
 				05F735072C7D03AB0001BCF9 /* SplashView.swift */,
 				05F735092C7D04130001BCF9 /* LoginView.swift */,
@@ -335,6 +337,8 @@
 				DEVELOPMENT_TEAM = WFYLC35ZF2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mi-Salud-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -364,6 +368,8 @@
 				DEVELOPMENT_TEAM = WFYLC35ZF2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mi-Salud-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
