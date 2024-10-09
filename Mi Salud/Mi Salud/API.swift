@@ -406,7 +406,7 @@ func registrarParticipacion(userID: Int, idEvento: String, sessionKey: String, c
     
     let body: [String: Any] = [
         "user_id": userID,
-        "id_evento": userID
+        "id_evento": idEvento
     ]
     
     print(body)
@@ -577,7 +577,7 @@ func registerForChallenge(userID: Int, challengeID: String, sessionKey: String, 
     // Prepare the JSON payload
     let payload: [String: Any] = [
         "user_id": userID,
-        "id_reto": challengeIDInt // Use the casted Int value here
+        "id_reto": challengeIDInt 
     ]
 
     print(payload)
