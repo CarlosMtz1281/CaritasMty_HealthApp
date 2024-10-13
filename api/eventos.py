@@ -8,9 +8,13 @@ eventos_bp = Blueprint('eventos', __name__)
 @eventos_bp.route('/getFuturosEventos', methods=['GET'])
 def eventos():
     query = """
-        SELECT ID_EVENTO, NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR
-        FROM EVENTOS
-        WHERE FECHA >= GETDATE();
+        SELECT E.ID_EVENTO, E.NOMBRE, E.DESCRIPCION, E.NUM_MAX_ASISTENTES, E.PUNTAJE, E.FECHA, E.LUGAR, E.EXPOSITOR,
+               STRING_AGG(T.NOMBRE, ', ') AS TAGS
+        FROM EVENTOS E
+        LEFT JOIN EVENTOS_TAGS ET ON E.ID_EVENTO = ET.ID_EVENTO
+        LEFT JOIN TAGS T ON ET.ID_TAG = T.ID_TAG
+        WHERE E.FECHA >= GETDATE()
+        GROUP BY E.ID_EVENTO, E.NOMBRE, E.DESCRIPCION, E.NUM_MAX_ASISTENTES, E.PUNTAJE, E.FECHA, E.LUGAR, E.EXPOSITOR;
     """
     
     try:
@@ -29,6 +33,7 @@ def eventos():
         return jsonify(eventos), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
     
 
 @eventos_bp.route('/eventosUsuario/<int:user_id>', methods=['GET'])
@@ -53,10 +58,14 @@ def eventos_usuario(user_id):
         return jsonify({"error": "Llave de sesión inválida."}), 400
     
     query = """
-        SELECT E.ID_EVENTO, E.NOMBRE, E.DESCRIPCION, E.NUM_MAX_ASISTENTES, E.PUNTAJE, E.FECHA, E.LUGAR, E.EXPOSITOR
+        SELECT E.ID_EVENTO, E.NOMBRE, E.DESCRIPCION, E.NUM_MAX_ASISTENTES, E.PUNTAJE, E.FECHA, E.LUGAR, E.EXPOSITOR,
+               STRING_AGG(T.NOMBRE, ', ') AS TAGS
         FROM USUARIOS_EVENTOS UE
         JOIN EVENTOS E ON UE.EVENTO = E.ID_EVENTO
-        WHERE UE.USUARIO = %d AND E.FECHA >= GETDATE();
+        LEFT JOIN EVENTOS_TAGS ET ON E.ID_EVENTO = ET.ID_EVENTO
+        LEFT JOIN TAGS T ON ET.ID_TAG = T.ID_TAG
+        WHERE UE.USUARIO = %s AND E.FECHA >= GETDATE()
+        GROUP BY E.ID_EVENTO, E.NOMBRE, E.DESCRIPCION, E.NUM_MAX_ASISTENTES, E.PUNTAJE, E.FECHA, E.LUGAR, E.EXPOSITOR;
     """
     
     try:
@@ -85,6 +94,7 @@ def eventos_usuario(user_id):
         # Depurar en caso de error
         print(f"An error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
     
     
 
@@ -128,20 +138,61 @@ def registrar_participacion():
     user_id = data.get('user_id')
     id_evento = data.get('id_evento')
     
-    query = """
+    # Query para registrar la participación en USUARIOS_EVENTOS
+    query_participacion = """
         INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO)
-        VALUES (%d, %d, 0);
+        VALUES (%s, %s, 0);
+    """
+    
+    # Query para obtener los tags del evento
+    query_tags_evento = """
+        SELECT ID_TAG
+        FROM EVENTOS_TAGS
+        WHERE ID_EVENTO = %s;
+    """
+    
+    # Query para actualizar los tags del usuario (incrementar veces usado si ya existe)
+    query_update_tag = """
+        UPDATE USUARIOS_TAGS
+        SET VECES_USADO = VECES_USADO + 1
+        WHERE ID_USUARIO = %s AND ID_TAG = %s;
+    """
+    
+    # Query para insertar un nuevo tag en USUARIOS_TAGS si no existe
+    query_insert_tag = """
+        INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO)
+        VALUES (%s, %s, 1);
     """
     
     try:
         cursor = cnx.cursor()
-        cursor.execute(query, (user_id, id_evento))
+        
+        # 1. Registrar la participación en el evento
+        cursor.execute(query_participacion, (user_id, id_evento))
+        
+        # 2. Obtener los tags asociados al evento
+        cursor.execute(query_tags_evento, (id_evento,))
+        event_tags = cursor.fetchall()
+        
+        # 3. Actualizar los tags del usuario
+        for tag in event_tags:
+            id_tag = tag[0]
+            
+            # Intentar actualizar el tag del usuario (si ya lo tiene)
+            rows_affected = cursor.execute(query_update_tag, (user_id, id_tag))
+            
+            # Si no se actualizó ninguna fila, significa que el usuario no tiene ese tag, así que lo insertamos
+            if cursor.rowcount == 0:
+                cursor.execute(query_insert_tag, (user_id, id_tag))
+        
+        # Confirmar los cambios en la base de datos
         cnx.commit()
         cursor.close()
         
-        return jsonify({"message": "Participación registrada."}), 200
+        return jsonify({"message": "Participación registrada y tags actualizados."}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
     
     
 @eventos_bp.route('/asistirEvento', methods=['POST'])
