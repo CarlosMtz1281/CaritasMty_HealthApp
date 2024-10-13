@@ -49,7 +49,7 @@ struct EventListView: View {
                                 .padding(.top, 5)
 
                             ForEach(myEvents) { event in
-                                EventRow(event: event)
+                                MyEventRow(event: event)
                                     .padding(.horizontal)
                             }
                             
@@ -118,6 +118,49 @@ struct EventListView: View {
     }
 }
 
+
+
+
+struct MyEventRow: View {
+    let event: EventItem
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(event.title)
+                        .font(.title2)
+                    
+                    Text(event.eventDate)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+                
+                NavigationLink(destination: EventDetailView(event: event, registered: true)) {
+                    Text("Ver Más")
+                        .frame(width: 100, height: 45)
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.white)
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 16)
+                        .background(Color.orange)
+                        .cornerRadius(8)
+                }
+                .padding(.top, 8)
+            }
+            .frame(height: 60)
+            .padding(15)
+        }
+        .padding(.vertical, 10)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 2)
+    }
+}
+
+
 struct EventRow: View {
     let event: EventItem
     
@@ -134,7 +177,7 @@ struct EventRow: View {
                 }
                 Spacer()
                 
-                NavigationLink(destination: EventDetailView(event: event)) {
+                NavigationLink(destination: EventDetailView(event: event, registered: false)) {
                     Text("Ver Más")
                         .frame(width: 100, height: 45)
                         .font(.title2)
