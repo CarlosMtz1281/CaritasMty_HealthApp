@@ -24,20 +24,19 @@ INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARI
 INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Pedro', 'González', 'Torres', 'pedro.gonzalez@example.com', HASHBYTES('SHA2_256', 'password'), 2, 4);
 INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Sofía', 'Hernández', 'Lopez', 'sofia.hernandez@example.com', HASHBYTES('SHA2_256', 'password'), 1, 3);
 INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Miguel', 'Cruz', 'Mendoza', 'miguel.cruz@example.com', HASHBYTES('SHA2_256', 'password'), 2, 2);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('AAA', 'BBB', 'CCC', 'aaa.bbb@example.com', HASHBYTES('SHA2_256', 'password'), 2, 1);
 
 -- 3. Insertar eventos con las nuevas columnas Lugar y Expositor
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia de Tecnología', 'Una conferencia sobre las últimas tendencias en tecnología.', 100, 10, '2024-10-10 09:00:00', 'Auditorio Central', 'Dr. Juan Pérez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia sobre Solidaridad y Fe', 'Un encuentro para reflexionar sobre la importancia de la solidaridad en nuestra comunidad y su vínculo con la fe.', 120, 10, '2024-10-20 09:00:00', 'Auditorio Central', 'P. Miguel Hernández');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Acompañamiento Espiritual', 'Taller enfocado en el acompañamiento espiritual a personas en situaciones de vulnerabilidad.', 50, 9, '2024-10-25 10:00:00', 'Sala de Conferencias A', 'Hna. María López');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Foro sobre Inclusión Social', 'Un foro para discutir estrategias de inclusión social y apoyo a comunidades marginadas.', 100, 12, '2024-11-02 11:00:00', 'Centro Comunitario', 'Dr. Carlos Rodríguez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Jornada de Salud Comunitaria', 'Una jornada enfocada en la promoción de la salud en comunidades desfavorecidas.', 80, 15, '2024-11-08 08:00:00', 'Plaza Principal', 'Dra. Ana Gutiérrez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia de Voluntariado y Servicio', 'Charla inspiradora sobre la importancia del voluntariado y cómo generar un cambio positivo.', 150, 10, '2024-11-12 09:30:00', 'Auditorio Norte', 'Lic. José González');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Liderazgo Comunitario', 'Capacitación para líderes comunitarios sobre cómo mejorar la organización y el apoyo en comunidades vulnerables.', 60, 12, '2024-11-18 14:00:00', 'Centro de Capacitación', 'Coach Roberto Díaz');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Seminario de Derechos Humanos', 'Un seminario que aborda los derechos humanos y cómo protegerlos en contextos de pobreza.', 90, 14, '2024-12-03 09:00:00', 'Sala de Conferencias B', 'Dra. Elena Martínez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia sobre Justicia Social', 'Discusión sobre los retos y oportunidades para promover la justicia social.', 110, 16, '2024-12-07 10:00:00', 'Centro de Convenciones', 'P. Fernando Morales');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Recaudación de Fondos', 'Aprender estrategias para la recaudación de fondos en apoyo a obras sociales.', 70, 10, '2024-12-10 12:00:00', 'Sala de Reuniones B', 'Mtra. Laura Sánchez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Encuentro de Voluntarios', 'Un espacio de convivencia y reflexión para los voluntarios de Cáritas Monterrey.', 200, 18, '2024-12-20 16:00:00', 'Centro Comunitario', 'Lic. Ana Rodríguez');
 
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Seminario de Desarrollo Personal', 'Un seminario enfocado en el crecimiento personal y profesional.', 50, 8, '2024-10-15 14:00:00', 'Sala de Conferencias A', 'Lic. María González');
-
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Innovación', 'Un taller interactivo sobre innovación y creatividad.', 30, 15, '2024-11-05 11:00:00', 'Laboratorio de Innovación', 'Ing. Carlos Méndez');
-
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia de Marketing', 'Tendencias actuales en marketing digital.', 75, 12, '2024-11-12 10:00:00', 'Auditorio Norte', 'Mtra. Laura Torres');
-
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Trabajo en Equipo', 'Mejorar habilidades de trabajo en equipo.', 40, 10, '2024-12-01 09:30:00', 'Sala de Reuniones B', 'Coach Roberto Díaz');
-
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Foro de Innovación Empresarial', 'Discusión sobre innovación en negocios.', 60, 18, '2024-12-15 15:00:00', 'Centro de Convenciones', 'Lic. Ana Rodríguez');
 -- 4. Insertar beneficios
 INSERT INTO BENEFICIOS (NOMBRE, DESCRIPCION, PUNTOS) VALUES ('Día libre', 'Un día libre extra para descansar.', 20);
 INSERT INTO BENEFICIOS (NOMBRE, DESCRIPCION, PUNTOS) VALUES ('Descuento en la cafetería', 'Un 20% de descuento en todas las compras en la cafetería.', 5);
@@ -199,3 +198,134 @@ INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (8, 90);
 
 INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (9, 95);
 INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (9, 97);
+
+
+
+
+-- TAGS
+INSERT INTO TAGS (NOMBRE) VALUES 
+    ('Solidaridad'),
+    ('Voluntariado'),
+    ('Liderazgo'),
+    ('Inclusión social'),
+    ('Salud comunitaria'),
+    ('Justicia social'),
+    ('Derechos humanos'),
+    ('Recaudación de fondos'),
+    ('Espiritualidad'),
+    ('Innovación'),
+    ('Trabajo en equipo'),
+    ('Crecimiento personal'),
+    ('Competencias digitales'),
+    ('Networking'),
+    ('Desarrollo profesional'),
+    ('Responsabilidad social'),
+    ('Emprendimiento'),
+    ('Creatividad'),
+    ('Formación continua'),
+    ('Desarrollo de habilidades'),
+    ('Sostenibilidad'),
+    ('Igualdad de género'),
+    ('Cuidado ambiental'),
+    ('Empoderamiento juvenil'),
+    ('Colaboración'),
+    ('Capacitación'),
+    ('Resiliencia'),
+    ('Motivación'),
+    ('Resolución de conflictos'),
+    ('Trabajo comunitario'),
+    ('Mentoría');
+
+
+
+-- Juan Pérez
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 1, 5);  -- Solidaridad
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 4, 3);  -- Inclusión social
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 7, 4);  -- Derechos humanos
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 18, 2); -- Creatividad
+-- Ana López
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 2, 6);  -- Voluntariado
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 5, 5);  -- Salud comunitaria
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 12, 3); -- Crecimiento personal
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 15, 2); -- Desarrollo profesional
+-- Carlos Ramírez
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 3, 8);  -- Liderazgo
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 6, 5);  -- Justicia social
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 19, 7); -- Desarrollo de habilidades
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 23, 3); -- Cuidado ambiental
+-- María Fernández
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 5, 9);  -- Salud comunitaria
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 9, 3);  -- Espiritualidad
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 14, 2); -- Networking
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 20, 1); -- Sostenibilidad
+-- Lucía Navarro
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 7, 4);  -- Derechos humanos
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 16, 5); -- Emprendimiento
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 24, 3); -- Empoderamiento juvenil
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 27, 2); -- Motivación
+-- Pedro González
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 8, 4);  -- Recaudación de fondos
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 11, 6); -- Trabajo en equipo
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 21, 2); -- Igualdad de género
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 25, 1); -- Capacitación
+-- Sofía Hernández
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 2, 5);  -- Voluntariado
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 10, 3); -- Innovación
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 26, 2); -- Resiliencia
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 30, 1); -- Mentoría
+-- Miguel Cruz
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 3, 6);  -- Liderazgo
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 13, 4); -- Competencias digitales
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 17, 3); -- Responsabilidad social
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 22, 1); -- Cuidado ambiental
+
+
+-- Conferencia sobre Solidaridad y Fe
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (1, 1);  -- Solidaridad
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (1, 9);  -- Espiritualidad
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (1, 18); -- Creatividad
+
+-- Taller de Acompañamiento Espiritual
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (2, 9);  -- Espiritualidad
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (2, 12); -- Crecimiento personal
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (2, 19); -- Desarrollo de habilidades
+
+-- Foro sobre Inclusión Social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (3, 4);  -- Inclusión social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (3, 21); -- Igualdad de género
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (3, 6);  -- Justicia social
+
+-- Jornada de Salud Comunitaria
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (4, 5);  -- Salud comunitaria
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (4, 22); -- Cuidado ambiental
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (4, 26); -- Resiliencia
+
+-- Conferencia de Voluntariado y Servicio
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (5, 2);  -- Voluntariado
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (5, 11); -- Trabajo en equipo
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (5, 17); -- Responsabilidad social
+
+-- Taller de Liderazgo Comunitario
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (6, 3);  -- Liderazgo
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (6, 19); -- Desarrollo de habilidades
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (6, 27); -- Motivación
+
+-- Seminario de Derechos Humanos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (7, 7);  -- Derechos humanos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (7, 6);  -- Justicia social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (7, 19); -- Desarrollo de habilidades
+
+-- Conferencia sobre Justicia Social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (8, 6);  -- Justicia social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (8, 17); -- Responsabilidad social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (8, 4);  -- Inclusión social
+
+-- Taller de Recaudación de Fondos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (9, 8);  -- Recaudación de fondos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (9, 19); -- Desarrollo de habilidades
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (9, 10); -- Innovación
+
+-- Encuentro de Voluntarios
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (10, 2);  -- Voluntariado
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (10, 11); -- Trabajo en equipo
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (10, 15); -- Desarrollo profesional
