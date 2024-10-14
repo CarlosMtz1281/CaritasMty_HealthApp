@@ -172,11 +172,25 @@ struct LoginView: View {
                             self.showingAlert = true
                         }
                     } else if let userId = jsonResponse["user_id"] as? Int ?? Int(jsonResponse["user_id"] as? String ?? ""),
-                              let sessionKey = jsonResponse["key"] as? String {
+                              let sessionKey = jsonResponse["key"] as? String,
+                              let tags = jsonResponse["tags"] as? [[String: Any]] {
                         
-                        // Store values in UserDefaults
+                        // Store user_id and session_key in UserDefaults
                         UserDefaults.standard.set(userId, forKey: "user_id")
                         UserDefaults.standard.set(sessionKey, forKey: "session_key")
+                        
+                        // Store tags in UserDefaults (or handle them as needed)
+                        let formattedTags = tags.map { tag in
+                            if let nombre = tag["nombre"] as? String, let veces_usado = tag["veces_usado"] as? Int {
+                                return "\(nombre): \(veces_usado)"
+                            }
+                            return ""
+                        }
+                        
+                        UserDefaults.standard.set(formattedTags, forKey: "user_tags")
+                        
+                        // Debug: Print the tags
+                        print("User Tags: \(formattedTags)")
                         
                         // Update the login state
                         DispatchQueue.main.async {

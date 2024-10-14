@@ -281,6 +281,7 @@ func comprarBono(userID: Int, puntos: Int, beneficioId: String, sessionKey: Stri
 
 
 // events
+// Modificar la estructura para incluir tags
 struct EventItem: Codable, Identifiable {
     let id: String
     let title: String
@@ -290,6 +291,7 @@ struct EventItem: Codable, Identifiable {
     let eventDate: String
     let location: String
     let organizer: String
+    let tags: [String] // Arreglo de tags
 
     enum CodingKeys: String, CodingKey {
         case id = "ID_EVENTO"
@@ -297,18 +299,37 @@ struct EventItem: Codable, Identifiable {
         case description = "DESCRIPCION"
         case availableSpots = "NUM_MAX_ASISTENTES"
         case score = "PUNTAJE"
-        case eventDate = "FECHA" // Cambié "fECHA" a "FECHA" para que coincida con el JSON de ejemplo
+        case eventDate = "FECHA"
         case location = "LUGAR"
         case organizer = "EXPOSITOR"
+        case tags = "TAGS"
+    }
+
+    // Custom Decoding para convertir la cadena de tags en un arreglo
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        id = try container.decode(String.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        description = try container.decode(String.self, forKey: .description)
+        availableSpots = try container.decode(String.self, forKey: .availableSpots)
+        score = try container.decode(String.self, forKey: .score)
+        eventDate = try container.decode(String.self, forKey: .eventDate) // Tratar la fecha como cadena
+        location = try container.decode(String.self, forKey: .location)
+        organizer = try container.decode(String.self, forKey: .organizer)
+
+        // Convertir los tags de una cadena a un arreglo de strings, separando por comas
+        let tagsString = try container.decode(String.self, forKey: .tags)
+        tags = tagsString.components(separatedBy: ", ").map { $0.trimmingCharacters(in: .whitespaces) }
     }
 }
 
+
+
 func fetchEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void) {
     print("Fetching general events...")
-    print(sessionKey)
-    
-    let concUrl = Constants.path + "/eventos/getFuturosEventos"
 
+    let concUrl = Constants.path + "/eventos/getFuturosEventos"
     
     guard let url = URL(string: concUrl) else { return }
 
@@ -327,7 +348,9 @@ func fetchEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void
         }
 
         // Print the raw JSON response for debugging
-
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
 
         do {
             let events = try JSONDecoder().decode([EventItem].self, from: data)
@@ -342,13 +365,10 @@ func fetchEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void
 
 func fetchMyEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void) {
     print("Fetching personal events...")
-    print(sessionKey)
-    
-    let concUrl = Constants.path + "/eventos/eventosUsuario/\(userID)"
 
+    let concUrl = Constants.path + "/eventos/eventosUsuario/\(userID)"
     
     guard let url = URL(string: concUrl) else { return }
-    print("Fetching personal events...")
 
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Add session key as header
@@ -377,10 +397,9 @@ func fetchMyEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Vo
         } catch {
             print("Error decoding personal events: \(error.localizedDescription)")
         }
-
-        print("Done")
     }.resume()
 }
+
 
 func registrarParticipacion(userID: Int, idEvento: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
         

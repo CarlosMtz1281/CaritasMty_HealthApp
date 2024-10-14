@@ -1,10 +1,11 @@
 import SwiftUI
-
 struct EventListView: View {
     @State private var myEvents: [EventItem] = []
     @State private var proxEvents: [EventItem] = []
     @State private var myChallenges: [ChallengeItem] = []
     @State private var challenges: [ChallengeItem] = []
+    @State private var userTags: [String] = [] // Añadir los tags del usuario
+    @State private var userTagFrequencies: [Int] = [] // Añadir las frecuencias de los tags del usuario
     
     @State private var selectedTab: Tab = .events
 
@@ -34,7 +35,6 @@ struct EventListView: View {
                         .font(.title2)
                     Text("Retos").tag(Tab.challenges)
                         .font(.title2)
-
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
@@ -49,7 +49,7 @@ struct EventListView: View {
                                 .padding(.top, 5)
 
                             ForEach(myEvents) { event in
-                                MyEventRow(event: event)
+                                MyEventRow(event: event, userTags: userTags, userTagFrequencies: userTagFrequencies) // Pasamos también las frecuencias
                                     .padding(.horizontal)
                             }
                             
@@ -62,8 +62,11 @@ struct EventListView: View {
                                 .padding(.leading, 20)
                                 .padding(.top, 20)
                             
-                            ForEach(proxEvents) { event in
-                                EventRow(event: event)
+                            // Filter out events that are already in 'myEvents'
+                            ForEach(proxEvents.filter { proxEvent in
+                                !myEvents.contains(where: { $0.id == proxEvent.id }) // Compare by ID
+                            }) { event in
+                                EventRow(event: event, userTags: userTags, userTagFrequencies: userTagFrequencies) // Pasamos también las frecuencias
                                     .padding(.horizontal)
                             }
                         } else {
@@ -96,18 +99,42 @@ struct EventListView: View {
                     .padding(.bottom, 30)
                 }
                 .onAppear {
+                    // Obtener los tags y frecuencias del usuario desde UserDefaults
+                    if let storedTagsAndFrequencies = UserDefaults.standard.array(forKey: "user_tags") as? [String] {
+                        
+                        // Inicializar listas vacías para tags y frecuencias
+                        var extractedTags: [String] = []
+                        var extractedFrequencies: [Int] = []
+                        
+                        // Iterar sobre los valores guardados en UserDefaults
+                        for tagAndFrequency in storedTagsAndFrequencies {
+                            let components = tagAndFrequency.components(separatedBy: ": ")
+                            
+                            // Asegurarse de que hay dos componentes: el tag y la frecuencia
+                            if components.count == 2, let frequency = Int(components[1]) {
+                                extractedTags.append(components[0])
+                                extractedFrequencies.append(frequency)
+                            }
+                        }
+                        
+                        // Asignar los valores procesados a las variables de estado
+                        self.userTags = extractedTags
+                        self.userTagFrequencies = extractedFrequencies
+                    }
+                    
+                    // Fetch events
                     fetchEvents(sessionKey: sessionKey) { fetchedEvents in
                         self.proxEvents = fetchedEvents
                         
                         fetchMyEvents(sessionKey: sessionKey) { fetchMyEvents in
                             self.myEvents = fetchMyEvents
-                            print(myEvents)
+                            //print(myEvents)
                             
                             fetchChallenges(sessionKey: sessionKey) { fetchedChallenges in
                                 self.challenges = fetchedChallenges
                                 
-                                fetchMyChallenges(userId: userID, sessionKey: sessionKey){ fetchedMyChallenges in self.myChallenges = fetchedMyChallenges
-                                    
+                                fetchMyChallenges(userId: userID, sessionKey: sessionKey){ fetchedMyChallenges in
+                                    self.myChallenges = fetchedMyChallenges
                                 }
                             }
                         }
@@ -121,10 +148,16 @@ struct EventListView: View {
 
 
 
+
 struct MyEventRow: View {
     let event: EventItem
-    
+    let userTags: [String] // Añadimos los tags del usuario
+    let userTagFrequencies: [Int] // Frecuencias de uso de tags del usuario
+
     var body: some View {
+        // Llamamos a la función para calcular la compatibilidad
+        let compatibility = eventsCompatibility(userTags: userTags, userTagFrequencies: userTagFrequencies, eventTags: event.tags) ?? 0.0
+        
         VStack(alignment: .leading) {
             HStack {
                 VStack(alignment: .leading) {
@@ -134,6 +167,10 @@ struct MyEventRow: View {
                     Text(event.eventDate)
                         .font(.subheadline)
                         .foregroundColor(.gray)
+                    
+                    Text("Compatibilidad: \(Int(compatibility * 100))%")
+                        .font(.subheadline)
+                        .foregroundColor(Color(Constants.Colors.PANTONE_320_C))
                 }
                 Spacer()
                 
@@ -160,11 +197,15 @@ struct MyEventRow: View {
     }
 }
 
-
 struct EventRow: View {
     let event: EventItem
-    
+    let userTags: [String] // Añadimos los tags del usuario
+    let userTagFrequencies: [Int] // Frecuencias de uso de tags del usuario
+
     var body: some View {
+        // Llamamos a la función para calcular la compatibilidad
+        let compatibility = eventsCompatibility(userTags: userTags, userTagFrequencies: userTagFrequencies, eventTags: event.tags) ?? 0.0
+        
         VStack(alignment: .leading) {
             HStack {
                 VStack(alignment: .leading) {
@@ -174,6 +215,10 @@ struct EventRow: View {
                     Text(event.eventDate)
                         .font(.subheadline)
                         .foregroundColor(.gray)
+                    
+                    Text("Compatibilidad: \(Int(compatibility * 100))%")
+                        .font(.subheadline)
+                        .foregroundColor(Color(Constants.Colors.PANTONE_320_C))
                 }
                 Spacer()
                 
@@ -199,6 +244,8 @@ struct EventRow: View {
         .shadow(radius: 2)
     }
 }
+
+
 
 struct ChallengeRow: View {
     let challenge: ChallengeItem
