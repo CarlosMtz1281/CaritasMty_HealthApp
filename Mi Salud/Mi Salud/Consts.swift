@@ -24,6 +24,7 @@ struct Constants {
     //static let path = "https://sabritones.tc2007b.tec.mx:10206/"
     static let path = "http://localhost:8000"
 
+
     // MARK: - Endpoints
     struct Endpoints {
         static let BASE_API_URL = ""
