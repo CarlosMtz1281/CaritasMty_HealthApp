@@ -782,7 +782,7 @@ enum FetchBonosError: Error {
 func fetchBonosComprados(userID: Int, sessionKey: String, completion: @escaping (Result<[Bono], FetchBonosError>) -> Void) {
     
     // Define the URL for the request
-    guard let url = URL(string: "http://localhost:8000/tienda/bonosComprados/\(userID)") else {
+    guard let url = URL(string: Constants.path + "/tienda/bonosComprados/\(userID)") else {
         print("Invalid URL")
         return
     }

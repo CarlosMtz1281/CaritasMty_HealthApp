@@ -90,7 +90,7 @@ struct DashboardView: View {
 
                     // Tienda section
                     VStack(alignment: .leading) {
-                        Text("Catalogo")
+                        Text("Catálogo")
                             .font(.title)
                             .padding(.bottom, 20)
                             .padding()
@@ -98,27 +98,29 @@ struct DashboardView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 ForEach(catalogItems, id: \.id) { item in // Assuming CatalogItem has a unique 'id'
-                                    VStack {
-                                        Image("family_trip") // Assuming the image is static
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 150, height: 100)
-                                            .clipped()
-
-                                        VStack(alignment: .leading) {
-                                            Text(item.nombre) // Display the item's name
-                                                .font(.headline)
-                                            Text("\(item.puntos) pts") // Assuming `puntos` is a property in CatalogItem
-                                                .font(.subheadline)
-                                                .foregroundColor(.gray)
+                                    NavigationLink(destination: ShopView()) {
+                                        VStack {
+                                            Image("family_trip") // Assuming the image is static
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 150, height: 100)
+                                                .clipped()
+                                            
+                                            VStack(alignment: .leading) {
+                                                Text(item.nombre) // Display the item's name
+                                                    .font(.headline)
+                                                Text("\(item.puntos) pts") // Assuming `puntos` is a property in CatalogItem
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.gray)
+                                            }
+                                            .padding(8)
                                         }
-                                        .padding(8)
+                                        .frame(width: 200)
+                                        .frame(height: 200)
+                                        .background(Color.white)
+                                        .cornerRadius(10)
+                                        .shadow(radius: 10)
                                     }
-                                    .frame(width: 200)
-                                    .frame(height: 200)
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 10)
                                 }
                             }
                             .padding(.horizontal, 16)
@@ -170,27 +172,29 @@ struct DashboardView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 ForEach(0..<8) { _ in
-                                    VStack {
-                                        Image("family_trip") // Using the same image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 150, height: 100)
-                                            .clipped()
-
-                                        VStack(alignment: .leading) {
-                                            Text("Platica Nutrición")
-                                                .font(.headline)
-                                            Text("19/09/2024")
-                                                .font(.subheadline)
-                                                .foregroundColor(.gray)
+                                    NavigationLink(destination: EventListView()) {
+                                        VStack {
+                                            Image("family_trip") // Using the same image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 150, height: 100)
+                                                .clipped()
+                                            
+                                            VStack(alignment: .leading) {
+                                                Text("Platica Nutrición")
+                                                    .font(.headline)
+                                                Text("19/09/2024")
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.gray)
+                                            }
+                                            .padding(8)
                                         }
-                                        .padding(8)
+                                        .frame(width: 180)
+                                        .frame(height: 200)
+                                        .background(Color.white)
+                                        .cornerRadius(10)
+                                        .shadow(radius: 10)
                                     }
-                                    .frame(width: 180)
-                                    .frame(height: 200)
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 10)
                                 }
                             }
                             .padding(.horizontal, 16)

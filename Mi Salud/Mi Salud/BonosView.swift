@@ -107,7 +107,7 @@ struct BonosView: View {
 
         .onAppear {
             // Call the API when the view appears
-            fetchBonosComprados(userID: 123, sessionKey: "abcd1234sessionkey") { result in
+            fetchBonosComprados(userID: userID, sessionKey: sessionKey) { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let fetchedBonos):

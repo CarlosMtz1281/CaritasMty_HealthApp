@@ -89,7 +89,7 @@ struct ShopView: View {
                 VStack {
                     HStack {
                         VStack(alignment: .leading){
-                            Text("Catalogo")
+                            Text("Catálogo")
                                 .font(.title)
                                 .foregroundColor(.white)
                                 .bold()
