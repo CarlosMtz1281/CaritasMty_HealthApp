@@ -108,7 +108,9 @@ struct AccountView: View {
     }
     
     func signOut() {
-        guard let url = URL(string: "http://localhost:8000/users/signOut") else { return }
+        let concUrl = Constants.path + "/users/signOut"
+
+        guard let url = URL(string: concUrl) else { return }
         
         // Retrieve sessionKey and userId from UserDefaults
         guard let sessionKey = UserDefaults.standard.string(forKey: "session_key"),

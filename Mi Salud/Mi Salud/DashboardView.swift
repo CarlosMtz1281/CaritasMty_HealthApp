@@ -26,6 +26,7 @@ struct DashboardView: View {
     @State private var catalogItems: [CatalogItem] = [] // para catalogo
     @State private var currentImagePath: String?
     @State private var userName: String = "Usuario"
+    @State private var bloodPressureData: [BloodPressureDataPoint] = []
 
 
     var body: some View {
@@ -62,7 +63,7 @@ struct DashboardView: View {
                         // Points section
                 
                             // Points section
-                            NavigationLink(destination: PointsHistoryView()) {
+                        NavigationLink(destination: PointsHistoryView(points: points)) {
                                 HStack {
                                     VStack(alignment: .leading) {
                                         Text("\(points) puntos")
@@ -127,36 +128,36 @@ struct DashboardView: View {
                     }
                     .padding(.bottom, 50)
 
-                    // Último examen clinico
                     VStack(alignment: .leading) {
                         Text("Último examen de salud")
                             .font(.title2)
                             .padding(.leading)
-
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Presion Arterial")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
-                                Text("150 / 85")
-                                    .font(.title)
-                                    .foregroundColor(.white)
+                        NavigationLink(destination: HealthView()){
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("Presion Arterial")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                    Text("\(String(format: "%.0f", bloodPressureData.first?.systolic ?? 0)) / \(String(format: "%.0f", bloodPressureData.first?.diastolic ?? 0))")
+                                        .font(.title)
+                                        .foregroundColor(.white)
+                                }
+                                Spacer()
+                                VStack(alignment: .trailing) {
+                                    Text("\(bloodPressureData.first?.time ?? "No Data")")
+                                        .font(.subheadline)
+                                        .foregroundColor(.white)
+                                    Text("San José del Uro")
+                                        .font(.title3)
+                                        .foregroundColor(.white)
+                                }
                             }
-                            Spacer()
-                            VStack(alignment: .trailing) {
-                                Text("19/02/2024")
-                                    .font(.subheadline)
-                                    .foregroundColor(.white)
-                                Text("San José del Uro")
-                                    .font(.title3)
-                                    .foregroundColor(.white)
-                            }
+                            .frame(height: 80)
+                            .padding()
+                            .background(Color.teal)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
                         }
-                        .frame(height: 80)
-                        .padding()
-                        .background(Color.teal)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
                     }
 
                     // Eventos section
@@ -221,6 +222,9 @@ struct DashboardView: View {
                         fetchProfilePicture(userID: userID, sessionKey: sessionKey) { path in
                             self.currentImagePath = path
                             print(path)
+                            fetchMedicionesSalud(userID: userID, sessionKey: sessionKey) { glucosa, presionArterial, ritmoCardiaco in
+                                self.bloodPressureData = presionArterial
+                            }
                         }
                     }
                 }

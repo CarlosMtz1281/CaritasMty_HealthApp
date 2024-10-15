@@ -16,23 +16,26 @@ INSERT INTO FOTOS_PERFIL (ARCHIVO, DESCRIPCION) VALUES ('profile9','Voluntario9'
 
 
 -- 2. Insertar usuarios
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Juan', 'Pérez', 'Gómez', 'juan.perez@example.com', 'password', 1, 1);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Ana', 'López', 'Martínez', 'ana.lopez@example.com', 'password', 2, 2);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Carlos', 'Ramírez', 'Sánchez', 'carlos.ramirez@example.com', 'password', 1, 1);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('María', 'Fernández', 'Rodríguez', 'maria.fernandez@example.com', 'password', 2, 1);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Lucía', 'Navarro', 'García', 'lucia.navarro@example.com', 'password', 1, 4);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Pedro', 'González', 'Torres', 'pedro.gonzalez@example.com', 'password', 2, 4);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Sofía', 'Hernández', 'Lopez', 'sofia.hernandez@example.com', 'password', 1, 3);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Miguel', 'Cruz', 'Mendoza', 'miguel.cruz@example.com', 'password', 2, 2);
-INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('AAA', 'BBB', 'CCC', 'aaa.bbb@example.com', 'password', 2, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Juan', 'Pérez', 'Gómez', 'juan.perez@example.com', HASHBYTES('SHA2_256', 'password'), 1, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Ana', 'López', 'Martínez', 'ana.lopez@example.com', HASHBYTES('SHA2_256', 'password'), 2, 2);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Carlos', 'Ramírez', 'Sánchez', 'carlos.ramirez@example.com', HASHBYTES('SHA2_256', 'password'), 1, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('María', 'Fernández', 'Rodríguez', 'maria.fernandez@example.com', HASHBYTES('SHA2_256', 'password'), 2, 1);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Lucía', 'Navarro', 'García', 'lucia.navarro@example.com', HASHBYTES('SHA2_256', 'password'), 1, 4);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Pedro', 'González', 'Torres', 'pedro.gonzalez@example.com', HASHBYTES('SHA2_256', 'password'), 2, 4);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Sofía', 'Hernández', 'Lopez', 'sofia.hernandez@example.com', HASHBYTES('SHA2_256', 'password'), 1, 3);
+INSERT INTO USUARIOS (NOMBRE, A_PATERNO, A_MATERNO, CORREO, PASS, ID_TIPO_USUARIO, ID_FOTO) VALUES ('Miguel', 'Cruz', 'Mendoza', 'miguel.cruz@example.com', HASHBYTES('SHA2_256', 'password'), 2, 2);
 
--- 3. Insertar eventos
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Conferencia de Tecnología', 'Una conferencia sobre las últimas tendencias en tecnología.', 100, 10, '2024-10-10 09:00:00');
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Seminario de Desarrollo Personal', 'Un seminario enfocado en el crecimiento personal y profesional.', 50, 8, '2024-10-15 14:00:00');
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Taller de Innovación', 'Un taller interactivo sobre innovación y creatividad.', 30, 15, '2024-11-05 11:00:00');
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Conferencia de Marketing', 'Tendencias actuales en marketing digital.', 75, 12, '2024-11-12 10:00:00');
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Taller de Trabajo en Equipo', 'Mejorar habilidades de trabajo en equipo.', 40, 10, '2024-12-01 09:30:00');
-INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA) VALUES ('Foro de Innovación Empresarial', 'Discusión sobre innovación en negocios.', 60, 18, '2024-12-15 15:00:00');
+-- 3. Insertar eventos con las nuevas columnas Lugar y Expositor
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia sobre Solidaridad y Fe', 'Un encuentro para reflexionar sobre la importancia de la solidaridad en nuestra comunidad y su vínculo con la fe.', 120, 10, '2024-10-20 09:00:00', 'Auditorio Central', 'P. Miguel Hernández');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Acompañamiento Espiritual', 'Taller enfocado en el acompañamiento espiritual a personas en situaciones de vulnerabilidad.', 50, 9, '2024-10-25 10:00:00', 'Sala de Conferencias A', 'Hna. María López');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Foro sobre Inclusión Social', 'Un foro para discutir estrategias de inclusión social y apoyo a comunidades marginadas.', 100, 12, '2024-11-02 11:00:00', 'Centro Comunitario', 'Dr. Carlos Rodríguez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Jornada de Salud Comunitaria', 'Una jornada enfocada en la promoción de la salud en comunidades desfavorecidas.', 80, 15, '2024-11-08 08:00:00', 'Plaza Principal', 'Dra. Ana Gutiérrez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia de Voluntariado y Servicio', 'Charla inspiradora sobre la importancia del voluntariado y cómo generar un cambio positivo.', 150, 10, '2024-11-12 09:30:00', 'Auditorio Norte', 'Lic. José González');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Liderazgo Comunitario', 'Capacitación para líderes comunitarios sobre cómo mejorar la organización y el apoyo en comunidades vulnerables.', 60, 12, '2024-11-18 14:00:00', 'Centro de Capacitación', 'Coach Roberto Díaz');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Seminario de Derechos Humanos', 'Un seminario que aborda los derechos humanos y cómo protegerlos en contextos de pobreza.', 90, 14, '2024-12-03 09:00:00', 'Sala de Conferencias B', 'Dra. Elena Martínez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Conferencia sobre Justicia Social', 'Discusión sobre los retos y oportunidades para promover la justicia social.', 110, 16, '2024-12-07 10:00:00', 'Centro de Convenciones', 'P. Fernando Morales');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Taller de Recaudación de Fondos', 'Aprender estrategias para la recaudación de fondos en apoyo a obras sociales.', 70, 10, '2024-12-10 12:00:00', 'Sala de Reuniones B', 'Mtra. Laura Sánchez');
+INSERT INTO EVENTOS (NOMBRE, DESCRIPCION, NUM_MAX_ASISTENTES, PUNTAJE, FECHA, LUGAR, EXPOSITOR) VALUES ('Encuentro de Voluntarios', 'Un espacio de convivencia y reflexión para los voluntarios de Cáritas Monterrey.', 200, 18, '2024-12-20 16:00:00', 'Centro Comunitario', 'Lic. Ana Rodríguez');
 
 -- 4. Insertar beneficios
 INSERT INTO BENEFICIOS (NOMBRE, DESCRIPCION, PUNTOS) VALUES ('Día libre', 'Un día libre extra para descansar.', 20);
@@ -43,13 +46,14 @@ INSERT INTO BENEFICIOS (NOMBRE, DESCRIPCION, PUNTOS) VALUES ('Suscripción a rev
 INSERT INTO BENEFICIOS (NOMBRE, DESCRIPCION, PUNTOS) VALUES ('Acceso a gimnasio', 'Acceso al gimnasio de la empresa.', 30);
 
 -- 5. Insertar retos
-INSERT INTO RETOS (NOMBRE, DESCRIPCION, PUNTAJE) VALUES ('Correr 10km', 'Completar un curso de 10 km.', 10);
-INSERT INTO RETOS (NOMBRE, DESCRIPCION, PUNTAJE) VALUES ('Participar en 3 eventos', 'Asistir a 3 eventos diferentes organizados por la empresa.', 15);
-INSERT INTO RETOS (NOMBRE, DESCRIPCION, PUNTAJE) VALUES ('Organizar un evento', 'Organizar un evento de inicio a fin.', 20);
-INSERT INTO RETOS (NOMBRE, DESCRIPCION, PUNTAJE) VALUES ('Proponer una idea innovadora', 'Proponer y desarrollar una idea que mejore procesos de un evento.', 25);
-INSERT INTO RETOS (NOMBRE, DESCRIPCION, PUNTAJE) VALUES ('Completar curso de liderazgo', 'Curso en línea sobre habilidades de liderazgo.', 15);
-INSERT INTO RETOS (NOMBRE, DESCRIPCION, PUNTAJE) VALUES ('Mentorear a un nuevo empleado', 'Ser mentor de un nuevo empleado durante su primer mes.', 20);
-
+-- 5. Insertar retos con las nuevas columnas
+INSERT INTO RETOS (NOMBRE, DESCRIPCION, PUNTAJE, CONTACTO, FECHA_LIMITE) VALUES 
+    ('Correr 10km', 'Completar un curso de 10 km.', 10, 'contacto@ejemplo.com', '2024-12-31'),
+    ('Participar en 3 eventos', 'Asistir a 3 eventos diferentes organizados por la empresa.', 15, 'contacto@ejemplo.com', '2024-12-31'),
+    ('Organizar un evento', 'Organizar un evento de inicio a fin.', 20, 'contacto@ejemplo.com', '2024-12-31'),
+    ('Proponer una idea innovadora', 'Proponer y desarrollar una idea que mejore procesos de un evento.', 25, 'contacto@ejemplo.com', '2024-12-31'),
+    ('Completar curso de liderazgo', 'Curso en línea sobre habilidades de liderazgo.', 15, 'contacto@ejemplo.com', '2024-12-31'),
+    ('Mentorear a un nuevo empleado', 'Ser mentor de un nuevo empleado durante su primer mes.', 20, 'contacto@ejemplo.com', '2024-12-31');
 -- 6. Insertar relación usuarios-beneficios
 INSERT INTO USUARIOS_BENEFICIOS (USUARIO, BENEFICIO) VALUES (1, 1); -- Juan obtiene Día libre
 INSERT INTO USUARIOS_BENEFICIOS (USUARIO, BENEFICIO) VALUES (2, 2); -- Ana obtiene Descuento en la cafetería
@@ -60,13 +64,13 @@ INSERT INTO USUARIOS_BENEFICIOS (USUARIO, BENEFICIO) VALUES (6, 6); -- Sofía ob
 INSERT INTO USUARIOS_BENEFICIOS (USUARIO, BENEFICIO) VALUES (7, 1); -- Miguel obtiene Día libre
 
 -- 7. Insertar relación usuarios-eventos
-INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO) VALUES (1, 1); -- Juan asiste a Conferencia de Tecnología
-INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO) VALUES (2, 2); -- Ana asiste a Seminario de Desarrollo Personal
-INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO) VALUES (3, 3); -- Carlos asiste a Taller de Innovación
-INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO) VALUES (4, 4); -- Lucía asiste a Conferencia de Marketing
-INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO) VALUES (5, 5); -- Pedro asiste a Taller de Trabajo en Equipo
-INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO) VALUES (6, 6); -- Sofía asiste a Foro de Innovación Empresarial
-INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO) VALUES (7, 1); -- Miguel asiste a Conferencia de Tecnología
+INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO) VALUES (1, 1, 0); -- Juan asiste a Conferencia de Tecnología
+INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO) VALUES (2, 2, 0);
+INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO) VALUES (3, 3, 0);
+INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO) VALUES (4, 4, 0);
+INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO) VALUES (5, 5, 0);
+INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO) VALUES (6, 6, 0);
+INSERT INTO USUARIOS_EVENTOS (USUARIO, EVENTO, ASISTIO) VALUES (7, 1, 0);
 
 -- 8. Insertar relación usuarios-retos
 INSERT INTO USUARIOS_RETOS (ID, ID_RETO) VALUES (1, 1); -- Juan completa curso de 10 km
@@ -87,3 +91,233 @@ INSERT INTO HISTORIAL_PUNTOS (USUARIO, PUNTOS_MODIFICADOS, TIPO_MODIFICACION, EV
 INSERT INTO PUNTOS_USUARIO (USUARIO, PUNTOS_ACTUALES) VALUES (1, 100);
 INSERT INTO PUNTOS_USUARIO (USUARIO, PUNTOS_ACTUALES) VALUES (2, 300);
 
+-- 11. Insertar a datos de salud de usuario
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (1, 30, 'O+', 'Masculino', 75.5, 1.75);
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (2, 28, 'A-', 'Femenino', 65.0, 1.68);
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (3, 35, 'B+', 'Masculino', 85.2, 1.80);
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (4, 27, 'AB+', 'Femenino', 62.5, 1.65);
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (5, 40, 'O-', 'Masculino', 90.0, 1.82);
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (6, 22, 'A+', 'Femenino', 58.4, 1.70);
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (7, 33, 'B-', 'Masculino', 78.0, 1.77);
+INSERT INTO DATOS_SALUD (USUARIO, EDAD, TIPO_SANGRE, GENERO, PESO, ALTURA) VALUES (8, 29, 'AB-', 'Femenino', 64.2, 1.68);
+
+-- 12. Insertar Registro Presion Arterial
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (1, '2024-09-15 08:30:00', 120, 80);
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (1, '2024-09-16 08:30:00', 118, 78);
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (1, '2024-09-17 08:30:00', 122, 82);
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (1, '2024-09-18 08:30:00', 125, 85);
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (1, '2024-09-19 08:30:00', 120, 80);
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (1, 130, 70);
+
+
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (2, '2024-09-15 08:45:00', 115, 75);
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (2, '2024-09-16 08:45:00', 117, 76);
+
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (3, '2024-09-15 09:00:00', 125, 85);
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (3, '2024-09-16 09:00:00', 130, 88);
+
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (4, 110, 70);
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (4, 112, 72);
+
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (5, 120, 80);
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (5, 118, 78);
+
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (6, '2024-09-17 10:00:00', 125, 82);
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (6, '2024-09-18 10:00:00', 122, 80);
+
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (7, 130, 85);
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (7, 128, 83);
+
+INSERT INTO PRESION_ARTERIAL (USUARIO, FECHA, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (8, '2024-09-19 08:30:00', 115, 75);
+INSERT INTO PRESION_ARTERIAL (USUARIO, PRESION_SISTOLICA, PRESION_DIASTOLICA) VALUES (8, 117, 76);
+
+
+
+-- 12. Insertar Registro Ritmo Cardiaco
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (1, '2024-09-15 08:30:00', 72);
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (1, '2024-09-16 08:30:00', 70);
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (1, '2024-09-17 08:30:00', 68);
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (1, '2024-09-18 08:30:00', 75);
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (1, '2024-09-19 08:30:00', 72);
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (1, 74);
+
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (2, '2024-09-15 08:45:00', 68);
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (2, '2024-09-16 08:45:00', 70);
+
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (3, '2024-09-15 09:00:00', 78);
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (3, '2024-09-16 09:00:00', 80);
+
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (4, 65);
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (4, 67);
+
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (5, 72);
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (5, 74);
+
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (6, '2024-09-17 10:00:00', 78);
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (6, '2024-09-18 10:00:00', 76);
+
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (7, 82);
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (7, 80);
+
+INSERT INTO RITMO_CARDIACO (USUARIO, FECHA, RITMO) VALUES (8, '2024-09-19 08:30:00', 70);
+INSERT INTO RITMO_CARDIACO (USUARIO, RITMO) VALUES (8, 72);
+
+
+-- 13. Insertar Registro Nivel de Glucosa
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (1, '2024-09-15 08:30:00', 95);
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (1, '2024-09-16 08:30:00', 92);
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (1, '2024-09-17 08:30:00', 90);
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (1, '2024-09-18 08:30:00', 94);
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (1, 93);
+
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (2, '2024-09-15 08:45:00', 85);
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (2, '2024-09-16 08:45:00', 88);
+
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (3, '2024-09-15 09:00:00', 100);
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (3, '2024-09-16 09:00:00', 102);
+
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (4, 85);
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (4, 87);
+
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (5, 92);
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (5, 90);
+
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (6, '2024-09-17 10:00:00', 98);
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (6, '2024-09-18 10:00:00', 95);
+
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (7, 100);
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (7, 102);
+
+INSERT INTO GLUCOSA (USUARIO, FECHA, NIVEL) VALUES (8, '2024-09-19 08:30:00', 89);
+INSERT INTO GLUCOSA (USUARIO, NIVEL) VALUES (8, 90);
+
+
+
+
+-- TAGS
+INSERT INTO TAGS (NOMBRE) VALUES 
+    ('Solidaridad'),
+    ('Voluntariado'),
+    ('Liderazgo'),
+    ('Inclusión social'),
+    ('Salud comunitaria'),
+    ('Justicia social'),
+    ('Derechos humanos'),
+    ('Recaudación de fondos'),
+    ('Espiritualidad'),
+    ('Innovación'),
+    ('Trabajo en equipo'),
+    ('Crecimiento personal'),
+    ('Competencias digitales'),
+    ('Networking'),
+    ('Desarrollo profesional'),
+    ('Responsabilidad social'),
+    ('Emprendimiento'),
+    ('Creatividad'),
+    ('Formación continua'),
+    ('Desarrollo de habilidades'),
+    ('Sostenibilidad'),
+    ('Igualdad de género'),
+    ('Cuidado ambiental'),
+    ('Empoderamiento juvenil'),
+    ('Colaboración'),
+    ('Capacitación'),
+    ('Resiliencia'),
+    ('Motivación'),
+    ('Resolución de conflictos'),
+    ('Trabajo comunitario'),
+    ('Mentoría');
+
+
+
+-- Juan Pérez
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 1, 5);  -- Solidaridad
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 4, 3);  -- Inclusión social
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 7, 4);  -- Derechos humanos
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (1, 18, 2); -- Creatividad
+-- Ana López
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 2, 6);  -- Voluntariado
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 5, 5);  -- Salud comunitaria
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 12, 3); -- Crecimiento personal
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (2, 15, 2); -- Desarrollo profesional
+-- Carlos Ramírez
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 3, 8);  -- Liderazgo
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 6, 5);  -- Justicia social
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 19, 7); -- Desarrollo de habilidades
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (3, 23, 3); -- Cuidado ambiental
+-- María Fernández
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 5, 9);  -- Salud comunitaria
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 9, 3);  -- Espiritualidad
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 14, 2); -- Networking
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (4, 20, 1); -- Sostenibilidad
+-- Lucía Navarro
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 7, 4);  -- Derechos humanos
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 16, 5); -- Emprendimiento
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 24, 3); -- Empoderamiento juvenil
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (5, 27, 2); -- Motivación
+-- Pedro González
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 8, 4);  -- Recaudación de fondos
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 11, 6); -- Trabajo en equipo
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 21, 2); -- Igualdad de género
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (6, 25, 1); -- Capacitación
+-- Sofía Hernández
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 2, 5);  -- Voluntariado
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 10, 3); -- Innovación
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 26, 2); -- Resiliencia
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (7, 30, 1); -- Mentoría
+-- Miguel Cruz
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 3, 6);  -- Liderazgo
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 13, 4); -- Competencias digitales
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 17, 3); -- Responsabilidad social
+INSERT INTO USUARIOS_TAGS (ID_USUARIO, ID_TAG, VECES_USADO) VALUES (8, 22, 1); -- Cuidado ambiental
+
+
+-- Conferencia sobre Solidaridad y Fe
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (1, 1);  -- Solidaridad
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (1, 9);  -- Espiritualidad
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (1, 18); -- Creatividad
+
+-- Taller de Acompañamiento Espiritual
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (2, 9);  -- Espiritualidad
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (2, 12); -- Crecimiento personal
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (2, 19); -- Desarrollo de habilidades
+
+-- Foro sobre Inclusión Social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (3, 4);  -- Inclusión social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (3, 21); -- Igualdad de género
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (3, 6);  -- Justicia social
+
+-- Jornada de Salud Comunitaria
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (4, 5);  -- Salud comunitaria
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (4, 22); -- Cuidado ambiental
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (4, 26); -- Resiliencia
+
+-- Conferencia de Voluntariado y Servicio
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (5, 2);  -- Voluntariado
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (5, 11); -- Trabajo en equipo
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (5, 17); -- Responsabilidad social
+
+-- Taller de Liderazgo Comunitario
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (6, 3);  -- Liderazgo
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (6, 19); -- Desarrollo de habilidades
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (6, 27); -- Motivación
+
+-- Seminario de Derechos Humanos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (7, 7);  -- Derechos humanos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (7, 6);  -- Justicia social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (7, 19); -- Desarrollo de habilidades
+
+-- Conferencia sobre Justicia Social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (8, 6);  -- Justicia social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (8, 17); -- Responsabilidad social
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (8, 4);  -- Inclusión social
+
+-- Taller de Recaudación de Fondos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (9, 8);  -- Recaudación de fondos
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (9, 19); -- Desarrollo de habilidades
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (9, 10); -- Innovación
+
+-- Encuentro de Voluntarios
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (10, 2);  -- Voluntariado
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (10, 11); -- Trabajo en equipo
+INSERT INTO EVENTOS_TAGS (ID_EVENTO, ID_TAG) VALUES (10, 15); -- Desarrollo profesional

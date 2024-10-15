@@ -9,7 +9,7 @@ import Foundation
 
 // Fetch session key and user ID from UserDefaults
 let sessionKey: String = {
-    return UserDefaults.standard.string(forKey: "session_key") ?? "3324467f-2842-44b9-b434-08f14547af6e" // Use hardcoded session key if not found
+    return UserDefaults.standard.string(forKey: "session_key") ?? "d0e14599-d0c2-4853-8663-707303ff00e0" // Use hardcoded session key if not found
 }()
 
 let userID: Int = {
@@ -28,7 +28,8 @@ struct ProfilePictureResponse: Decodable {
 
 // Fetch current points using the retrieved session key
 func fetchCurrentPoints(userID: Int, sessionKey: String, completion: @escaping (String, Int) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/currentpoints/\(userID)") else { return }
+    let concUrl = Constants.path + "/users/currentpoints/\(userID)"
+    guard let url = URL(string: concUrl) else { return }
     
     var request = URLRequest(url: url)
     request.addValue(sessionKey, forHTTPHeaderField: "key") // Add the session key as a header
@@ -80,8 +81,9 @@ struct CatalogItem: Codable, Identifiable {
 }
 
 func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> Void) {
-    let urlString = "http://localhost:8000/tienda/catalogo"
-    guard let url = URL(string: urlString) else { return }
+    let concUrl = Constants.path + "/tienda/catalogo"
+    
+    guard let url = URL(string: concUrl) else { return }
 
     var request = URLRequest(url: url)
     request.httpMethod = "GET" // Ensure the method is set correctly
@@ -125,7 +127,10 @@ func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> V
 }
 
 func updateProfilePicture(userID: Int, imagePath: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/profilepicture") else { return }
+
+    let concUrl = Constants.path + "/users/profilepicture"
+    
+    guard let url = URL(string: concUrl) else { return }
     
     var request = URLRequest(url: url)
     request.httpMethod = "PATCH"
@@ -169,7 +174,11 @@ func updateProfilePicture(userID: Int, imagePath: String, sessionKey: String, co
 }
 
 func fetchProfilePicture(userID: Int, sessionKey: String, completion: @escaping (String) -> Void) {
-    guard let url = URL(string: "http://localhost:8000/users/profilepicture/\(userID)") else {
+    
+    let concUrl = Constants.path + "/users/profilepicture/\(userID)"
+
+    
+    guard let url = URL(string: concUrl) else {
         return
     }
     
@@ -204,7 +213,11 @@ func fetchProfilePicture(userID: Int, sessionKey: String, completion: @escaping 
 }
 
 func comprarBono(userID: Int, puntos: Int, beneficioId: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void){
-    guard let url = URL(string: "http://localhost:8000/tienda/comprarBono") else {
+    
+    let concUrl = Constants.path + "/tienda/comprarBono"
+
+    
+    guard let url = URL(string: concUrl) else {
         completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
         return
     }
@@ -264,4 +277,465 @@ func comprarBono(userID: Int, puntos: Int, beneficioId: String, sessionKey: Stri
     }
     
     task.resume()
+}
+
+
+// events
+// Modificar la estructura para incluir tags
+struct EventItem: Codable, Identifiable {
+    let id: String
+    let title: String
+    let description: String
+    let availableSpots: String
+    let score: String
+    let eventDate: String
+    let location: String
+    let organizer: String
+    let tags: [String] // Arreglo de tags
+
+    enum CodingKeys: String, CodingKey {
+        case id = "ID_EVENTO"
+        case title = "NOMBRE"
+        case description = "DESCRIPCION"
+        case availableSpots = "NUM_MAX_ASISTENTES"
+        case score = "PUNTAJE"
+        case eventDate = "FECHA"
+        case location = "LUGAR"
+        case organizer = "EXPOSITOR"
+        case tags = "TAGS"
+    }
+
+    // Custom Decoding para convertir la cadena de tags en un arreglo
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        id = try container.decode(String.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        description = try container.decode(String.self, forKey: .description)
+        availableSpots = try container.decode(String.self, forKey: .availableSpots)
+        score = try container.decode(String.self, forKey: .score)
+        eventDate = try container.decode(String.self, forKey: .eventDate) // Tratar la fecha como cadena
+        location = try container.decode(String.self, forKey: .location)
+        organizer = try container.decode(String.self, forKey: .organizer)
+
+        // Convertir los tags de una cadena a un arreglo de strings, separando por comas
+        let tagsString = try container.decode(String.self, forKey: .tags)
+        tags = tagsString.components(separatedBy: ", ").map { $0.trimmingCharacters(in: .whitespaces) }
+    }
+}
+
+
+
+func fetchEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void) {
+    print("Fetching general events...")
+
+    let concUrl = Constants.path + "/eventos/getFuturosEventos"
+    
+    guard let url = URL(string: concUrl) else { return }
+
+    var request = URLRequest(url: url)
+    request.addValue(sessionKey, forHTTPHeaderField: "key") // Add session key as header
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching events: \(error.localizedDescription)")
+            return
+        }
+
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+
+        // Print the raw JSON response for debugging
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
+
+        do {
+            let events = try JSONDecoder().decode([EventItem].self, from: data)
+            DispatchQueue.main.async {
+                completion(events)
+            }
+        } catch {
+            print("Error decoding events: \(error.localizedDescription)")
+        }
+    }.resume()
+}
+
+func fetchMyEvents(sessionKey: String, completion: @escaping ([EventItem]) -> Void) {
+    print("Fetching personal events...")
+
+    let concUrl = Constants.path + "/eventos/eventosUsuario/\(userID)"
+    
+    guard let url = URL(string: concUrl) else { return }
+
+    var request = URLRequest(url: url)
+    request.addValue(sessionKey, forHTTPHeaderField: "key") // Add session key as header
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching personal events: \(error.localizedDescription)")
+            return
+        }
+
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+
+        // Print the raw JSON response for debugging
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
+
+        do {
+            let events = try JSONDecoder().decode([EventItem].self, from: data)
+            DispatchQueue.main.async {
+                completion(events)
+            }
+        } catch {
+            print("Error decoding personal events: \(error.localizedDescription)")
+        }
+    }.resume()
+}
+
+
+func registrarParticipacion(userID: Int, idEvento: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
+        
+    
+    let concUrl = Constants.path + "/eventos/registrarParticipacion"
+
+    
+    // Create the URL for the API endpoint
+    guard let url = URL(string: concUrl) else {
+        print("Invalid URL")
+        return
+    }
+    
+    // Create the request
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    
+    // Set headers
+    request.setValue(sessionKey, forHTTPHeaderField: "key")
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    // Create the body
+    
+    let body: [String: Any] = [
+        "user_id": userID,
+        "id_evento": idEvento
+    ]
+    
+    print(body)
+
+    
+    // Convert the body to JSON
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+    } catch {
+        print("Error serializing JSON: \(error)")
+        completion(.failure(error))
+        return
+    }
+    
+    // Make the API call
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        // Handle error
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        // Handle response
+        if let data = data, let response = response as? HTTPURLResponse {
+            if response.statusCode == 200 {
+                // Success response
+                if let responseMessage = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let message = responseMessage["message"] as? String {
+                    completion(.success(message))
+                } else {
+                    completion(.failure(NSError(domain: "", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: "Failed to parse response"])))
+                }
+            } else {
+                // Server error response
+                if let errorMessage = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let error = errorMessage["error"] as? String {
+                    completion(.failure(NSError(domain: "", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: error])))
+                } else {
+                    completion(.failure(NSError(domain: "", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: "Unknown error"])))
+                }
+            }
+        }
+    }.resume()
+}
+
+// codigo de retos
+struct ChallengeItem: Codable, Identifiable {
+    let id: String
+    let title: String
+    let description: String
+    let contact: String
+    let deadline: String
+    let score: String
+
+    enum CodingKeys: String, CodingKey {
+        case id = "ID_RETO"
+        case title = "NOMBRE"
+        case description = "DESCRIPCION"
+        case contact = "CONTACTO"
+        case deadline = "FECHA_LIMITE"
+        case score = "PUNTAJE"
+    }
+}
+
+func fetchChallenges(sessionKey: String, completion: @escaping ([ChallengeItem]) -> Void) {
+    print("Fetching challenges...")
+    print(sessionKey)
+    
+    let concUrl = Constants.path + "/retos/getRetos"
+
+    
+    guard let url = URL(string: concUrl) else { return }
+
+    var request = URLRequest(url: url)
+    request.addValue(sessionKey, forHTTPHeaderField: "key") // Agregar clave de sesión como header
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching challenges: \(error.localizedDescription)")
+            return
+        }
+
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+
+        // Imprimir la respuesta JSON en bruto para depuración
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
+
+        do {
+            let challenges = try JSONDecoder().decode([ChallengeItem].self, from: data)
+            DispatchQueue.main.async {
+                completion(challenges)
+            }
+        } catch {
+            print("Error decoding challenges: \(error.localizedDescription)")
+        }
+    }.resume()
+}
+
+// Nuevo método para obtener los retos del usuario
+func fetchMyChallenges(userId: Int, sessionKey: String, completion: @escaping ([ChallengeItem]) -> Void) {
+    print("Fetching my challenges for user: \(userId)...")
+    print(sessionKey)
+    
+    let concUrl = Constants.path + "/retos/getMyRetos/\(userId)"
+
+    
+    guard let url = URL(string: concUrl) else { return }
+
+    var request = URLRequest(url: url)
+    request.addValue(sessionKey, forHTTPHeaderField: "key") // Agregar clave de sesión como header
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching my challenges: \(error.localizedDescription)")
+            return
+        }
+
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+
+        // Imprimir la respuesta JSON en bruto para depuración
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw JSON response: \(jsonString)")
+        }
+
+        do {
+            let challenges = try JSONDecoder().decode([ChallengeItem].self, from: data)
+            DispatchQueue.main.async {
+                completion(challenges)
+            }
+        } catch {
+            print("Error decoding my challenges: \(error.localizedDescription)")
+        }
+    }.resume()
+}
+
+func registerForChallenge(userID: Int, challengeID: String, sessionKey: String, completion: @escaping (Result<String, Error>) -> Void) {
+    
+    // Attempt to cast challengeID to an Int
+    guard let challengeIDInt = Int(challengeID) else {
+        print("Invalid challenge ID format. Must be an integer.")
+        return
+    }
+    
+    
+    let concUrl = Constants.path + "/retos/registerReto"
+
+    
+    // Define the URL
+    guard let url = URL(string: concUrl) else {
+        print("Invalid URL")
+        return
+    }
+    
+    // Prepare the request
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.addValue(sessionKey, forHTTPHeaderField: "key")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    // Prepare the JSON payload
+    let payload: [String: Any] = [
+        "user_id": userID,
+        "id_reto": challengeIDInt 
+    ]
+
+    print(payload)
+    
+    // Convert to JSON data
+    guard let httpBody = try? JSONSerialization.data(withJSONObject: payload, options: []) else {
+        print("Error serializing JSON")
+        return
+    }
+    request.httpBody = httpBody
+    
+    // Send the request
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        // Handle any errors
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        // Ensure response is successful
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            print("Invalid response from server")
+            return
+        }
+        
+        // Parse the response data
+        if let data = data, let responseString = String(data: data, encoding: .utf8) {
+            completion(.success(responseString))
+        }
+    }.resume()
+}
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////// SALUD ///////////////////////////////////////////////////////////////////////////
+struct HealthDataPoint: Identifiable {
+    var id = UUID()
+    var time: String
+    var value: Double
+}
+
+struct BloodPressureDataPoint: Identifiable {
+    var id = UUID()
+    var time: String
+    var systolic: Double
+    var diastolic: Double
+}
+
+struct MedicionesResponse: Codable {
+    let resultados: MedicionesResultados
+}
+
+struct MedicionesResultados: Codable {
+    let glucosa: [Glucose]
+    let presion_arterial: [BloodPressure]
+    let ritmo_cardiaco: [HeartRate]
+}
+
+struct Glucose: Codable {
+    var fecha: String
+    var glucosa: Int
+}
+
+struct BloodPressure: Codable {
+    var fecha: String
+    var presion_diastolica: Int
+    var presion_sistolica: Int
+}
+
+struct HeartRate: Codable {
+    var fecha: String
+    var ritmo: Int
+}
+
+func formatDate(_ dateString: String) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+    if let date = formatter.date(from: dateString) {
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MM/dd/yy"
+        return outputFormatter.string(from: date)
+    }
+    return dateString
+}
+
+func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping ([HealthDataPoint], [BloodPressureDataPoint], [HealthDataPoint]) -> Void) {
+    
+    let concUrl = Constants.path + "/mediciones/medicionesdatos/\(userID)"
+
+    
+    guard let url = URL(string: concUrl) else {
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.addValue(sessionKey, forHTTPHeaderField: "key")
+    
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error fetching health data: \(error)")
+            return
+        }
+        
+        guard let data = data else {
+            print("No data returned")
+            return
+        }
+        
+        do {
+            // Debug: Print the raw JSON
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Raw JSON response: \(jsonString)")
+            }
+
+            // Decode the response
+            let medicionesResponse = try JSONDecoder().decode(MedicionesResponse.self, from: data)
+            
+            // Process the data and send it via the completion handler
+            DispatchQueue.main.async {
+                let glucosaData = medicionesResponse.resultados.glucosa.map {
+                    HealthDataPoint(time: formatDate($0.fecha), value: Double($0.glucosa))
+                }
+                
+                let bloodPressureData = medicionesResponse.resultados.presion_arterial.map {
+                    BloodPressureDataPoint(time: formatDate($0.fecha), systolic: Double($0.presion_sistolica), diastolic: Double($0.presion_diastolica))
+                }
+                
+                let heartRateData = medicionesResponse.resultados.ritmo_cardiaco.map {
+                    HealthDataPoint(time: formatDate($0.fecha), value: Double($0.ritmo))
+                }
+                
+                // Call the completion handler with the formatted data
+                completion(glucosaData, bloodPressureData, heartRateData)
+            }
+        } catch {
+            print("Error decoding health data response: \(error)")
+        }
+    }.resume()
 }
