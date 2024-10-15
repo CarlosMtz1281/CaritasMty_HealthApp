@@ -219,3 +219,40 @@ def asistir_evento():
         cursor.execute(query, (user_id, id_evento))
         result = cursor.fetchone()
         cursor.close()
+
+        if not result:
+            return jsonify({"error": "Usuario no registrado en el evento."}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    # si el usuario ya asistió, no hacer nada
+    if result[2]:
+        return jsonify({"message": "Usuario ya asistió al evento."}), 200
+    
+    # si el usuario no ha asistido, actualizar el registro
+    query = """
+        UPDATE USUARIOS_EVENTOS
+        SET ASISTIO = 1
+        WHERE USUARIO = %d AND EVENTO = %d;
+    """
+    
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, (user_id, id_evento))
+        cnx.commit()
+        cursor.close()
+        
+        return jsonify({"message": "Asistencia registrada."}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+@eventos_bp.route('/crearEvento', methods=['POST'])
+def crear_evento():
+    return "Crear Evento"
+
+
+
+@eventos_bp.route('/qr', methods=['GET'])
+def qr():
+    return "QR Endpoint"
