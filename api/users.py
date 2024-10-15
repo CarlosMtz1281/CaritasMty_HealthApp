@@ -136,6 +136,43 @@ def login():
 
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
+    """
+    Cierra la sesión de un usuario.
+    Documentado por Nico.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+      - in: header
+        name: User-Id
+        type: string
+        required: true
+        description: ID del usuario que está cerrando la sesión.
+        example: "123"
+    responses:
+      200:
+        description: Sesión cerrada exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Sesión cerrada exitosamente"
+      400:
+        description: Clave de sesión o ID de usuario inválidos o faltantes.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "El ID de usuario y la clave de sesión son obligatorios"
+    """
     my_logger.info("Sign out attempt started")
     session_key = request.headers.get('key')
     user_id = request.headers.get('User-Id')
@@ -155,13 +192,54 @@ def sign_out():
         my_logger.warning(f"Invalid session key or user ID for user {user_id}")
         return jsonify({"error": "Clave de sesión o ID de usuario inválidos"}), 400
 
-@users_bp.route('/signUp', methods=['POST'])
-def sign_up():
-    my_logger.info("Sign up attempt")
-    return "Sign Up"
 
 @users_bp.route('/profilepicture/<int:user_id>', methods=['GET'])
 def profile_picture_get(user_id):
+    """
+    Obtiene la foto de perfil del usuario.
+    Documentado por German.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener su foto de perfil.
+        example: 123
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Foto de perfil devuelta exitosamente.
+        schema:
+          type: object
+          properties:
+            archivo:
+              type: string
+              example: "profile_pic.jpg"
+      400:
+        description: Clave de sesión inválida.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Invalid session key"
+      404:
+        description: No se encontró la foto de perfil para este usuario.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "No picture found for the user"
+    """
     my_logger.info(f"Fetching profile picture for user {user_id}")
     session_key = request.headers.get('key')
 
@@ -191,6 +269,53 @@ def profile_picture_get(user_id):
 
 @users_bp.route('/profilepicture', methods=['PATCH'])
 def profile_picture_change():
+    """
+    Actualiza la foto de perfil del usuario.
+    Documentado por Carlos.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario cuyo perfil se actualizará.
+              example: 123
+            path:
+              type: string
+              description: Ruta del archivo de la nueva foto de perfil.
+              example: "profile_pic.jpg"
+    responses:
+      200:
+        description: Foto de perfil actualizada exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Picture updated successfully"
+      400:
+        description: Datos de entrada inválidos o faltantes.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Invalid input data"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al actualizar la foto de perfil"
+    """
     my_logger.info("Profile picture update attempt")
     try:
         data = request.json
@@ -217,6 +342,62 @@ def profile_picture_change():
 
 @users_bp.route('/currentpoints/<int:user_id>', methods=['GET'])
 def current_points(user_id):
+    """
+    Obtiene los puntos actuales del usuario.
+    Documentado por Fer.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener sus puntos actuales.
+        example: 123
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Puntos actuales devueltos exitosamente.
+        schema:
+          type: object
+          properties:
+            puntos:
+              type: integer
+              example: 1500
+            nombre:
+              type: string
+              example: "Juan"
+      400:
+        description: Llave de sesión inválida.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida."
+      404:
+        description: No se encontraron puntos para este usuario.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "No points found for the user"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al obtener los puntos del usuario"
+    """
     my_logger.info(f"Fetching current points for user {user_id}")
     session_key = request.headers.get('key')
 
@@ -250,6 +431,60 @@ def current_points(user_id):
 
 @users_bp.route('/historypoints/<int:user_id>', methods=['GET'])
 def history_points(user_id):
+    """
+    Obtiene el historial de puntos del usuario.
+    Documentado por Fer.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener su historial de puntos.
+        example: 123
+    responses:
+      200:
+        description: Historial de puntos devuelto exitosamente.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id:
+                type: integer
+                example: 123
+              nombre:
+                type: string
+                example: "Juan"
+              puntos:
+                type: integer
+                example: 100
+              tipo:
+                type: integer
+                example: 1
+              fecha:
+                type: string
+                example: "2024-10-15T14:30:00"
+              origen_nombre:
+                type: string
+                example: "Reto de Liderazgo"
+              origen_id:
+                type: integer
+                example: 456
+              origen_tipo:
+                type: string
+                example: "Beneficio"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al obtener el historial de puntos"
+    """
     my_logger.info(f"Fetching point history for user {user_id}")
     query = """
     SELECT
@@ -291,6 +526,72 @@ def history_points(user_id):
 # Similar my_logger additions for updatehistorypoints and updatecurrentpoints...
 @users_bp.route('/updatehistorypoints', methods=['POST'])
 def update_history_points():
+    """
+    Actualiza el historial de puntos del usuario.
+    Documentado por Fer.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario cuyo historial de puntos se actualizará.
+              example: 123
+            puntos:
+              type: integer
+              description: Cantidad de puntos modificados (añadidos o restados).
+              example: 100
+            tipo:
+              type: integer
+              description: Tipo de modificación (1 para añadir puntos, 0 para restar puntos).
+              example: 1
+            beneficio_id:
+              type: integer
+              description: ID del beneficio asociado a la transacción de puntos.
+              example: 456
+              nullable: true
+            evento_id:
+              type: integer
+              description: ID del evento asociado a la transacción de puntos.
+              example: 789
+              nullable: true
+            reto_id:
+              type: integer
+              description: ID del reto asociado a la transacción de puntos.
+              example: 101
+              nullable: true
+    responses:
+      200:
+        description: Historial de puntos actualizado exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Points updated successfully"
+      400:
+        description: Datos de entrada inválidos.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Invalid input data"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error updating history points"
+    """
     try:
         data = request.json
         my_logger.info("Received data for update_history_points: %s", data)
@@ -325,6 +626,57 @@ def update_history_points():
 
 @users_bp.route('/updatecurrentpoints', methods=['PATCH'])
 def update_current_points():
+    """
+    Actualiza los puntos actuales del usuario.
+    Documentado por Fer.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario cuyos puntos actuales se actualizarán.
+              example: 123
+            puntos:
+              type: integer
+              description: Cantidad de puntos que se agregarán o restarán.
+              example: 100
+            tipo:
+              type: integer
+              description: Tipo de modificación (1 para añadir puntos, 0 para restar puntos).
+              example: 1
+    responses:
+      200:
+        description: Puntos actualizados exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Points updated successfully"
+      400:
+        description: Datos de entrada inválidos.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Invalid input data"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error updating current points"
+    """
     try:
         data = request.json
         my_logger.info("Received data for update_current_points: %s", data)

@@ -279,6 +279,9 @@ def bonos_comprados(user_id):
               PUNTOS:
                 type: integer
                 example: 100
+              CODIGO:
+                type: string
+                example: "550e8400-e29b-41d4-a716-446655440000"
       400:
         description: Llave de sesión inválida o faltante.
         schema:
@@ -304,7 +307,6 @@ def bonos_comprados(user_id):
               type: string
               example: "Error al procesar la solicitud."
     """
-
     my_logger.debug("Starting /bonosComprados request.")
 
     # Obtener la clave de sesión desde los headers
@@ -315,9 +317,9 @@ def bonos_comprados(user_id):
         my_logger.warning("Invalid or missing session key.")
         return jsonify({"error": "Llave de sesión inválida."}), 400
 
-    # Consulta SQL para obtener los beneficios comprados por el usuario
+    # Consulta SQL para obtener los beneficios comprados por el usuario junto con el código (UUID)
     query = """
-        SELECT B.ID_BENEFICIO, B.NOMBRE, B.DESCRIPCION, B.PUNTOS
+        SELECT B.ID_BENEFICIO, B.NOMBRE, B.DESCRIPCION, B.PUNTOS, UB.CODIGO
         FROM BENEFICIOS B
         JOIN USUARIOS_BENEFICIOS UB ON B.ID_BENEFICIO = UB.BENEFICIO
         WHERE UB.USUARIO = %s;
@@ -331,7 +333,13 @@ def bonos_comprados(user_id):
         if bonos_result:
             # Convertir los resultados en un diccionario para la respuesta
             bonos = [
-                {"ID_BENEFICIO": row[0], "NOMBRE": row[1], "DESCRIPCION": row[2], "PUNTOS": row[3]}
+                {
+                    "ID_BENEFICIO": row[0],
+                    "NOMBRE": row[1],
+                    "DESCRIPCION": row[2],
+                    "PUNTOS": row[3],
+                    "CODIGO": str(row[4])  # Convertir UUID a string
+                }
                 for row in bonos_result
             ]
             my_logger.debug(f"Fetched {len(bonos)} bonos comprados for user_id {user_id}.")

@@ -245,14 +245,3 @@ def asistir_evento():
         return jsonify({"message": "Asistencia registrada."}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-
-@eventos_bp.route('/crearEvento', methods=['POST'])
-def crear_evento():
-    return "Crear Evento"
-
-
-
-@eventos_bp.route('/qr', methods=['GET'])
-def qr():
-    return "QR Endpoint"
