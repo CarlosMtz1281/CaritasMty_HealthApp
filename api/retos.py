@@ -11,6 +11,50 @@ retos_bp = Blueprint('retos', __name__)
 
 @retos_bp.route('/getRetos', methods=['GET'])
 def get_retos():
+    """
+    Obtiene todos los retos disponibles.
+    Documentado por Carlos
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Retos devueltos con éxito.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              ID_RETO:
+                type: integer
+                example: 1
+              NOMBRE:
+                type: string
+                example: "Reto de Solidaridad"
+              DESCRIPCION:
+                type: string
+                example: "Descripción del reto."
+              PUNTAJE:
+                type: integer
+                example: 100
+              CONTACTO:
+                type: string
+                example: "contacto@ejemplo.com"
+              FECHA_LIMITE:
+                type: string
+                example: "2024-12-31"
+      400:
+        description: Llave de sesión inválida.
+      500:
+        description: Error interno del servidor.
+    """
     session_key = request.headers.get('key')
     my_logger.debug(f"Session Key received: {session_key}")
 
@@ -44,6 +88,56 @@ def get_retos():
 
 @retos_bp.route('/getMyRetos/<int:user_id>', methods=['GET'])
 def get_my_retos(user_id):
+    """
+    Obtiene los retos específicos de un usuario.
+    Documentado por Carlos
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener sus retos.
+        example: 123
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Retos del usuario devueltos con éxito.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              ID_RETO:
+                type: integer
+                example: 1
+              NOMBRE:
+                type: string
+                example: "Reto de Solidaridad"
+              DESCRIPCION:
+                type: string
+                example: "Descripción del reto."
+              PUNTAJE:
+                type: integer
+                example: 100
+              CONTACTO:
+                type: string
+                example: "contacto@ejemplo.com"
+              FECHA_LIMITE:
+                type: string
+                example: "2024-12-31"
+      400:
+        description: Llave de sesión inválida o faltante.
+      500:
+        description: Error interno del servidor.
+    """
     session_key = request.headers.get('key')
     my_logger.debug(f"Session Key received: {session_key}, User ID: {user_id}")
     
@@ -87,6 +181,41 @@ def get_my_retos(user_id):
 
 @retos_bp.route('/registerReto', methods=['POST'])
 def register_reto():
+    """
+    Registra a un usuario en un reto específico.
+    Documentado por Carlos
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que se quiere registrar.
+              example: 123
+            id_reto:
+              type: integer
+              description: ID del reto en el que se quiere registrar al usuario.
+              example: 456
+    responses:
+      200:
+        description: Usuario registrado exitosamente en el reto.
+      400:
+        description: Llave de sesión inválida, faltante, o datos faltantes.
+      500:
+        description: Error interno del servidor.
+    """
     session_key = request.headers.get('key')
     my_logger.debug(f"Session Key received: {session_key}")
     

@@ -7,6 +7,67 @@ mediciones_bp = Blueprint('mediciones', __name__)
 
 @mediciones_bp.route('/borrarMedicion', methods=['DELETE'])
 def borrar_medicion():
+    """
+    Elimina una medición de la base de datos.
+    Documentado por german
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que solicita la eliminación.
+              example: 123
+            medicion_id:
+              type: integer
+              description: ID de la medición que se desea eliminar.
+              example: 456
+      - in: header
+        name: key
+        required: true
+        type: string
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Medición eliminada exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Medición deleted successfully"
+      400:
+        description: Error en la solicitud por clave de sesión inválida o falta de datos.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Invalid session key"
+      404:
+        description: La medición no se encontró o no pertenece al usuario.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Medición not found or belongs to another user"
+      500:
+        description: Error interno del servidor al intentar eliminar la medición.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Mensaje detallado del error"
+    """
     user_id = request.json.get('user_id')
     medicion_id = request.json.get('medicion_id')
     session_key = request.headers.get('key')
@@ -46,6 +107,52 @@ def borrar_medicion():
 
 @mediciones_bp.route('/historialMediciones', methods=['GET'])
 def historial_mediciones():
+    """
+    Obtiene el historial de mediciones de un usuario.
+    Documentado por german
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: query
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener el historial de mediciones.
+        example: 123
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Historial de mediciones devuelto con éxito.
+        schema:
+          type: object
+          properties:
+            historial:
+              type: array
+              items:
+                type: object
+                properties:
+                  fecha:
+                    type: string
+                    example: "2024-01-01"
+                  tipo:
+                    type: string
+                    example: "Peso"
+                  valor:
+                    type: number
+                    example: 70
+      400:
+        description: Clave de sesión inválida o falta de datos.
+      404:
+        description: No se encontraron mediciones para este usuario.
+      500:
+        description: Error interno del servidor.
+    """
     user_id = request.args.get('user_id')
     session_key = request.headers.get('key')
 
@@ -87,6 +194,56 @@ def historial_mediciones():
 
 @mediciones_bp.route('/datossalud/<int:user_id>', methods=['GET'])
 def datos_salud(user_id):
+    """
+    Obtiene los datos de salud del usuario.
+    Documentado por German
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener sus datos de salud.
+        example: 123
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Datos de salud devueltos con éxito.
+        schema:
+          type: object
+          properties:
+            resultados:
+              type: object
+              properties:
+                edad:
+                  type: integer
+                  example: 30
+                tipo_sangre:
+                  type: string
+                  example: "O+"
+                genero:
+                  type: string
+                  example: "M"
+                peso:
+                  type: number
+                  example: 70
+                altura:
+                  type: number
+                  example: 1.75
+      400:
+        description: Clave de sesión inválida.
+      404:
+        description: No se encontraron datos de salud para este usuario.
+      500:
+        description: Error interno del servidor.
+    """
     my_logger.info(f"Request to /datossalud for user_id: {user_id}")
 
     session_key = request.headers.get('key')
@@ -123,6 +280,77 @@ def datos_salud(user_id):
     
 @mediciones_bp.route('/medicionesdatos/<int:user_id>', methods=['GET'])
 def obtener_mediciones(user_id):
+    """
+    Obtiene las mediciones de glucosa, ritmo cardiaco y presión arterial del usuario.
+    Documentado por German
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener sus mediciones.
+        example: 123
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Mediciones devueltas con éxito.
+        schema:
+          type: object
+          properties:
+            resultados:
+              type: object
+              properties:
+                glucosa:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fecha:
+                        type: string
+                        example: "2024-01-01"
+                      glucosa:
+                        type: number
+                        example: 100
+                ritmo_cardiaco:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fecha:
+                        type: string
+                        example: "2024-01-01"
+                      ritmo:
+                        type: number
+                        example: 80
+                presion_arterial:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fecha:
+                        type: string
+                        example: "2024-01-01"
+                      presion_sistolica:
+                        type: number
+                        example: 120
+                      presion_diastolica:
+                        type: number
+                        example: 80
+      400:
+        description: Clave de sesión inválida.
+      404:
+        description: No se encontraron mediciones para este usuario.
+      500:
+        description: Error interno del servidor.
+    """
     session_key = request.headers.get('key')
 
     my_logger.info(f"Request to /medicionesdatos for user_id: {user_id}")

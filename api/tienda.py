@@ -5,8 +5,6 @@ from session_manager import validate_key
 from logger import my_logger  
 
 
-
-
 # Create a Blueprint for 'Tienda'
 tienda_bp = Blueprint('tienda', __name__)
 
@@ -16,6 +14,55 @@ def catalogo():
     """
     Obtiene el catálogo de beneficios disponibles para canjear.
     Documentado por Carlos.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Catálogo de beneficios devuelto exitosamente.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              ID_BENEFICIO:
+                type: integer
+                example: 1
+              NOMBRE:
+                type: string
+                example: "Descuento en productos"
+              DESCRIPCION:
+                type: string
+                example: "20% de descuento en productos seleccionados"
+              PUNTOS:
+                type: integer
+                example: 100
+              FECHA_EXPIRACION:
+                type: string
+                example: "2024-12-31"
+      400:
+        description: Llave de sesión inválida o faltante.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida."
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "No se estableció la conexión con la Base de Datos."
     """
     my_logger.debug("Starting /catalogo request.")
 
@@ -56,7 +103,70 @@ def catalogo():
 def comprar_bono():
     """
     Maneja la compra de un beneficio por parte de un usuario.
+    Documentado por Carlos.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que está realizando la compra.
+              example: 123
+            puntos:
+              type: integer
+              description: Puntos actuales del usuario.
+              example: 200
+            beneficio_id:
+              type: integer
+              description: ID del beneficio a comprar.
+              example: 456
+    responses:
+      200:
+        description: Beneficio comprado exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Beneficio comprado exitosamente."
+      400:
+        description: Llave de sesión inválida o datos faltantes.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida."
+      409:
+        description: El beneficio ya fue comprado previamente o puntos insuficientes.
+        schema:
+          type: object
+          properties:
+            conflict:
+              type: string
+              example: "Beneficio ya comprado anteriormente."
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
     """
+    
     my_logger.debug("Starting /comprarBono request.")
 
     session_key = request.headers.get('key')
@@ -127,12 +237,116 @@ def comprar_bono():
     finally:
         cursor.close()
 
+# Ruta para mostrar los bonos comprados por un usuario
+@tienda_bp.route('/bonosComprados/<int:user_id>', methods=['GET'])
+def bonos_comprados(user_id):
+    """
+    Muestra los bonos comprados por el usuario.
+    Documentado por Nico.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener sus bonos comprados.
+        example: 123
+    responses:
+      200:
+        description: Bonos comprados devueltos exitosamente.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              ID_BENEFICIO:
+                type: integer
+                example: 1
+              NOMBRE:
+                type: string
+                example: "Descuento en productos"
+              DESCRIPCION:
+                type: string
+                example: "20% de descuento en productos seleccionados"
+              PUNTOS:
+                type: integer
+                example: 100
+      400:
+        description: Llave de sesión inválida o faltante.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida."
+      404:
+        description: No se encontraron bonos comprados para este usuario.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "No se encontraron bonos comprados para este usuario."
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
+    """
 
-# Additional route stubs (to be implemented) with my_logger
-@tienda_bp.route('/bonosComprados', methods=['GET'])
-def bonos_comprados():
     my_logger.debug("Starting /bonosComprados request.")
-    return "Bonos Comprados"
+
+    # Obtener la clave de sesión desde los headers
+    session_key = request.headers.get('key')
+
+    # Validar la clave de sesión y el user_id
+    if not session_key or validate_key(session_key) != int(user_id):
+        my_logger.warning("Invalid or missing session key.")
+        return jsonify({"error": "Llave de sesión inválida."}), 400
+
+    # Consulta SQL para obtener los beneficios comprados por el usuario
+    query = """
+        SELECT B.ID_BENEFICIO, B.NOMBRE, B.DESCRIPCION, B.PUNTOS
+        FROM BENEFICIOS B
+        JOIN USUARIOS_BENEFICIOS UB ON B.ID_BENEFICIO = UB.BENEFICIO
+        WHERE UB.USUARIO = %s;
+    """
+
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query, (user_id,))
+        bonos_result = cursor.fetchall()
+
+        if bonos_result:
+            # Convertir los resultados en un diccionario para la respuesta
+            bonos = [
+                {"ID_BENEFICIO": row[0], "NOMBRE": row[1], "DESCRIPCION": row[2], "PUNTOS": row[3]}
+                for row in bonos_result
+            ]
+            my_logger.debug(f"Fetched {len(bonos)} bonos comprados for user_id {user_id}.")
+            return jsonify(bonos), 200
+        else:
+            my_logger.info(f"No purchased bonos found for user_id {user_id}.")
+            return jsonify({"message": "No se encontraron bonos comprados para este usuario."}), 404
+
+    except Exception as e:
+        my_logger.error(f"Error occurred during /bonosComprados: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cursor.close()
+
 
 @tienda_bp.route('/crearBono', methods=['POST'])
 def crear_bono():
