@@ -43,6 +43,19 @@ def login():
               type: string
               description: Clave de sesión generada para el usuario.
               example: "abcd1234sessionkey"
+            tags:
+              type: array
+              items:
+                type: object
+                properties:
+                  nombre:
+                    type: string
+                    description: Nombre del tag.
+                    example: "Solidaridad"
+                  veces_usado:
+                    type: integer
+                    description: Veces que el tag ha sido usado por el usuario.
+                    example: 5
       400:
         description: Error en la solicitud por falta de datos o credenciales inválidas.
         schema:
@@ -94,9 +107,29 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+    # Crear la sesión del usuario
     session_key = create_session(user_id)
 
-    return jsonify({"user_id": user_id, "key": session_key}), 200
+    # Obtener los tags asociados al usuario y las veces que han sido usados
+    query_tags = """
+    SELECT T.NOMBRE, UT.VECES_USADO
+    FROM USUARIOS_TAGS UT
+    JOIN TAGS T ON UT.ID_TAG = T.ID_TAG
+    WHERE UT.ID_USUARIO = %s
+    """
+    
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query_tags, (user_id,))
+        user_tags = [{"nombre": row[0], "veces_usado": row[1]} for row in cursor.fetchall()]
+        cursor.close()
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    # Responder con el user_id, la clave de sesión y los tags del usuario con las veces usados
+    return jsonify({"user_id": user_id, "key": session_key, "tags": user_tags}), 200
+
 
 
 @users_bp.route('/signOut', methods=['POST'])
@@ -424,3 +457,5 @@ def update_current_points():
         return jsonify({"message": "Points updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+      
+      
