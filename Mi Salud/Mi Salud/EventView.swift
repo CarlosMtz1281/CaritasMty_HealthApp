@@ -40,12 +40,16 @@ struct EventListView: View {
                
                */
                 
-                // Tab Selector using Picker
-                Picker("Seleccione una pestaña", selection: $selectedTab) {
-                    Text("Eventos").tag(Tab.events)
-                        .font(.title2)
-                    Text("Retos").tag(Tab.challenges)
-                        .font(.title2)
+                VStack{
+                    HStack {
+                        Text("Eventos y Retos")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(16)
+                        
+                        Spacer()
+                    }
+                    .padding(.top,40)
                 }
                 .frame(height: UIScreen.main.bounds.height * 0.20)
                 .background(Color(Constants.Colors.primary))
@@ -76,11 +80,11 @@ struct EventListView: View {
                                     .padding(.leading, 20)
                                     .padding(.top, 5)
 
-<<<<<<< HEAD
                                 ForEach(myEvents) { event in
-                                    EventRow(event: event)
-                                        .padding(.horizontal)
-                                }
+                                MyEventRow(event: event, userTags: userTags, userTagFrequencies: userTagFrequencies) // Pasamos también las frecuencias
+                                    .padding(.horizontal)
+                            }
+
                                 
                                 Divider()
                                     .padding(.horizontal)
@@ -91,45 +95,19 @@ struct EventListView: View {
                                     .padding(.leading, 20)
                                     .padding(.top, 20)
                                 
-                                ForEach(proxEvents) { event in
-                                    EventRow(event: event)
+                                ForEach(proxEvents.filter { proxEvent in
+                                    !myEvents.contains(where: { $0.id == proxEvent.id }) // Compare by ID
+                                }) { event in
+                                    EventRow(event: event, userTags: userTags, userTagFrequencies: userTagFrequencies) // Pasamos también las frecuencias
                                         .padding(.horizontal)
                                 }
+
                             } else {
                                 Text("Mis Retos")
                                     .font(.title)
                                     .bold()
                                     .padding(.leading, 20)
                                     .padding(.top, 5)
-=======
-                            ForEach(myEvents) { event in
-                                MyEventRow(event: event, userTags: userTags, userTagFrequencies: userTagFrequencies) // Pasamos también las frecuencias
-                                    .padding(.horizontal)
-                            }
-                            
-                            Divider()
-                                .padding(.horizontal)
-                            
-                            Text("Próximos eventos")
-                                .font(.title)
-                                .bold()
-                                .padding(.leading, 20)
-                                .padding(.top, 20)
-                            
-                            // Filter out events that are already in 'myEvents'
-                            ForEach(proxEvents.filter { proxEvent in
-                                !myEvents.contains(where: { $0.id == proxEvent.id }) // Compare by ID
-                            }) { event in
-                                EventRow(event: event, userTags: userTags, userTagFrequencies: userTagFrequencies) // Pasamos también las frecuencias
-                                    .padding(.horizontal)
-                            }
-                        } else {
-                            Text("Mis Retos")
-                                .font(.title)
-                                .bold()
-                                .padding(.leading, 20)
-                                .padding(.top, 5)
->>>>>>> main
 
                                 ForEach(myChallenges) { challenge in
                                     ChallengeRow(challenge: challenge)
