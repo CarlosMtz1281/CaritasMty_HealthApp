@@ -178,6 +178,8 @@ struct LoginView: View {
                         // Store user_id and session_key in UserDefaults
                         UserDefaults.standard.set(userId, forKey: "user_id")
                         UserDefaults.standard.set(sessionKey, forKey: "session_key")
+                        updateUserId()
+                        updateSessionKey()
                         
                         // Store tags in UserDefaults (or handle them as needed)
                         let formattedTags = tags.map { tag in
