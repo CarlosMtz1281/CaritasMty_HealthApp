@@ -23,47 +23,29 @@ struct ContentView: View {
                     .transition(.opacity) // Optional: add transition animation
             } else if !isLoggedIn {
                 LoginView(isLoggedIn: $isLoggedIn, selectedTab: $selectedTab)
+                //LoginView()
             } else {
                 TabView(selection: $selectedTab) {
-                    NavigationView {
-                        DashboardView()
-                    }
-                    .tabItem {
-                        Image(systemName: "house")
-                    }.tag(0)
-                    
-                    NavigationView {
-                        EventListView()
-                    }
-                    .tabItem {
-                        Image(systemName: "calendar.badge.plus")
-                    }.tag(1)
-                    
-                    NavigationView {
-                        QRView()
-                    }
-                    .tabItem {
-                        Image(systemName: "qrcode")
-                    }.tag(2)
-                    
-                    NavigationView {
-                        ShopView()
-                    }
-                    .tabItem {
-                        Image(systemName: "bag")
-                    }.tag(3)
-                    
-                    NavigationView {
-                        AccountView(isLoggedIn: $isLoggedIn)
-                    }
-                    .tabItem {
-                        Image(systemName: "person")
-                    }.tag(4)
-                }
-                .onChange(of: selectedTab) { newTab in
-                    // Handle tab switch and pop to root navigation if needed
-                    // This is where you reset the navigation stack.
-                    // For example, reset navigation if needed for a specific tab.
+                    DashboardView()
+                        .tabItem {
+                            Image(systemName: "house")
+                        }.tag(0)
+                    EventListView()
+                        .tabItem {
+                            Image(systemName: "calendar.badge.plus")
+                        }.tag(1)
+                    QRView()
+                        .tabItem {
+                            Image(systemName: "qrcode")
+                        }.tag(2)
+                    ShopView()
+                        .tabItem {
+                            Image(systemName: "bag")
+                        }.tag(3)
+                    AccountView(isLoggedIn: $isLoggedIn)
+                        .tabItem {
+                            Image(systemName: "person")
+                        }.tag(4)
                 }
             }
         }
@@ -77,9 +59,3 @@ struct ContentView: View {
         }
     }
 }
-
-
-
-//#Preview {
-//    ContentView()
-//}

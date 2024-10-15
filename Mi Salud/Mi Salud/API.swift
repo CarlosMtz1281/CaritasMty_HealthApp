@@ -748,16 +748,19 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
     }.resume()
 }
 
+import Foundation
+
+// MARK: - Bono Model
 
 struct Bono: Codable, Identifiable {
-    let idBeneficio: Int
+    let idBeneficio: String
     let nombre: String
     let descripcion: String
-    let puntos: Int
+    let puntos: String
     let codigo: String
     
     // Use idBeneficio as the unique identifier
-    var id: Int {
+    var id: String {
         return idBeneficio
     }
     
@@ -770,71 +773,95 @@ struct Bono: Codable, Identifiable {
         case codigo = "CODIGO"
     }
 }
-// Define an error enum to handle different error cases
+
+// MARK: - FetchBonosError Enum
+
 enum FetchBonosError: Error {
     case invalidSessionKey
     case noBonosFound
     case serverError(String)
     case invalidResponse
     case decodingError(String)
+    
+    var localizedDescription: String {
+        switch self {
+        case .invalidSessionKey:
+            return "La clave de sesión es inválida. Por favor, inicia sesión nuevamente."
+        case .noBonosFound:
+            return "No se encontraron bonos comprados."
+        case .serverError(let message):
+            return "Error del servidor: \(message)"
+        case .invalidResponse:
+            return "Respuesta inválida del servidor."
+        case .decodingError(let message):
+            return "Error de decodificación: \(message)"
+        }
+    }
 }
+
+// MARK: - Fetch Function
 
 func fetchBonosComprados(userID: Int, sessionKey: String, completion: @escaping (Result<[Bono], FetchBonosError>) -> Void) {
     
-    // Define the URL for the request
+    // Definir la URL para la solicitud
     guard let url = URL(string: Constants.path + "/tienda/bonosComprados/\(userID)") else {
-        print("Invalid URL")
+        print("URL inválida")
+        completion(.failure(.invalidResponse))  // No se puede crear la URL
         return
     }
     
-    // Prepare the URL request
+    // Preparar la solicitud URL
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     request.addValue(sessionKey, forHTTPHeaderField: "key")
     
-    // Create a data task to fetch the bonos
+    // Crear una tarea de datos para obtener los bonos
     URLSession.shared.dataTask(with: request) { data, response, error in
-        // Handle network errors
+        // Manejar errores de red
         if let error = error {
-            print("Error: \(error)")
+            print("Error: \(error.localizedDescription)")
             completion(.failure(.serverError(error.localizedDescription)))
             return
         }
         
-        // Ensure the response is an HTTP response with a successful status code
+        // Asegurarse de que la respuesta sea un HTTPURLResponse con un código de estado exitoso
         guard let httpResponse = response as? HTTPURLResponse else {
-            print("Invalid response from server")
+            print("Respuesta inválida del servidor")
             completion(.failure(.invalidResponse))
             return
         }
         
-        // Handle specific status codes (404 or others)
-        if !(200...299).contains(httpResponse.statusCode) {
-            // Try to decode the error message from the response
-            if let data = data, let errorResponse = try? JSONDecoder().decode([String: String].self, from: data), let errorMessage = errorResponse["message"] {
-                print("Server error: \(errorMessage)")
+        // Verificar el código de estado y manejar códigos específicos
+        guard (200...299).contains(httpResponse.statusCode) else {
+            // Intentar decodificar el mensaje de error de la respuesta
+            if let data = data,
+               let errorResponse = try? JSONDecoder().decode([String: String].self, from: data),
+               let errorMessage = errorResponse["message"] {
+                print("Error del servidor: \(errorMessage)")
                 if httpResponse.statusCode == 404 {
                     completion(.failure(.noBonosFound))
+                } else if httpResponse.statusCode == 401 {
+                    completion(.failure(.invalidSessionKey))
                 } else {
                     completion(.failure(.serverError(errorMessage)))
                 }
             } else {
-                completion(.failure(.serverError("Unknown server error")))
+                completion(.failure(.serverError("Error desconocido del servidor")))
             }
             return
         }
         
-        // Handle the response data and try decoding it into an array of Bono objects
+        // Manejar los datos de respuesta y tratar de decodificarlos en un array de Bono
         if let data = data {
             do {
                 let bonos = try JSONDecoder().decode([Bono].self, from: data)
                 completion(.success(bonos))
             } catch {
-                print("Decoding error: \(error)")
+                print("Error de decodificación: \(error.localizedDescription)")
                 completion(.failure(.decodingError(error.localizedDescription)))
             }
         } else {
-            print("No data received from server")
+            print("No se recibieron datos del servidor")
             completion(.failure(.invalidResponse))
         }
     }.resume()

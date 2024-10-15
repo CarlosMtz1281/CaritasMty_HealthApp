@@ -143,6 +143,7 @@ struct AccountView: View {
                 .padding(.horizontal)
                 Spacer()
             }
+            
             .offset(y:-70)
             
         }

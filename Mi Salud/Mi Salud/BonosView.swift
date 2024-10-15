@@ -65,7 +65,7 @@ struct BonosView: View {
                                     Text(bono.nombre)
                                         .font(.title3)
                                         .bold()
-                                        .padding(.bottom,5)
+                                        .padding(.bottom, 5)
                                     Text(bono.descripcion)
                                         .font(.subheadline)
                                     Text("Puntos: \(bono.puntos)")
@@ -103,7 +103,6 @@ struct BonosView: View {
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
         .background(Color.white) // Set the background color
-        .offset(y:-290)
 
         .onAppear {
             // Call the API when the view appears

@@ -141,6 +141,7 @@ struct LoginView: View {
         
         let body: [String: Any] = ["correo": correo, "password": password]
         let jsonData = try? JSONSerialization.data(withJSONObject: body)
+        print(body)
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

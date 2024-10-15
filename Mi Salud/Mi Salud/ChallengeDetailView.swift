@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChallengeDetailView: View {
     let challenge: ChallengeItem // Change this to ChallengeItem
+    let register: Bool
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -86,30 +87,33 @@ struct ChallengeDetailView: View {
             
             Spacer()
             
-            Button(action: {
-                registerForChallenge(userID: userID, challengeID: challenge.id, sessionKey: sessionKey) { result in
-                    switch result {
-                    case .success(let message):
-                        print("Registration successful: \(message)")
-                        // Optionally dismiss the view after success
-                        DispatchQueue.main.async {
-                            self.presentationMode.wrappedValue.dismiss()
+            if(register){
+                Button(action: {
+                    registerForChallenge(userID: userID, challengeID: challenge.id, sessionKey: sessionKey) { result in
+                        switch result {
+                        case .success(let message):
+                            print("Registration successful: \(message)")
+                            // Optionally dismiss the view after success
+                            DispatchQueue.main.async {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
+                        case .failure(let error):
+                            print("Registration failed: \(error.localizedDescription)")
                         }
-                    case .failure(let error):
-                        print("Registration failed: \(error.localizedDescription)")
                     }
+                }) {
+                    Text("Registrate")
+                        .font(.title2)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                 }
-            }) {
-                Text("Registrate")
-                    .font(.title2)
-                    .bold()
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+            
         }
         .navigationBarHidden(true)
     }

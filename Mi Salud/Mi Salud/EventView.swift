@@ -124,7 +124,7 @@ struct EventListView: View {
                                     .padding(.top, 20)
 
                                 ForEach(challenges) { challenge in
-                                    ChallengeRow(challenge: challenge)
+                                    ChallengeRowNotRegistered(challenge: challenge)
                                         .padding(.horizontal)
                                 }
                             }
@@ -299,7 +299,41 @@ struct ChallengeRow: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: ChallengeDetailView(challenge: challenge)) {
+                    NavigationLink(destination: ChallengeDetailView(challenge: challenge, register: false)) {
+                        Text("Ver Más")
+                            .frame(width: 100, height: 45)
+                            .font(.title2)
+                            .bold()
+                            .foregroundColor(.white)
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 16)
+                            .background(Color.orange)
+                            .cornerRadius(8)
+                    }
+                    .padding(.top, 8)
+                }
+                Spacer()
+            }
+            .padding(15)
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(radius: 2)
+        }
+    }
+
+
+struct ChallengeRowNotRegistered: View {
+    let challenge: ChallengeItem
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                    Text(challenge.title)
+                        .font(.title2)
+                    
+                    Spacer()
+                    
+                    NavigationLink(destination: ChallengeDetailView(challenge: challenge, register: true)) {
                         Text("Ver Más")
                             .frame(width: 100, height: 45)
                             .font(.title2)
