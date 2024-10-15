@@ -85,7 +85,7 @@ struct ContentView: View {
             return
         }
 
-        let url = URL(string: "http://192.168.1.65:8000/eventos/asistirEvento")!
+        let url = URL(string: "https://sabritones.tc2007b.tec.mx:10206/eventos/asistirEvento")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
