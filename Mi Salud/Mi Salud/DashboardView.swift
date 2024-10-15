@@ -19,7 +19,17 @@ struct RoundedCornersShape: Shape {
 //API CALLS
 
 // Fetch current points using the hardcoded session key
+func randomImage() -> Image {
+    let images = ["Card1", "Card2", "Card3"]
+    let randomIndex = Int.random(in: 0..<images.count)
+    return Image(images[randomIndex])
+}
 
+func randomImageName() -> String {
+    let images = ["image1", "image2", "image3"] // Lista de nombres de imágenes
+    let randomIndex = Int.random(in: 0..<images.count)
+    return images[randomIndex]
+}
 
 struct DashboardView: View {
     @State private var points: Int = 0 // para puntos
@@ -99,7 +109,7 @@ struct DashboardView: View {
                             HStack(spacing: 16) {
                                 ForEach(catalogItems, id: \.id) { item in // Assuming CatalogItem has a unique 'id'
                                     VStack {
-                                        Image("family_trip") // Assuming the image is static
+                                        Image(item.imagen) // Assuming the image is static
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
                                             .frame(width: 150, height: 100)
@@ -171,7 +181,7 @@ struct DashboardView: View {
                             HStack(spacing: 16) {
                                 ForEach(0..<8) { _ in
                                     VStack {
-                                        Image("family_trip") // Using the same image
+                                        randomImage() // Using the same image
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
                                             .frame(width: 150, height: 100)
