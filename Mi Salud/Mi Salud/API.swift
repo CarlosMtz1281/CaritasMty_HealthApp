@@ -663,6 +663,7 @@ struct MedicionesResultados: Codable {
     let glucosa: [Glucose]
     let presion_arterial: [BloodPressure]
     let ritmo_cardiaco: [HeartRate]
+    let usuario_info: UserInfo
 }
 
 struct Glucose: Codable {
@@ -681,6 +682,17 @@ struct HeartRate: Codable {
     var ritmo: Int
 }
 
+struct UserInfo: Codable {
+    let nombre: String
+    let a_paterno: String
+    let a_materno: String
+    let edad: Int
+    let tipo_sangre: String
+    let genero: String
+    let peso: String
+    let altura: String
+}
+
 func formatDate(_ dateString: String) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
@@ -692,7 +704,7 @@ func formatDate(_ dateString: String) -> String {
     return dateString
 }
 
-func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping ([HealthDataPoint], [BloodPressureDataPoint], [HealthDataPoint]) -> Void) {
+func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping ([HealthDataPoint], [BloodPressureDataPoint], [HealthDataPoint], UserInfo) -> Void) {
     
     let concUrl = Constants.path + "/mediciones/medicionesdatos/\(userID)"
 
@@ -738,9 +750,10 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
                 let heartRateData = medicionesResponse.resultados.ritmo_cardiaco.map {
                     HealthDataPoint(time: formatDate($0.fecha), value: Double($0.ritmo))
                 }
+            
+                let userInfo = medicionesResponse.resultados.usuario_info
                 
-                // Call the completion handler with the formatted data
-                completion(glucosaData, bloodPressureData, heartRateData)
+                completion(glucosaData, bloodPressureData, heartRateData, userInfo)
             }
         } catch {
             print("Error decoding health data response: \(error)")

@@ -18,6 +18,19 @@ struct HealthView: View {
     
     @State private var heartRateData: [HealthDataPoint] = []
     
+    @State private var userInfo: UserInfo = UserInfo(
+        nombre: "",
+        a_paterno: "",
+        a_materno: "",
+        edad: 0,
+        tipo_sangre: "",
+        genero: "",
+        peso: "",
+        altura: ""
+    )
+    
+    var CurrentImagePath: String
+    
     var latestGlucose: Double {
         return glucoseData.first?.value ?? 0
     }
@@ -115,13 +128,13 @@ struct HealthView: View {
                     VStack(spacing: 35){
                         VStack{
                             HStack{
-                                Text("Juan Perez")
+                                Text("\(userInfo.nombre) \(userInfo.a_materno) \(userInfo.a_paterno)")
                                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                     .bold()
                                 Spacer()
                             }
                             HStack{
-                                Image("profile1")
+                                Image(CurrentImagePath)
                                     .resizable()
                                     .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
                                     .frame(width: 125, height: 225)
@@ -138,12 +151,12 @@ struct HealthView: View {
                                 .font(.system(size: 20))
                                 .bold()
                                 VStack(spacing: 20){
-                                    Text("35")
-                                    Text("Masculino")
-                                    Text("O+")
+                                    Text("\(userInfo.edad)")
+                                    Text(userInfo.genero)
+                                    Text(userInfo.tipo_sangre)
                                         .padding(.vertical, 11)
-                                    Text("87 kg")
-                                    Text("1.50 m")
+                                    Text("\(Double(userInfo.peso) ?? 0.0, specifier: "%.1f") kg")
+                                    Text("\(Double(userInfo.altura) ?? 0.0, specifier: "%.2f") m")
                                 }
                                 .font(.system(size: 18))
                                 .frame(maxWidth: .infinity)
@@ -318,16 +331,19 @@ struct HealthView: View {
         }
         .edgesIgnoringSafeArea(.top)
         .onAppear{
-            fetchMedicionesSalud(userID: userID, sessionKey: sessionKey) { glucosa, presionArterial, ritmoCardiaco in
+            fetchMedicionesSalud(userID: userID, sessionKey: sessionKey) { glucosa, presionArterial, ritmoCardiaco, userInfo  in
                 self.glucoseData = glucosa
                 self.bloodPressureData = presionArterial
                 self.heartRateData = ritmoCardiaco
+                self.userInfo = userInfo
             }
         }
         .navigationBarHidden(true)
     }
 }
 
+/*
 #Preview {
-    HealthView()
+    HealthView(nombre: "Fernando", CurrentImagePath: "profile1")
 }
+*/

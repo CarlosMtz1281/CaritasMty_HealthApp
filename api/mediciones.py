@@ -63,18 +63,80 @@ def historial_mediciones():
         ORDER BY FECHA DESC
     """
 
+    userInfo_query = """
+        SELECT 
+            U.NOMBRE, 
+            U.A_PATERNO,
+            U.A_MATERNO,
+            DS.EDAD, 
+            DS.TIPO_SANGRE, 
+            DS.GENERO, 
+            DS.PESO, 
+            DS.ALTURA
+        FROM 
+            USUARIOS U
+        JOIN 
+            DATOS_SALUD DS 
+        ON 
+            U.ID_USUARIO = DS.USUARIO
+        WHERE 
+            U.ID_USUARIO =  %s;
+    """
+
     try:
         cursor = cnx.cursor()
+        
         cursor.execute(query, (user_id,))
         mediciones_result = cursor.fetchall()
 
-        if mediciones_result:
-            mediciones_data = [
-                {"fecha": row[0], "tipo": row[1], "valor": row[2]}
-                for row in mediciones_result
+        cursor.execute(glucosa_query, (user_id,))
+        glucosa_result = cursor.fetchall()
+
+        cursor.execute(ritmo_cardiaco_query, (user_id,))
+        ritmo_cardiaco_result = cursor.fetchall()
+
+        cursor.execute(presion_arterial_query, (user_id,))
+        presion_arterial_result = cursor.fetchall()
+
+        cursor.execute(userInfo_query, (user_id,))
+        userInfo_result = cursor.fetchone()
+
+        cursor.close()
+
+        if glucosa_result and ritmo_cardiaco_result and presion_arterial_result and userInfo_result:
+            glucosa_data = [
+                {"fecha": row[0], "glucosa": row[1]}
+                for row in glucosa_result
             ]
-            my_logger.info(f"Successfully fetched measurements for user_id: {user_id}")
-            return jsonify({"historial": mediciones_data}), 200
+
+            ritmo_cardiaco_data = [
+                {"fecha": row[0], "ritmo": row[1]}
+                for row in ritmo_cardiaco_result
+            ]
+
+            presion_arterial_data = [
+                {"fecha": row[0], "presion_sistolica": row[1], "presion_diastolica": row[2]}
+                for row in presion_arterial_result
+            ]
+
+            userInfo_data = {
+                "nombre": userInfo_result[0],
+                "a_paterno": userInfo_result[1],
+                "a_materno": userInfo_result[2],
+                "edad": userInfo_result[3],
+                "tipo_sangre": userInfo_result[4],
+                "genero": userInfo_result[5],
+                "peso": userInfo_result[6],
+                "altura": userInfo_result[7]
+            }
+
+            return jsonify({"resultados": {
+                "glucosa": glucosa_data,
+                "ritmo_cardiaco": ritmo_cardiaco_data,
+                "presion_arterial": presion_arterial_data,
+                "usuario_info": userInfo_data
+            }}), 200
+
         else:
             my_logger.info(f"No health measurements found for user_id: {user_id}")
             return jsonify({"message": "No health measurements found for this user"}), 404
