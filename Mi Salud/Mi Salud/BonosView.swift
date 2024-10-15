@@ -47,7 +47,6 @@ struct BonosView: View {
             .background(Color(Constants.Colors.primary))
             .frame(height: 130)
 
-            // Display either the bonos or an error message if there's one
             if let errorMessage = errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
@@ -104,6 +103,8 @@ struct BonosView: View {
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
         .background(Color.white) // Set the background color
+        .offset(y:-290)
+
         .onAppear {
             // Call the API when the view appears
             fetchBonosComprados(userID: 123, sessionKey: "abcd1234sessionkey") { result in

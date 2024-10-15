@@ -91,6 +91,28 @@ struct AccountView: View {
                     }
                     
                     Divider()
+                    NavigationLink(destination: BonosView()) {
+                        HStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(Constants.Colors.primary), lineWidth: 2)
+                                .frame(width: 55, height: 55)
+                                .overlay(
+                                    Image(systemName: "wallet.pass")
+                                        .font(.system(size: 36))
+                                        .foregroundColor(Color(Constants.Colors.primary))
+                                )
+                                .padding(.leading)
+                            
+                            Text("Wallet")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding()
+                            
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                    }
+                    Divider()
                     
                     Button(action: {
                         signOut()
