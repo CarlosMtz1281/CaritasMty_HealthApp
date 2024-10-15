@@ -16,85 +16,124 @@ struct EventListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                HStack {
-                    Text("Eventos y Retos")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding(16)
+                /*
+                VStack{
+                    HStack {
+                        Text("Eventos y Retos")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(16)
+                        
+                        Spacer()
+                    }
+                    .padding()
+                    .padding(.top,40)
                     
-                    Spacer()
                 }
-                .padding()
+                .frame(height: UIScreen.main.bounds.height * 0.20)
                 .background(Color(Constants.Colors.primary))
                 .foregroundColor(.white)
+                .cornerRadius(20)
+                .ignoresSafeArea(.all, edges: .top)
+                .padding(0)
+               
+               */
                 
-                // Tab Selector using Picker
-                Picker("Seleccione una pestaña", selection: $selectedTab) {
-                    Text("Eventos").tag(Tab.events)
-                        .font(.title2)
-                    Text("Retos").tag(Tab.challenges)
-                        .font(.title2)
-
+                VStack{
+                    HStack {
+                        Text("Eventos y Retos")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(16)
+                        
+                        Spacer()
+                    }
+                    .padding(.top,40)
                 }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
+                .frame(height: UIScreen.main.bounds.height * 0.20)
+                .background(Color(Constants.Colors.primary))
+                .foregroundColor(.white)
+                .cornerRadius(20)
+                .ignoresSafeArea()
+                
+                VStack{
+                    // Tab Selector using Picker
+                    Picker("Seleccione una pestaña", selection: $selectedTab) {
+                        Text("Eventos").tag(Tab.events)
+                            .font(.title2)
+                        Text("Retos").tag(Tab.challenges)
+                            .font(.title2)
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        if selectedTab == .events {
-                            Text("Mis eventos")
-                                .font(.title)
-                                .bold()
-                                .padding(.leading, 20)
-                                .padding(.top, 5)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding()
+                    .padding(.top ,0)
+                    .padding(.bottom,0)
+                    
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 16) {
+                            if selectedTab == .events {
+                                Text("Mis eventos")
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.leading, 20)
+                                    .padding(.top, 5)
 
-                            ForEach(myEvents) { event in
-                                EventRow(event: event)
+                                ForEach(myEvents) { event in
+                                    EventRow(event: event)
+                                        .padding(.horizontal)
+                                }
+                                
+                                Divider()
                                     .padding(.horizontal)
-                            }
-                            
-                            Divider()
-                                .padding(.horizontal)
-                            
-                            Text("Próximos eventos")
-                                .font(.title)
-                                .bold()
-                                .padding(.leading, 20)
-                                .padding(.top, 20)
-                            
-                            ForEach(proxEvents) { event in
-                                EventRow(event: event)
-                                    .padding(.horizontal)
-                            }
-                        } else {
-                            Text("Mis Retos")
-                                .font(.title)
-                                .bold()
-                                .padding(.leading, 20)
-                                .padding(.top, 5)
+                                
+                                Text("Próximos eventos")
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.leading, 20)
+                                    .padding(.top, 20)
+                                
+                                ForEach(proxEvents) { event in
+                                    EventRow(event: event)
+                                        .padding(.horizontal)
+                                }
+                            } else {
+                                Text("Mis Retos")
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.leading, 20)
+                                    .padding(.top, 5)
 
-                            ForEach(myChallenges) { challenge in
-                                ChallengeRow(challenge: challenge)
+                                ForEach(myChallenges) { challenge in
+                                    ChallengeRow(challenge: challenge)
+                                        .padding(.horizontal)
+                                }
+                                
+                                Divider()
                                     .padding(.horizontal)
-                            }
-                            
-                            Divider()
-                                .padding(.horizontal)
-                            
-                            Text("Retos Disponibles")
-                                .font(.title)
-                                .bold()
-                                .padding(.leading, 20)
-                                .padding(.top, 20)
+                                
+                                Text("Retos Disponibles")
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.leading, 20)
+                                    .padding(.top, 20)
 
-                            ForEach(challenges) { challenge in
-                                ChallengeRow(challenge: challenge)
-                                    .padding(.horizontal)
+                                ForEach(challenges) { challenge in
+                                    ChallengeRow(challenge: challenge)
+                                        .padding(.horizontal)
+                                }
                             }
                         }
+                        
+                        .padding(.bottom, 30)
+                        
                     }
-                    .padding(.bottom, 30)
-                }
+                }.offset(y:-50)
+                
+                
+
+                
+               
                 .onAppear {
                     fetchEvents(sessionKey: sessionKey) { fetchedEvents in
                         self.proxEvents = fetchedEvents

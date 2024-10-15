@@ -90,7 +90,7 @@ struct DashboardView: View {
 
                     // Tienda section
                     VStack(alignment: .leading) {
-                        Text("Tienda")
+                        Text("Catalogo")
                             .font(.title)
                             .padding(.bottom, 20)
                             .padding()
