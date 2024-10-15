@@ -11,7 +11,74 @@ users_bp = Blueprint('users', __name__)
 
 @users_bp.route('/login', methods=['POST'])
 def login():
+    """
+    Maneja el inicio de sesión de un usuario.
+    Documentado por Nico.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            correo:
+              type: string
+              description: El correo electrónico del usuario.
+              example: "juan.perez@example.com"
+            password:
+              type: string
+              description: La contraseña del usuario.
+              example: "password123"
+    responses:
+      200:
+        description: Inicio de sesión exitoso.
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que ha iniciado sesión.
+              example: 123
+            key:
+              type: string
+              description: Clave de sesión generada para el usuario.
+              example: "abcd1234sessionkey"
+            tags:
+              type: array
+              items:
+                type: object
+                properties:
+                  nombre:
+                    type: string
+                    description: Nombre del tag.
+                    example: "Solidaridad"
+                  veces_usado:
+                    type: integer
+                    description: Veces que el tag ha sido usado por el usuario.
+                    example: 5
+      400:
+        description: Error en la solicitud por falta de datos o credenciales inválidas.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "El correo y la contraseña son obligatorios. O Credenciales inválidas"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Mensaje detallando el error"
+    """
+
     my_logger.info("Login attempt started")
+
     data = request.json
     correo = data.get('correo')
     password = data.get('password')
@@ -42,10 +109,30 @@ def login():
         my_logger.error(f"Error during login: {e}")
         return jsonify({"error": str(e)}), 500
 
+    # Crear la sesión del usuario
     session_key = create_session(user_id)
     my_logger.info(f"Session created for user {user_id} with key {session_key}")
 
-    return jsonify({"user_id": user_id, "key": session_key}), 200
+    # Obtener los tags asociados al usuario y las veces que han sido usados
+    query_tags = """
+    SELECT T.NOMBRE, UT.VECES_USADO
+    FROM USUARIOS_TAGS UT
+    JOIN TAGS T ON UT.ID_TAG = T.ID_TAG
+    WHERE UT.ID_USUARIO = %s
+    """
+    
+    try:
+        cursor = cnx.cursor()
+        cursor.execute(query_tags, (user_id,))
+        user_tags = [{"nombre": row[0], "veces_usado": row[1]} for row in cursor.fetchall()]
+        cursor.close()
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    # Responder con el user_id, la clave de sesión y los tags del usuario con las veces usados
+    return jsonify({"user_id": user_id, "key": session_key, "tags": user_tags}), 200
+
 
 @users_bp.route('/signOut', methods=['POST'])
 def sign_out():
@@ -249,5 +336,6 @@ def update_current_points():
         my_logger.info("Current points updated successfully for user_id=%s", user_id)
         return jsonify({"message": "Points updated successfully"}), 200
     except Exception as e:
+
         my_logger.error("Error updating current points: %s", str(e))
         return jsonify({"error": str(e)}), 500

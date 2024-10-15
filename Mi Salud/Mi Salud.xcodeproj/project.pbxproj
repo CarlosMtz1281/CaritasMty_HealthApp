@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		05B236E22CBC9BDC0057A70A /* modelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B236E12CBC9BDC0057A70A /* modelData.swift */; };
+		05B236EA2CBCB15B0057A70A /* EventsCompatibilityFinal.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 05B236E92CBCB15B0057A70A /* EventsCompatibilityFinal.mlmodel */; };
+		05F735082C7D03AB0001BCF9 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F735072C7D03AB0001BCF9 /* SplashView.swift */; };
+		05F7350A2C7D04130001BCF9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F735092C7D04130001BCF9 /* LoginView.swift */; };
+		19815E3F2C77F6030094E7B1 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E3E2C77F6030094E7B1 /* DashboardView.swift */; };
+		19815E412C77F61B0094E7B1 /* HealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E402C77F61B0094E7B1 /* HealthView.swift */; };
+		19815E432C77F62B0094E7B1 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E422C77F62B0094E7B1 /* QRView.swift */; };
+		19815E452C77F63E0094E7B1 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E442C77F63E0094E7B1 /* ShopView.swift */; };
+		19815E472C77F64B0094E7B1 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E462C77F64B0094E7B1 /* AccountView.swift */; };
+		19815E492C77FC640094E7B1 /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19815E482C77FC640094E7B1 /* Consts.swift */; };
+		851959C62CA22F4800363047 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851959C52CA22F4600363047 /* API.swift */; };
+		852CAF7A2CAEF7CD00D70D17 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852CAF792CAEF7AB00D70D17 /* EventView.swift */; };
+		852CAF7C2CAEF80100D70D17 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852CAF7B2CAEF7F900D70D17 /* EventDetailView.swift */; };
+		855B864D2CB4464B00BC32C4 /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B864C2CB4463C00BC32C4 /* ChallengeDetailView.swift */; };
+		85D19BD92C9B98FD00B9498E /* PointsHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */; };
+		85DF87EE2CA39E9A001F97B1 /* ProfilePictureSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DF87ED2CA39E8A001F97B1 /* ProfilePictureSelectionView.swift */; };
+		B5511B272CAE0391000EADB4 /* MasInformacion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5511B262CAE0389000EADB4 /* MasInformacion.swift */; };
+		B5D5170D2C75720B0093C91E /* Mi_SaludApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */; };
+		B5D5170F2C75720B0093C91E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5170E2C75720B0093C91E /* ContentView.swift */; };
+		B5D517112C75720B0093C91E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D517102C75720B0093C91E /* Assets.xcassets */; };
+		B5D517142C75720B0093C91E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D517132C75720B0093C91E /* Preview Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		05B236E12CBC9BDC0057A70A /* modelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = modelData.swift; sourceTree = "<group>"; };
+		05B236E92CBCB15B0057A70A /* EventsCompatibilityFinal.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = EventsCompatibilityFinal.mlmodel; sourceTree = "<group>"; };
+		05F735072C7D03AB0001BCF9 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		05F735092C7D04130001BCF9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		19815E3E2C77F6030094E7B1 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		19815E402C77F61B0094E7B1 /* HealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthView.swift; sourceTree = "<group>"; };
+		19815E422C77F62B0094E7B1 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
+		19815E442C77F63E0094E7B1 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		19815E462C77F64B0094E7B1 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		19815E482C77FC640094E7B1 /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
+		851959C52CA22F4600363047 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		852CAF792CAEF7AB00D70D17 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		852CAF7B2CAEF7F900D70D17 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		855B864C2CB4463C00BC32C4 /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
+		85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsHistoryView.swift; sourceTree = "<group>"; };
+		85DF87ED2CA39E8A001F97B1 /* ProfilePictureSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureSelectionView.swift; sourceTree = "<group>"; };
+		85E561DC2CB6B7C600EAED5D /* Mi-Salud-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Mi-Salud-Info.plist"; sourceTree = SOURCE_ROOT; };
+		B5511B262CAE0389000EADB4 /* MasInformacion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasInformacion.swift; sourceTree = "<group>"; };
+		B5D517092C75720B0093C91E /* Mi Salud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mi Salud.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mi_SaludApp.swift; sourceTree = "<group>"; };
+		B5D5170E2C75720B0093C91E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B5D517102C75720B0093C91E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B5D517132C75720B0093C91E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B5D517062C75720B0093C91E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B5D517002C75720B0093C91E = {
+			isa = PBXGroup;
+			children = (
+				B5D5170B2C75720B0093C91E /* Mi Salud */,
+				B5D5170A2C75720B0093C91E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B5D5170A2C75720B0093C91E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5D517092C75720B0093C91E /* Mi Salud.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B5D5170B2C75720B0093C91E /* Mi Salud */ = {
+			isa = PBXGroup;
+			children = (
+				85E561DC2CB6B7C600EAED5D /* Mi-Salud-Info.plist */,
+				B5D5170C2C75720B0093C91E /* Mi_SaludApp.swift */,
+				05F735072C7D03AB0001BCF9 /* SplashView.swift */,
+				05F735092C7D04130001BCF9 /* LoginView.swift */,
+				B5511B262CAE0389000EADB4 /* MasInformacion.swift */,
+				19815E482C77FC640094E7B1 /* Consts.swift */,
+				B5D5170E2C75720B0093C91E /* ContentView.swift */,
+				19815E3E2C77F6030094E7B1 /* DashboardView.swift */,
+				851959C52CA22F4600363047 /* API.swift */,
+				19815E402C77F61B0094E7B1 /* HealthView.swift */,
+				852CAF792CAEF7AB00D70D17 /* EventView.swift */,
+				855B864C2CB4463C00BC32C4 /* ChallengeDetailView.swift */,
+				852CAF7B2CAEF7F900D70D17 /* EventDetailView.swift */,
+				19815E422C77F62B0094E7B1 /* QRView.swift */,
+				19815E442C77F63E0094E7B1 /* ShopView.swift */,
+				19815E462C77F64B0094E7B1 /* AccountView.swift */,
+				85DF87ED2CA39E8A001F97B1 /* ProfilePictureSelectionView.swift */,
+				85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */,
+				B5D517102C75720B0093C91E /* Assets.xcassets */,
+				B5D517122C75720B0093C91E /* Preview Content */,
+				05B236E12CBC9BDC0057A70A /* modelData.swift */,
+				05B236E92CBCB15B0057A70A /* EventsCompatibilityFinal.mlmodel */,
+			);
+			path = "Mi Salud";
+			sourceTree = "<group>";
+		};
+		B5D517122C75720B0093C91E /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				B5D517132C75720B0093C91E /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B5D517082C75720B0093C91E /* Mi Salud */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5D517172C75720B0093C91E /* Build configuration list for PBXNativeTarget "Mi Salud" */;
+			buildPhases = (
+				B5D517052C75720B0093C91E /* Sources */,
+				B5D517062C75720B0093C91E /* Frameworks */,
+				B5D517072C75720B0093C91E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mi Salud";
+			productName = "Mi Salud";
+			productReference = B5D517092C75720B0093C91E /* Mi Salud.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B5D517012C75720B0093C91E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					B5D517082C75720B0093C91E = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = B5D517042C75720B0093C91E /* Build configuration list for PBXProject "Mi Salud" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B5D517002C75720B0093C91E;
+			productRefGroup = B5D5170A2C75720B0093C91E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B5D517082C75720B0093C91E /* Mi Salud */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B5D517072C75720B0093C91E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5D517142C75720B0093C91E /* Preview Assets.xcassets in Resources */,
+				B5D517112C75720B0093C91E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B5D517052C75720B0093C91E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05B236E22CBC9BDC0057A70A /* modelData.swift in Sources */,
+				852CAF7C2CAEF80100D70D17 /* EventDetailView.swift in Sources */,
+				19815E452C77F63E0094E7B1 /* ShopView.swift in Sources */,
+				19815E492C77FC640094E7B1 /* Consts.swift in Sources */,
+				19815E412C77F61B0094E7B1 /* HealthView.swift in Sources */,
+				B5511B272CAE0391000EADB4 /* MasInformacion.swift in Sources */,
+				B5D5170F2C75720B0093C91E /* ContentView.swift in Sources */,
+				19815E3F2C77F6030094E7B1 /* DashboardView.swift in Sources */,
+				85DF87EE2CA39E9A001F97B1 /* ProfilePictureSelectionView.swift in Sources */,
+				855B864D2CB4464B00BC32C4 /* ChallengeDetailView.swift in Sources */,
+				05B236EA2CBCB15B0057A70A /* EventsCompatibilityFinal.mlmodel in Sources */,
+				19815E472C77F64B0094E7B1 /* AccountView.swift in Sources */,
+				85D19BD92C9B98FD00B9498E /* PointsHistoryView.swift in Sources */,
+				852CAF7A2CAEF7CD00D70D17 /* EventView.swift in Sources */,
+				19815E432C77F62B0094E7B1 /* QRView.swift in Sources */,
+				B5D5170D2C75720B0093C91E /* Mi_SaludApp.swift in Sources */,
+				05F7350A2C7D04130001BCF9 /* LoginView.swift in Sources */,
+				851959C62CA22F4800363047 /* API.swift in Sources */,
+				05F735082C7D03AB0001BCF9 /* SplashView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B5D517152C75720B0093C91E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B5D517162C75720B0093C91E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B5D517182C75720B0093C91E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mi Salud/Preview Content\"";
+				DEVELOPMENT_TEAM = PCXZHA2X2G;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mi-Salud-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tec.mx.Mi-SaludFer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B5D517192C75720B0093C91E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mi Salud/Preview Content\"";
+				DEVELOPMENT_TEAM = PCXZHA2X2G;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mi-Salud-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tec.mx.Mi-SaludFer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B5D517042C75720B0093C91E /* Build configuration list for PBXProject "Mi Salud" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5D517152C75720B0093C91E /* Debug */,
+				B5D517162C75720B0093C91E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5D517172C75720B0093C91E /* Build configuration list for PBXNativeTarget "Mi Salud" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5D517182C75720B0093C91E /* Debug */,
+				B5D517192C75720B0093C91E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B5D517012C75720B0093C91E /* Project object */;
+}
