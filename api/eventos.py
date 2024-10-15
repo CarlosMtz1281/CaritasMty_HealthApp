@@ -8,6 +8,56 @@ eventos_bp = Blueprint('eventos', __name__)
 
 @eventos_bp.route('/getFuturosEventos', methods=['GET'])
 def eventos():
+    """
+    Obtiene la lista de eventos futuros disponibles.
+    Documentado por Ivan.
+    ---
+    tags:
+      - Sprint 2
+    responses:
+      200:
+        description: Eventos futuros devueltos exitosamente.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              ID_EVENTO:
+                type: integer
+                example: 1
+              NOMBRE:
+                type: string
+                example: "Conferencia de Liderazgo"
+              DESCRIPCION:
+                type: string
+                example: "Un evento para mejorar habilidades de liderazgo"
+              NUM_MAX_ASISTENTES:
+                type: integer
+                example: 200
+              PUNTAJE:
+                type: integer
+                example: 100
+              FECHA:
+                type: string
+                example: "2024-12-01T15:00:00"
+              LUGAR:
+                type: string
+                example: "Auditorio Central"
+              EXPOSITOR:
+                type: string
+                example: "Dr. Juan Pérez"
+              TAGS:
+                type: string
+                example: "Liderazgo, Innovación"
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
+    """
     # Log the request for this endpoint
     my_logger.info(f"({request.remote_addr}) Requested /getFuturosEventos")
 
@@ -47,6 +97,78 @@ def eventos():
 
 @eventos_bp.route('/eventosUsuario/<int:user_id>', methods=['GET'])
 def eventos_usuario(user_id):
+    """
+    Obtiene la lista de eventos futuros registrados para un usuario.
+    Documentado por Ivan.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener sus eventos registrados.
+        example: 123
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Eventos futuros del usuario devueltos exitosamente.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              ID_EVENTO:
+                type: integer
+                example: 1
+              NOMBRE:
+                type: string
+                example: "Conferencia de Liderazgo"
+              DESCRIPCION:
+                type: string
+                example: "Un evento para mejorar habilidades de liderazgo"
+              NUM_MAX_ASISTENTES:
+                type: integer
+                example: 200
+              PUNTAJE:
+                type: integer
+                example: 100
+              FECHA:
+                type: string
+                example: "2024-12-01T15:00:00"
+              LUGAR:
+                type: string
+                example: "Auditorio Central"
+              EXPOSITOR:
+                type: string
+                example: "Dr. Juan Pérez"
+              TAGS:
+                type: string
+                example: "Liderazgo, Innovación"
+      400:
+        description: Llave de sesión inválida o faltante.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida."
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
+    """
+    
     session_key = request.headers.get('key')
 
     # Log the request
@@ -97,6 +219,63 @@ def eventos_usuario(user_id):
 
 @eventos_bp.route('/usuariosEvento/<int:user_id>/<int:id_evento>', methods=['GET'])
 def usuarios_evento(user_id, id_evento):
+    """
+    Obtiene la lista de usuarios registrados en un evento, excluyendo al usuario que solicita.
+    Documentado por Ivan.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario que solicita la información.
+        example: 123
+      - in: path
+        name: id_evento
+        type: integer
+        required: true
+        description: ID del evento.
+        example: 456
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+    responses:
+      200:
+        description: Lista de usuarios devuelta exitosamente.
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              NOMBRE:
+                type: string
+                example: "Juan"
+              A_PATERNO:
+                type: string
+                example: "Pérez"
+      400:
+        description: Llave de sesión inválida o faltante.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida."
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
+    """
+    
     session_key = request.headers.get('key')
 
     my_logger.info(f"({request.remote_addr}) Requested /usuariosEvento/{user_id}/{id_evento}")
@@ -135,6 +314,51 @@ def usuarios_evento(user_id, id_evento):
 
 @eventos_bp.route('/registrarParticipacion', methods=['POST'])
 def registrar_participacion():
+    """
+    Registra la participación de un usuario en un evento y actualiza sus tags.
+    Documentado por Ivan.
+    ---
+    tags:
+      - Sprint 3
+    parameters:
+      - in: header
+        name: key
+        type: string
+        required: true
+        description: Clave de sesión del usuario.
+        example: "abcd1234sessionkey"
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario que se está registrando.
+              example: 123
+            id_evento:
+              type: integer
+              description: ID del evento.
+              example: 456
+    responses:
+      200:
+        description: Participación registrada y tags actualizados.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Participación registrada y tags actualizados."
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
+    """
     session_key = request.headers.get('key')
     
     data = request.json
@@ -202,7 +426,54 @@ def registrar_participacion():
     
     
 @eventos_bp.route('/asistirEvento', methods=['POST'])
-def asistir_evento():    
+def asistir_evento():  
+    """
+    Registra la asistencia de un usuario a un evento registrando QR.
+    Documentado por Ivan.
+    ---
+    tags:
+      - Sprint 2
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: ID del usuario.
+              example: 123
+            id_evento:
+              type: integer
+              description: ID del evento.
+              example: 456
+    responses:
+      200:
+        description: Asistencia registrada exitosamente.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Asistencia registrada."
+      400:
+        description: Usuario no registrado en el evento o ya asistió.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Usuario no registrado en el evento."
+      500:
+        description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
+    """  
     data = request.json
     user_id = data.get('user_id')
     id_evento = data.get('id_evento')
