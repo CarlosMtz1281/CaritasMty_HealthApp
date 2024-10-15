@@ -12,6 +12,7 @@ struct ProfilePictureSelectionView: View {
     let imageNames = ["profile1", "profile2", "profile3", "profile4", "profile5", "profile6", "profile7", "profile8", "profile9"]
     @State private var selectedImage: String? = nil
     @Environment(\.presentationMode) var presentationMode
+    @State private var showingAlert: Bool = false
 
     var body: some View {
         VStack {
@@ -78,11 +79,13 @@ struct ProfilePictureSelectionView: View {
                     print("No image selected")
                     return
                 }
-                
+
                 updateProfilePicture(userID: userID, imagePath: selectedImage, sessionKey: sessionKey) { result in
                     switch result {
                     case .success(let message):
                         print(message)
+                        showingAlert = true  // Mostrar la alerta
+                        presentationMode.wrappedValue.dismiss()
                     case .failure(let error):
                         print("Failed to update profile picture: \(error.localizedDescription)")
                     }
@@ -97,6 +100,12 @@ struct ProfilePictureSelectionView: View {
             }
             .padding(.horizontal, 40)
             .padding(.bottom, 10)
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text("Se ha cambiado su foto de perfil"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
 
             // Cancel Button
             Button(action: {

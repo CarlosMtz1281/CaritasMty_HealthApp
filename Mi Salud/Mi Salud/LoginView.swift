@@ -136,7 +136,7 @@ struct LoginView: View {
     // funcion de login
     func loginUser(correo: String, password: String) {
         let concUrl = Constants.path + "/users/login"
-
+        print(concUrl)
         guard let url = URL(string: concUrl) else { return }
         
         let body: [String: Any] = ["correo": correo, "password": password]
@@ -178,6 +178,8 @@ struct LoginView: View {
                         // Store user_id and session_key in UserDefaults
                         UserDefaults.standard.set(userId, forKey: "user_id")
                         UserDefaults.standard.set(sessionKey, forKey: "session_key")
+                        updateUserId()
+                        updateSessionKey()
                         
                         // Store tags in UserDefaults (or handle them as needed)
                         let formattedTags = tags.map { tag in

@@ -107,6 +107,15 @@ struct AccountView: View {
         }
     }
     
+    func resetDefaults() {
+        UserDefaults.standard.removeObject(forKey: "user_id")
+        UserDefaults.standard.removeObject(forKey: "session_key")
+        UserDefaults.standard.removeObject(forKey: "user_tags")
+        
+        // Sincroniza para asegurarte de que los cambios se guarden inmediatamente
+        UserDefaults.standard.synchronize()
+    }
+    
     func signOut() {
         let concUrl = Constants.path + "/users/signOut"
 
@@ -147,8 +156,7 @@ struct AccountView: View {
                 print("Signed out successfully")
                 
                 // Clear UserDefaults
-                UserDefaults.standard.removeObject(forKey: "user_id")
-                UserDefaults.standard.removeObject(forKey: "session_key")
+                resetDefaults()
                 
                 // Close app
                 DispatchQueue.main.async {
