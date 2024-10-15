@@ -49,7 +49,7 @@ struct MasInformacion: View {
                         .padding(.horizontal)
                     
                     // Imagen del Bono
-                    Image("family_trip")
+                    Image(catalogItem.imagen)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: UIScreen.main.bounds.width - 40, height: 250)

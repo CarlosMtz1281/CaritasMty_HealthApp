@@ -21,6 +21,7 @@ struct Constants {
         static let fontColor2 = Color(.white)
         
     }
+
   
     static let path = "https://sabritones.tc2007b.tec.mx:10206/"
     //static let path = "http://192.168.1.65:8000/"
