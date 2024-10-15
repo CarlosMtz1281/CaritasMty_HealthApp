@@ -252,8 +252,29 @@ def current_points(user_id):
 def history_points(user_id):
     my_logger.info(f"Fetching point history for user {user_id}")
     query = """
-    SELECT ... FROM HISTORIAL_PUNTOS HP ...
+    SELECT
+        U.ID_USUARIO AS user_id,
+        U.NOMBRE AS nombre,
+        HP.PUNTOS_MODIFICADOS AS puntos,
+        HP.TIPO_MODIFICACION AS tipo,
+        HP.FECHA AS fecha,
+        COALESCE(B.NOMBRE , E.NOMBRE, R.NOMBRE) AS origen_nombre,
+        COALESCE(B.ID_BENEFICIO , E.ID_EVENTO, R.ID_RETO) AS origen_id,
+        CASE
+            WHEN HP.BENEFICIO IS NOT NULL THEN 'Beneficio'
+            WHEN HP.EVENTO IS NOT NULL THEN 'Evento'
+            WHEN HP.RETO IS NOT NULL THEN 'Reto'
+        END AS origen_tipo
+    FROM
+        HISTORIAL_PUNTOS HP
+        INNER JOIN USUARIOS U ON HP.USUARIO = U.ID_USUARIO
+        LEFT JOIN BENEFICIOS B ON HP.BENEFICIO = B.ID_BENEFICIO
+        LEFT JOIN EVENTOS E ON HP.EVENTO = E.ID_EVENTO
+        LEFT JOIN RETOS R ON HP.RETO = R.ID_RETO
+    WHERE
+        U.ID_USUARIO = %s
     """
+
     try:
         cursor = cnx.cursor()
         cursor.execute(query, (user_id,))
