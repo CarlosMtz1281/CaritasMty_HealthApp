@@ -9,6 +9,8 @@ import SwiftUI
 
 struct EventDetailView: View {
     let event: EventItem // EventItem model for event details
+    let registered: Bool
+    
     @Environment(\.presentationMode) var presentationMode
     @State private var message: String = "" // State for holding success/error message
     @State private var showAlert = false // State for showing the alert
@@ -104,36 +106,38 @@ struct EventDetailView: View {
             Spacer()
             
             // Reserve Button
-            Button(action: {
-                registrarParticipacion(userID: userID, idEvento: event.id, sessionKey: sessionKey) { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let successMessage):
-                            message = successMessage
-                            showAlert = true
-                            // After successful registration, dismiss the view
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                presentationMode.wrappedValue.dismiss()
+            if(!registered){
+                Button(action: {
+                    registrarParticipacion(userID: userID, idEvento: event.id, sessionKey: sessionKey) { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(let successMessage):
+                                message = successMessage
+                                showAlert = true
+                                // After successful registration, dismiss the view
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            case .failure(let error):
+                                message = "Error: \(error.localizedDescription)"
+                                showAlert = true
                             }
-                        case .failure(let error):
-                            message = "Error: \(error.localizedDescription)"
-                            showAlert = true
                         }
                     }
+                }) {
+                    Text("Reservar Lugar")
+                        .font(.title2)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                 }
-            }) {
-                Text("Reservar Lugar")
-                    .font(.title2)
-                    .bold()
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding(.horizontal)
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Resultado"), message: Text(message), dismissButton: .default(Text("OK")))
+                .padding(.horizontal)
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Resultado"), message: Text(message), dismissButton: .default(Text("OK")))
+                }
             }
         }
         .navigationBarHidden(true)
