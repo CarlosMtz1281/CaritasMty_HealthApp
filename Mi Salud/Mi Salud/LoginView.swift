@@ -136,7 +136,7 @@ struct LoginView: View {
     // funcion de login
     func loginUser(correo: String, password: String) {
         let concUrl = Constants.path + "/users/login"
-
+        print(concUrl)
         guard let url = URL(string: concUrl) else { return }
         
         let body: [String: Any] = ["correo": correo, "password": password]

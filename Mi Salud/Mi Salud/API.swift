@@ -8,13 +8,21 @@
 import Foundation
 
 // Fetch session key and user ID from UserDefaults
-let sessionKey: String = {
+var sessionKey: String = {
     return UserDefaults.standard.string(forKey: "session_key") ?? "d0e14599-d0c2-4853-8663-707303ff00e0" // Use hardcoded session key if not found
 }()
 
-let userID: Int = {
+var userID: Int = {
     return UserDefaults.standard.integer(forKey: "user_id") > 0 ? UserDefaults.standard.integer(forKey: "user_id") : 1 // Use stored user ID or default to 1
 }()
+
+func updateUserId(){
+    userID = UserDefaults.standard.integer(forKey: "user_id") > 0 ? UserDefaults.standard.integer(forKey: "user_id") : 1
+}
+
+func updateSessionKey(){
+    sessionKey = UserDefaults.standard.string(forKey: "session_key") ?? "d0e14599-d0c2-4853-8663-707303ff00e0"
+}
 
 // Struct to decode the current points response
 struct PointsResponse: Codable {
