@@ -78,8 +78,8 @@ def get_sessions():
     my_logger.info("({}) Requested sessions".format(request.remote_addr))
     return jsonify(session_storage)
 
-API_CERT = '/home/user01/mnt/api_https/SSL/sabritones.tc2007b.tec.mx.cer'
-API_KEY = '/home/user01/mnt/api_https/SSL/sabritones.tc2007b.tec.mx.key'
+API_CERT = '/home/user01/mnt/CaritasMty_HealthApp/api/SSL/sabritones.tc2007b.tec.mx.cer'
+API_KEY = '/home/user01/mnt/CaritasMty_HealthApp/api/SSL/sabritones.tc2007b.tec.mx.key'
 
 if __name__ == '__main__':
     import ssl
