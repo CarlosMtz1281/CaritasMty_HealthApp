@@ -747,3 +747,95 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
         }
     }.resume()
 }
+
+
+struct Bono: Codable, Identifiable {
+    let idBeneficio: Int
+    let nombre: String
+    let descripcion: String
+    let puntos: Int
+    let codigo: String
+    
+    // Use idBeneficio as the unique identifier
+    var id: Int {
+        return idBeneficio
+    }
+    
+    // Define custom keys to match JSON response with struct property names
+    enum CodingKeys: String, CodingKey {
+        case idBeneficio = "ID_BENEFICIO"
+        case nombre = "NOMBRE"
+        case descripcion = "DESCRIPCION"
+        case puntos = "PUNTOS"
+        case codigo = "CODIGO"
+    }
+}
+// Define an error enum to handle different error cases
+enum FetchBonosError: Error {
+    case invalidSessionKey
+    case noBonosFound
+    case serverError(String)
+    case invalidResponse
+    case decodingError(String)
+}
+
+func fetchBonosComprados(userID: Int, sessionKey: String, completion: @escaping (Result<[Bono], FetchBonosError>) -> Void) {
+    
+    // Define the URL for the request
+    guard let url = URL(string: "http://localhost:8000/tienda/bonosComprados/\(userID)") else {
+        print("Invalid URL")
+        return
+    }
+    
+    // Prepare the URL request
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.addValue(sessionKey, forHTTPHeaderField: "key")
+    
+    // Create a data task to fetch the bonos
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        // Handle network errors
+        if let error = error {
+            print("Error: \(error)")
+            completion(.failure(.serverError(error.localizedDescription)))
+            return
+        }
+        
+        // Ensure the response is an HTTP response with a successful status code
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("Invalid response from server")
+            completion(.failure(.invalidResponse))
+            return
+        }
+        
+        // Handle specific status codes (404 or others)
+        if !(200...299).contains(httpResponse.statusCode) {
+            // Try to decode the error message from the response
+            if let data = data, let errorResponse = try? JSONDecoder().decode([String: String].self, from: data), let errorMessage = errorResponse["message"] {
+                print("Server error: \(errorMessage)")
+                if httpResponse.statusCode == 404 {
+                    completion(.failure(.noBonosFound))
+                } else {
+                    completion(.failure(.serverError(errorMessage)))
+                }
+            } else {
+                completion(.failure(.serverError("Unknown server error")))
+            }
+            return
+        }
+        
+        // Handle the response data and try decoding it into an array of Bono objects
+        if let data = data {
+            do {
+                let bonos = try JSONDecoder().decode([Bono].self, from: data)
+                completion(.success(bonos))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(.decodingError(error.localizedDescription)))
+            }
+        } else {
+            print("No data received from server")
+            completion(.failure(.invalidResponse))
+        }
+    }.resume()
+}

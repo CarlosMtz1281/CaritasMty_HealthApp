@@ -130,32 +130,8 @@ struct ShopView: View {
                 .background(Color(Constants.Colors.primary))
                 .clipShape(RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 20))
                 
-                if isButtonVisible {
-                    HStack(){
-                        Spacer()
-                        Button(action: {
-                            
-                        }) {
-                            HStack {
-                                Image(systemName: "line.horizontal.3.decrease.circle")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.white)
-                                Text("Filtros")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.white)
-                            }
-                            .padding(.vertical, 12)
-                            .padding(.horizontal, 25)
-                            .background(Color(Constants.Colors.primary))
-                            .cornerRadius(100)
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
-                    }
-                    .frame(width: .infinity)
-                    .padding(.horizontal, 20)
-                    .background(Color.clear)
-                }
+                
+                       
                 
                 ScrollViewReader {proxy in
                     ScrollView(.vertical, showsIndicators: false){
