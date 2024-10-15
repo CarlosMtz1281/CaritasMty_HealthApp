@@ -74,6 +74,26 @@ def obtener_mediciones(user_id):
         ORDER BY PA.FECHA DESC
     """
 
+    userInfo_query = """
+        SELECT 
+            U.NOMBRE, 
+            U.A_PATERNO,
+            U.A_MATERNO,
+            DS.EDAD, 
+            DS.TIPO_SANGRE, 
+            DS.GENERO, 
+            DS.PESO, 
+            DS.ALTURA
+        FROM 
+            USUARIOS U
+        JOIN 
+            DATOS_SALUD DS 
+        ON 
+            U.ID_USUARIO = DS.USUARIO
+        WHERE 
+            U.ID_USUARIO =  %s;
+    """
+
     try:
         cursor = cnx.cursor()
 
@@ -86,9 +106,12 @@ def obtener_mediciones(user_id):
         cursor.execute(presion_arterial_query, (user_id,))
         presion_arterial_result = cursor.fetchall()
 
+        cursor.execute(userInfo_query, (user_id,))
+        userInfo_result = cursor.fetchone()
+
         cursor.close()
 
-        if glucosa_result and ritmo_cardiaco_result and presion_arterial_result:
+        if glucosa_result and ritmo_cardiaco_result and presion_arterial_result and userInfo_result:
             glucosa_data = [
                 {"fecha": row[0], "glucosa": row[1]}
                 for row in glucosa_result
@@ -104,10 +127,22 @@ def obtener_mediciones(user_id):
                 for row in presion_arterial_result
             ]
 
+            userInfo_data = {
+                "nombre": userInfo_result[0],
+                "a_paterno": userInfo_result[1],
+                "a_materno": userInfo_result[2],
+                "edad": userInfo_result[3],
+                "tipo_sangre": userInfo_result[4],
+                "genero": userInfo_result[5],
+                "peso": userInfo_result[6],
+                "altura": userInfo_result[7]
+            }
+
             return jsonify({"resultados": {
                 "glucosa": glucosa_data,
                 "ritmo_cardiaco": ritmo_cardiaco_data,
-                "presion_arterial": presion_arterial_data
+                "presion_arterial": presion_arterial_data,
+                "usuario_info": userInfo_data
             }}), 200
         else:
             return jsonify({"No results from this user"}), 404

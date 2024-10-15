@@ -51,7 +51,7 @@ struct DashboardView: View {
                                     .foregroundColor(Color(Constants.Colors.accent))
                             }
                             VStack(alignment: .leading) {
-                                Text("Hola," + userName)
+                                Text("Hola, " + userName)
                                     .font(.title2)
                                     .foregroundColor(.white)
                             }
@@ -132,7 +132,7 @@ struct DashboardView: View {
                         Text("Último examen de salud")
                             .font(.title2)
                             .padding(.leading)
-                        NavigationLink(destination: HealthView()){
+                        NavigationLink(destination: HealthView(CurrentImagePath: currentImagePath ?? "")){
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text("Presion Arterial")
@@ -222,7 +222,7 @@ struct DashboardView: View {
                         fetchProfilePicture(userID: userID, sessionKey: sessionKey) { path in
                             self.currentImagePath = path
                             print(path)
-                            fetchMedicionesSalud(userID: userID, sessionKey: sessionKey) { glucosa, presionArterial, ritmoCardiaco in
+                            fetchMedicionesSalud(userID: userID, sessionKey: sessionKey) { glucosa, presionArterial, ritmoCardiaco,userInfo  in
                                 self.bloodPressureData = presionArterial
                             }
                         }
