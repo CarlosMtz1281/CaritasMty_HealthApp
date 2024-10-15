@@ -23,12 +23,15 @@ app = Flask(__name__)
 
 @app.after_request
 def add_header(r):
-    secure_headers = secure.Secure()
-    secure_headers.framework.flask(r)
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Content-Security-Policy"] = "default-src 'none'"
-    r.headers["Shakira"] = "rocks!"
+    # Only add headers for non-Flasgger routes
+    if '/apidocs' not in request.path and '/swagger' not in request.path:
+        secure_headers = secure.Secure()
+        secure_headers.framework.flask(r)
+        r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        r.headers["Content-Security-Policy"] = "default-src 'none'"
+        r.headers["Shakira"] = "rocks!"
     return r
+
 
 app.register_blueprint(users_bp, url_prefix='/users')
 app.register_blueprint(eventos_bp, url_prefix='/eventos')
