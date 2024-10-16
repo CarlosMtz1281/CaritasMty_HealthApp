@@ -766,3 +766,122 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
         }
     }.resume()
 }
+
+import Foundation
+
+// MARK: - Bono Model
+
+struct Bono: Codable, Identifiable {
+    let idBeneficio: String
+    let nombre: String
+    let descripcion: String
+    let puntos: String
+    let codigo: String
+    
+    // Use idBeneficio as the unique identifier
+    var id: String {
+        return idBeneficio
+    }
+    
+    // Define custom keys to match JSON response with struct property names
+    enum CodingKeys: String, CodingKey {
+        case idBeneficio = "ID_BENEFICIO"
+        case nombre = "NOMBRE"
+        case descripcion = "DESCRIPCION"
+        case puntos = "PUNTOS"
+        case codigo = "CODIGO"
+    }
+}
+
+// MARK: - FetchBonosError Enum
+
+enum FetchBonosError: Error {
+    case invalidSessionKey
+    case noBonosFound
+    case serverError(String)
+    case invalidResponse
+    case decodingError(String)
+    
+    var localizedDescription: String {
+        switch self {
+        case .invalidSessionKey:
+            return "La clave de sesión es inválida. Por favor, inicia sesión nuevamente."
+        case .noBonosFound:
+            return "No se encontraron bonos comprados."
+        case .serverError(let message):
+            return "Error del servidor: \(message)"
+        case .invalidResponse:
+            return "Respuesta inválida del servidor."
+        case .decodingError(let message):
+            return "Error de decodificación: \(message)"
+        }
+    }
+}
+
+// MARK: - Fetch Function
+
+func fetchBonosComprados(userID: Int, sessionKey: String, completion: @escaping (Result<[Bono], FetchBonosError>) -> Void) {
+    
+    // Definir la URL para la solicitud
+    guard let url = URL(string: Constants.path + "/tienda/bonosComprados/\(userID)") else {
+        print("URL inválida")
+        completion(.failure(.invalidResponse))  // No se puede crear la URL
+        return
+    }
+    
+    // Preparar la solicitud URL
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.addValue(sessionKey, forHTTPHeaderField: "key")
+    
+    // Crear una tarea de datos para obtener los bonos
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        // Manejar errores de red
+        if let error = error {
+            print("Error: \(error.localizedDescription)")
+            completion(.failure(.serverError(error.localizedDescription)))
+            return
+        }
+        
+        // Asegurarse de que la respuesta sea un HTTPURLResponse con un código de estado exitoso
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("Respuesta inválida del servidor")
+            completion(.failure(.invalidResponse))
+            return
+        }
+        
+        // Verificar el código de estado y manejar códigos específicos
+        guard (200...299).contains(httpResponse.statusCode) else {
+            // Intentar decodificar el mensaje de error de la respuesta
+            if let data = data,
+               let errorResponse = try? JSONDecoder().decode([String: String].self, from: data),
+               let errorMessage = errorResponse["message"] {
+                print("Error del servidor: \(errorMessage)")
+                if httpResponse.statusCode == 404 {
+                    completion(.failure(.noBonosFound))
+                } else if httpResponse.statusCode == 401 {
+                    completion(.failure(.invalidSessionKey))
+                } else {
+                    completion(.failure(.serverError(errorMessage)))
+                }
+            } else {
+                completion(.failure(.serverError("Error desconocido del servidor")))
+            }
+            return
+        }
+        
+        // Manejar los datos de respuesta y tratar de decodificarlos en un array de Bono
+        if let data = data {
+            do {
+                let bonos = try JSONDecoder().decode([Bono].self, from: data)
+                completion(.success(bonos))
+            } catch {
+                print("Error de decodificación: \(error.localizedDescription)")
+                completion(.failure(.decodingError(error.localizedDescription)))
+            }
+        } else {
+            print("No se recibieron datos del servidor")
+            completion(.failure(.invalidResponse))
+        }
+    }.resume()
+}

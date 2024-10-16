@@ -9,18 +9,35 @@ import SwiftUI
 
 struct AccountView: View {
     @Binding var isLoggedIn: Bool
+    @State private var points: Int = 0 // para puntos
+    @State private var userName: String = "Usuario"
+
     var body: some View {
         NavigationView{
             VStack {
-                HStack {
-                    Text("PERFIL")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    Spacer()
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading){
+                            Text("Tu Perfil")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .bold()
+                        }
+                        .padding(.leading, 30)
+                        .frame(width: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                        Spacer()
+                    }
+                    .padding()
+                    .padding(.top, 70)
+                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                    
+                    
                 }
-                .padding(.horizontal)
-                .padding(.top, 40)
-                .padding(.bottom, 20)
+                .padding(.bottom,20)
+                .frame(maxWidth: .infinity)
+                .frame(height: UIScreen.main.bounds.height * 0.20)
+                .background(Color(Constants.Colors.primary))
+                .clipShape(RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 20))
                 
                 VStack(spacing: 0) {
                     Divider()
@@ -50,8 +67,8 @@ struct AccountView: View {
                     
                     Divider()
                     
-                    Button(action: {
-                    }) {
+                    
+                    NavigationLink(destination: PointsHistoryView(points: points)) {
                         HStack {
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color(Constants.Colors.primary), lineWidth: 2)
@@ -73,6 +90,28 @@ struct AccountView: View {
                         .padding(.vertical)
                     }
                     
+                    Divider()
+                    NavigationLink(destination: BonosView()) {
+                        HStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(Constants.Colors.primary), lineWidth: 2)
+                                .frame(width: 55, height: 55)
+                                .overlay(
+                                    Image(systemName: "wallet.pass")
+                                        .font(.system(size: 36))
+                                        .foregroundColor(Color(Constants.Colors.primary))
+                                )
+                                .padding(.leading)
+                            
+                            Text("Wallet")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding()
+                            
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                    }
                     Divider()
                     
                     Button(action: {
@@ -103,6 +142,16 @@ struct AccountView: View {
                 }
                 .padding(.horizontal)
                 Spacer()
+            }
+            
+            .offset(y:-70)
+            
+        }
+        .onAppear(){
+            fetchCurrentPoints(userID: userID, sessionKey: sessionKey) { fetchedName, fetchedPoints in
+                // Store the fetched name and points
+                self.userName = fetchedName
+                self.points = fetchedPoints
             }
         }
     }

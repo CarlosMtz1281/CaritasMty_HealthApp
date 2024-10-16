@@ -20,6 +20,7 @@
 		851959C62CA22F4800363047 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851959C52CA22F4600363047 /* API.swift */; };
 		852CAF7A2CAEF7CD00D70D17 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852CAF792CAEF7AB00D70D17 /* EventView.swift */; };
 		852CAF7C2CAEF80100D70D17 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852CAF7B2CAEF7F900D70D17 /* EventDetailView.swift */; };
+		852D358D2CBF1B2200A22AC6 /* BonosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852D358C2CBF1B1A00A22AC6 /* BonosView.swift */; };
 		855B864D2CB4464B00BC32C4 /* ChallengeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B864C2CB4463C00BC32C4 /* ChallengeDetailView.swift */; };
 		85D19BD92C9B98FD00B9498E /* PointsHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */; };
 		85DF87EE2CA39E9A001F97B1 /* ProfilePictureSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DF87ED2CA39E8A001F97B1 /* ProfilePictureSelectionView.swift */; };
@@ -44,6 +45,7 @@
 		851959C52CA22F4600363047 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		852CAF792CAEF7AB00D70D17 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		852CAF7B2CAEF7F900D70D17 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		852D358C2CBF1B1A00A22AC6 /* BonosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonosView.swift; sourceTree = "<group>"; };
 		855B864C2CB4463C00BC32C4 /* ChallengeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailView.swift; sourceTree = "<group>"; };
 		85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsHistoryView.swift; sourceTree = "<group>"; };
 		85DF87ED2CA39E8A001F97B1 /* ProfilePictureSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureSelectionView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				19815E422C77F62B0094E7B1 /* QRView.swift */,
 				19815E442C77F63E0094E7B1 /* ShopView.swift */,
 				19815E462C77F64B0094E7B1 /* AccountView.swift */,
+				852D358C2CBF1B1A00A22AC6 /* BonosView.swift */,
 				85DF87ED2CA39E8A001F97B1 /* ProfilePictureSelectionView.swift */,
 				85D19BD82C9B98FD00B9498E /* PointsHistoryView.swift */,
 				B5D517102C75720B0093C91E /* Assets.xcassets */,
@@ -192,6 +195,7 @@
 			files = (
 				05B236E22CBC9BDC0057A70A /* modelData.swift in Sources */,
 				852CAF7C2CAEF80100D70D17 /* EventDetailView.swift in Sources */,
+				852D358D2CBF1B2200A22AC6 /* BonosView.swift in Sources */,
 				19815E452C77F63E0094E7B1 /* ShopView.swift in Sources */,
 				19815E492C77FC640094E7B1 /* Consts.swift in Sources */,
 				19815E412C77F61B0094E7B1 /* HealthView.swift in Sources */,
@@ -343,7 +347,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mi Salud/Preview Content\"";
-				DEVELOPMENT_TEAM = PCXZHA2X2G;
+				DEVELOPMENT_TEAM = WFYLC35ZF2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Mi-Salud-Info.plist";
@@ -358,7 +362,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "tec.mx.Mi-Salud";
+				PRODUCT_BUNDLE_IDENTIFIER = "tec.mx.Mi-Salud12121";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -376,7 +380,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mi Salud/Preview Content\"";
-				DEVELOPMENT_TEAM = PCXZHA2X2G;
+				DEVELOPMENT_TEAM = WFYLC35ZF2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Mi-Salud-Info.plist";
@@ -391,7 +395,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "tec.mx.Mi-Salud";
+				PRODUCT_BUNDLE_IDENTIFIER = "tec.mx.Mi-Salud12121";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
