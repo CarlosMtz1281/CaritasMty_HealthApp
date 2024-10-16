@@ -281,27 +281,27 @@ def datos_salud(user_id):
 @mediciones_bp.route('/medicionesdatos/<int:user_id>', methods=['GET'])
 def obtener_mediciones(user_id):
     """
-    Obtiene las mediciones de glucosa, ritmo cardiaco y presión arterial del usuario.
-    Documentado por German
+    Obtiene las mediciones de glucosa, ritmo cardíaco, presión arterial y la información de salud de un usuario.
+    Documentado por Fer.
     ---
     tags:
       - Sprint 3
     parameters:
-      - in: path
-        name: user_id
-        type: integer
-        required: true
-        description: ID del usuario para obtener sus mediciones.
-        example: 123
       - in: header
         name: key
         type: string
         required: true
         description: Clave de sesión del usuario.
         example: "abcd1234sessionkey"
+      - in: path
+        name: user_id
+        type: integer
+        required: true
+        description: ID del usuario para obtener sus mediciones.
+        example: 123
     responses:
       200:
-        description: Mediciones devueltas con éxito.
+        description: Mediciones del usuario devueltas exitosamente.
         schema:
           type: object
           properties:
@@ -315,10 +315,10 @@ def obtener_mediciones(user_id):
                     properties:
                       fecha:
                         type: string
-                        example: "2024-01-01"
+                        example: "2024-10-14"
                       glucosa:
-                        type: number
-                        example: 100
+                        type: integer
+                        example: 110
                 ritmo_cardiaco:
                   type: array
                   items:
@@ -326,10 +326,10 @@ def obtener_mediciones(user_id):
                     properties:
                       fecha:
                         type: string
-                        example: "2024-01-01"
+                        example: "2024-10-14"
                       ritmo:
-                        type: number
-                        example: 80
+                        type: integer
+                        example: 75
                 presion_arterial:
                   type: array
                   items:
@@ -337,26 +337,74 @@ def obtener_mediciones(user_id):
                     properties:
                       fecha:
                         type: string
-                        example: "2024-01-01"
+                        example: "2024-10-14"
                       presion_sistolica:
-                        type: number
+                        type: integer
                         example: 120
                       presion_diastolica:
-                        type: number
+                        type: integer
                         example: 80
+                usuario_info:
+                  type: object
+                  properties:
+                    nombre:
+                      type: string
+                      example: "Juan"
+                    a_paterno:
+                      type: string
+                      example: "Pérez"
+                    a_materno:
+                      type: string
+                      example: "Gómez"
+                    edad:
+                      type: integer
+                      example: 30
+                    tipo_sangre:
+                      type: string
+                      example: "O+"
+                    genero:
+                      type: string
+                      example: "Masculino"
+                    peso:
+                      type: number
+                      example: 70.5
+                    altura:
+                      type: number
+                      example: 1.75
       400:
-        description: Clave de sesión inválida.
+        description: Llave de sesión inválida.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Llave de sesión inválida."
       404:
-        description: No se encontraron mediciones para este usuario.
+        description: No se encontraron resultados para este usuario.
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "No se encontraron resultados para este usuario."
       500:
         description: Error interno del servidor.
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Error al procesar la solicitud."
     """
     session_key = request.headers.get('key')
 
-    my_logger.info(f"Request to /medicionesdatos for user_id: {user_id}")
+    # Logging para la solicitud
+    my_logger.info(f"({request.remote_addr}) Requested /medicionesdatos for user_id {user_id}")
 
+    # Validar clave de sesión
     if not session_key or validate_key(session_key) != user_id:
-        return jsonify({"error": "Invalid session key"}), 400
+        my_logger.warning(f"({request.remote_addr}) Invalid session key for user_id {user_id}")
+        return jsonify({"error": "Llave de sesión inválida."}), 400
     
     glucosa_query = """
         SELECT TOP 5 G.FECHA, G.NIVEL
@@ -379,6 +427,26 @@ def obtener_mediciones(user_id):
         ORDER BY PA.FECHA DESC
     """
 
+    userInfo_query = """
+        SELECT 
+            U.NOMBRE, 
+            U.A_PATERNO,
+            U.A_MATERNO,
+            DS.EDAD, 
+            DS.TIPO_SANGRE, 
+            DS.GENERO, 
+            DS.PESO, 
+            DS.ALTURA
+        FROM 
+            USUARIOS U
+        JOIN 
+            DATOS_SALUD DS 
+        ON 
+            U.ID_USUARIO = DS.USUARIO
+        WHERE 
+            U.ID_USUARIO =  %s;
+    """
+
     try:
         cursor = cnx.cursor()
 
@@ -391,9 +459,12 @@ def obtener_mediciones(user_id):
         cursor.execute(presion_arterial_query, (user_id,))
         presion_arterial_result = cursor.fetchall()
 
+        cursor.execute(userInfo_query, (user_id,))
+        userInfo_result = cursor.fetchone()
+
         cursor.close()
 
-        if glucosa_result and ritmo_cardiaco_result and presion_arterial_result:
+        if glucosa_result and ritmo_cardiaco_result and presion_arterial_result and userInfo_result:
             glucosa_data = [
                 {"fecha": row[0], "glucosa": row[1]}
                 for row in glucosa_result
@@ -409,10 +480,22 @@ def obtener_mediciones(user_id):
                 for row in presion_arterial_result
             ]
 
+            userInfo_data = {
+                "nombre": userInfo_result[0],
+                "a_paterno": userInfo_result[1],
+                "a_materno": userInfo_result[2],
+                "edad": userInfo_result[3],
+                "tipo_sangre": userInfo_result[4],
+                "genero": userInfo_result[5],
+                "peso": userInfo_result[6],
+                "altura": userInfo_result[7]
+            }
+
             return jsonify({"resultados": {
                 "glucosa": glucosa_data,
                 "ritmo_cardiaco": ritmo_cardiaco_data,
-                "presion_arterial": presion_arterial_data
+                "presion_arterial": presion_arterial_data,
+                "usuario_info": userInfo_data
             }}), 200
         else:
             return jsonify({"No results from this user"}), 404
