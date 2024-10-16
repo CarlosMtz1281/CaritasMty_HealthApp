@@ -103,7 +103,7 @@ struct AccountView: View {
                                 )
                                 .padding(.leading)
                             
-                            Text("Wallet")
+                            Text("Bonos Comprados")
                                 .font(.headline)
                                 .foregroundColor(.black)
                                 .padding()
