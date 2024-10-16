@@ -103,7 +103,9 @@ struct BonosView: View {
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
         .background(Color.white) // Set the background color
-
+        
+        Spacer()
+        
         .onAppear {
             // Call the API when the view appears
             fetchBonosComprados(userID: userID, sessionKey: sessionKey) { result in
