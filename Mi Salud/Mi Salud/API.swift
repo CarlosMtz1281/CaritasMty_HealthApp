@@ -9,7 +9,7 @@ import Foundation
 
 // Fetch session key and user ID from UserDefaults
 var sessionKey: String = {
-    return UserDefaults.standard.string(forKey: "session_key") ?? "d0e14599-d0c2-4853-8663-707303ff00e0" // Use hardcoded session key if not found
+    return UserDefaults.standard.string(forKey: "session_key") ?? "8d138ab7-08f0-4ed2-8672-58c9b3b05c8c" // Use hardcoded session key if not found
 }()
 
 var userID: Int = {
@@ -79,6 +79,7 @@ struct CatalogItem: Codable, Identifiable {
     let nombre: String
     let descripcion: String
     let puntos: String
+    var imagen: String = "Card1"
     
     enum CodingKeys: String, CodingKey {
         case id = "ID_BENEFICIO"
@@ -126,7 +127,12 @@ func fetchCatalog(sessionKey: String, completion: @escaping ([CatalogItem]) -> V
         do {
             let catalogItems = try JSONDecoder().decode([CatalogItem].self, from: data)
             DispatchQueue.main.async {
-                completion(catalogItems)
+                let updatedItems = catalogItems.map { item -> CatalogItem in
+                    var newItem = item
+                    newItem.imagen = ["Card1", "Card2", "Card3"].randomElement() ?? "Card1"
+                    return newItem
+                }
+                completion(updatedItems)
             }
         } catch {
             print("Error decoding catalog items: \(error)")
@@ -663,6 +669,7 @@ struct MedicionesResultados: Codable {
     let glucosa: [Glucose]
     let presion_arterial: [BloodPressure]
     let ritmo_cardiaco: [HeartRate]
+    let usuario_info: UserInfo
 }
 
 struct Glucose: Codable {
@@ -681,6 +688,17 @@ struct HeartRate: Codable {
     var ritmo: Int
 }
 
+struct UserInfo: Codable {
+    let nombre: String
+    let a_paterno: String
+    let a_materno: String
+    let edad: Int
+    let tipo_sangre: String
+    let genero: String
+    let peso: String
+    let altura: String
+}
+
 func formatDate(_ dateString: String) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
@@ -692,7 +710,7 @@ func formatDate(_ dateString: String) -> String {
     return dateString
 }
 
-func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping ([HealthDataPoint], [BloodPressureDataPoint], [HealthDataPoint]) -> Void) {
+func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping ([HealthDataPoint], [BloodPressureDataPoint], [HealthDataPoint], UserInfo) -> Void) {
     
     let concUrl = Constants.path + "/mediciones/medicionesdatos/\(userID)"
 
@@ -738,9 +756,10 @@ func fetchMedicionesSalud(userID: Int, sessionKey: String, completion: @escaping
                 let heartRateData = medicionesResponse.resultados.ritmo_cardiaco.map {
                     HealthDataPoint(time: formatDate($0.fecha), value: Double($0.ritmo))
                 }
+            
+                let userInfo = medicionesResponse.resultados.usuario_info
                 
-                // Call the completion handler with the formatted data
-                completion(glucosaData, bloodPressureData, heartRateData)
+                completion(glucosaData, bloodPressureData, heartRateData, userInfo)
             }
         } catch {
             print("Error decoding health data response: \(error)")

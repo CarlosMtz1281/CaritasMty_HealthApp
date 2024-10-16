@@ -158,7 +158,7 @@ struct ShopView: View {
                         
                         VStack(spacing: 20) {
                             ForEach(catalogItems) { item in
-                                ShopCard(image: "family_trip", name: item.nombre, description: item.descripcion, points: Int(item.puntos) ?? 0, catalogItem: item, userPoints: points)
+                                ShopCard(image: item.imagen, name: item.nombre, description: item.descripcion, points: Int(item.puntos) ?? 0, catalogItem: item, userPoints: points)
                             }
                         }
                         .padding(.horizontal)

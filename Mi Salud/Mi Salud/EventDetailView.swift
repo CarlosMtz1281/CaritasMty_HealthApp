@@ -48,7 +48,7 @@ struct EventDetailView: View {
             // Image and Available spots section
             HStack {
                 // Placeholder for event image
-                Image("family_trip") // Replace with a dynamic image if you have one
+                randomImage() // Replace with a dynamic image if you have one
                     .resizable()
                     .frame(width: 200, height: 200)
                     .cornerRadius(10)
